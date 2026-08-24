@@ -34,16 +34,6 @@
   --collection-header-border: 0;
 }
 
-/* Two leftovers from the database sitting on this page: Super renders the
-   source database as a child-page link, and the linked view above the grid
-   carries the database title. The page h1 already says Lab News, and which
-   of the two Super emits varies between renders, so both are covered here.
-   Dragging the database into the Control panel in Notion retires the rule. */
-.page__lab-news .notion-page,
-.page__lab-news .notion-collection__header-wrapper {
-  display: none;
-}
-
 /* Rows line up across cards only when each row is a fixed number of lines,
    and neither Notion nor Super expresses that. What follows is here for that
    reason, or for type the theme variables do not reach. */

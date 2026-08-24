@@ -232,11 +232,12 @@ card preview already is the page cover. And `notion-update-view` cannot change
 a view's type, so a table view cannot be turned into a gallery; create the
 gallery as a linked view instead.
 
-`Lab News Posts` sits as a child of the Lab News page rather than beside
-`Blog posts database` inside the Control panel, because the MCP move tool
-cannot target a toggle. It therefore renders as a child-page block on
-`/lab-news` and is hidden by `.page__lab-news .notion-page { display: none }`.
-Dragging it into the Control panel toggle by hand in Notion retires that rule.
+Keep the source database off the page that shows it. While `Lab News Posts`
+still sat under the Lab News page, Super rendered it there as a child-page
+link (`a.notion-link.notion-page`) that only CSS could hide. Moving it out
+retires that rule, and the linked view's own header collapses to an empty
+`h3` once it is gone. The MCP move tool cannot target a toggle, so the move
+into the Control panel is a manual drag in Notion.
 
 Read and edit these with the `notion-fetch` / `notion-update-page` MCP tools. Content edits belong in Notion; reach for CSS only when Notion's block options cannot express the design.
 
