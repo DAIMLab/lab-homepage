@@ -33,6 +33,7 @@ Super server-renders every page, so `curl https://daim.super.site/<slug>` return
 ```
 css/super-custom.css   mirror of the site-wide CSS tab
 css/home-hero.css      Home page per-page CSS tab
+css/lab-news.css       Lab News page per-page CSS tab
 html/home-hero.html    Home page per-page Body tab
 html/head-fonts.html   site-wide Head tab
 js/                    scripts for the Head/Body tabs
@@ -175,6 +176,37 @@ Built on Super's **Ascent** template; several sections still hold template lorem
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 
 Team DAIM splits into `Professor` (`3c611c7b703c80768b7fd009d6c075ed`), `Students` (`3c611c7b703c80549898c426d40729cc`), and `Alumni` (`3c611c7b703c805d942dca6661c145dc`). Four content databases (case studies, careers, and two unnamed) back the list and gallery views.
+
+### Collections
+
+Databases live away from the page that shows them; the page carries a **linked
+view** instead. That split is Ascent's own pattern and it is what keeps a view
+switcher off a page: Super renders `.notion-dropdown` only when a collection
+block holds more than one view, so a linked block with a single view emits no
+switcher markup at all. Verified: `/projects` has 4 views and a dropdown,
+`/publications` has 1 and none.
+
+| Database | Notion ID | Data source | Shown on |
+| --- | --- | --- | --- |
+| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Projects, Publications |
+| Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News |
+
+`Lab News Posts` schema: `Title`, `Date`, `Location`, `Summary`, `Category`
+(select: Activity / Conference). The gallery shows the first four; `Category`
+is carried for filtered views someone may add later. Card thumbnails come from
+each post's **page cover**, not a files property.
+
+Two limits worth not re-deriving. The view DSL has no directive for the page
+cover, so `COVER "Page cover"` is rejected — omit `COVER` and Notion's default
+card preview already is the page cover. And `notion-update-view` cannot change
+a view's type, so a table view cannot be turned into a gallery; create the
+gallery as a linked view instead.
+
+`Lab News Posts` sits as a child of the Lab News page rather than beside
+`Blog posts database` inside the Control panel, because the MCP move tool
+cannot target a toggle. It therefore renders as a child-page block on
+`/lab-news` and is hidden by `.page__lab-news .notion-page { display: none }`.
+Dragging it into the Control panel toggle by hand in Notion retires that rule.
 
 Read and edit these with the `notion-fetch` / `notion-update-page` MCP tools. Content edits belong in Notion; reach for CSS only when Notion's block options cannot express the design.
 

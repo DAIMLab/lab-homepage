@@ -1,0 +1,83 @@
+/* Lab News — gallery of posts.
+   Per-page CSS: Super → Lab News → Code → CSS tab. Not site-wide.
+
+   Markup comes from a linked gallery view over the `Lab News Posts`
+   database. Visible properties, in order: Title, Date, Location, Summary. */
+
+/* The database itself sits on this page as a child-page block so Notion keeps
+   it addressable; only the gallery view below it belongs on the public page. */
+.page__lab-news .notion-page {
+  display: none;
+}
+
+/* Super's default gallery is a percentage-width flex wrap, which leaves a
+   ragged last row. A grid keeps every card the same width. */
+.page__lab-news .notion-collection-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px 24px;
+}
+
+@media (max-width: 900px) {
+  .page__lab-news .notion-collection-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .page__lab-news .notion-collection-gallery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Strip the card chrome; the legacy design is a bare photo over text. */
+.page__lab-news .notion-collection-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* Covers arrive at whatever aspect the uploaded photo has. Pinning the ratio
+   is what makes titles line up across a row. */
+.page__lab-news .notion-collection-card__cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.page__lab-news .notion-collection-card__content {
+  padding: 14px 0 0;
+}
+
+.page__lab-news .notion-collection-card__property.title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #212121;
+}
+
+/* Notion prefixes every card title with a page icon. The legacy cards have none. */
+.page__lab-news .notion-property__title__icon-wrapper {
+  display: none;
+}
+
+/* Date and Location read as one muted metadata line under the title. */
+.page__lab-news .notion-collection-card__property:not(.title) {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8a8a8e;
+}
+
+/* Summary is the last visible property. Two lines, then ellipsis. */
+.page__lab-news .notion-collection-card__property:last-child {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 6px;
+  color: #4a4a4f;
+}
