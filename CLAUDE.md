@@ -250,6 +250,20 @@ into the Control panel is a manual drag in Notion.
 
 Read and edit these with the `notion-fetch` / `notion-update-page` MCP tools. Content edits belong in Notion; reach for CSS only when Notion's block options cannot express the design.
 
+## Open Questions
+
+Whether Super renders every row of a database past 100. Notion pages its own
+collection queries at that size, and Super's behaviour there is undocumented:
+`/compatible-blocks` and the rest of the docs set no limit, and a rendered
+gallery carries no load-more, cursor, or `hasMore` markup. Untested, because
+no database on this site has held more than a handful of rows.
+
+It matters for the Lab News post count, which is a CSS counter over the
+rendered cards (`css/lab-news.css`) and so reports the database total only
+while every row is rendered. Check it against Notion once the 58 legacy posts
+are migrated. If Super does truncate, the fallback is a number typed into the
+Notion page by hand.
+
 ## Legacy Site Inventory
 
 The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/38`, `/122325403`) with no readable labels. Use it as a migration checklist and open each in a browser to identify it.

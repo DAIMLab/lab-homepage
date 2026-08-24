@@ -45,9 +45,14 @@
    many cards follow. `order: -1` then moves that box to the top of the grid,
    which changes where it paints but not what it counted.
 
-   It counts the cards Super rendered, which is the database total only while
-   the view returns every row — true below Notion's 100-row page. Past that,
-   check the number against Notion before trusting it. */
+   It counts the cards Super rendered, which equals the database total only
+   while the view returns every row. Scrolling and lazy-loaded images do not
+   come into it: counters read the DOM, and Super server-renders every card
+   into the HTML. What is unverified is Super's behaviour past 100 rows —
+   Notion pages its own queries there. The docs set no limit and a rendered
+   gallery carries no load-more or cursor markup, but this site has never had
+   more than a handful of posts. Check the number against Notion once the
+   back catalogue is in. */
 .page__lab-news .notion-collection-gallery {
   counter-reset: post;
 }
