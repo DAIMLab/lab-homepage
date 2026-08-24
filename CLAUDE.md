@@ -31,10 +31,16 @@ Super server-renders every page, so `curl https://daim.super.site/<slug>` return
 ## Repository Layout
 
 ```
-css/super-custom.css   mirror of the CSS currently pasted into Super's CSS tab
+css/super-custom.css   mirror of the site-wide CSS tab
+css/home-hero.css      Home page per-page CSS tab
+html/home-hero.html    Home page per-page Body tab
+html/head-fonts.html   site-wide Head tab
 js/                    scripts for the Head/Body tabs
 assets/                images and video referenced by URL
+reference/             vendored third-party CSS, read-only
 ```
+
+One file per Super injection target, named `<scope>-<purpose>`. Anything named for a page belongs in that page's per-page Code editor, not the site-wide one.
 
 `css/super-custom.css` is a **mirror, not a source**. Super does not read this repo. After editing it, paste the file into the Super Code editor's CSS tab, and when someone edits CSS in Super directly, pull it back here so the two stay in sync. Re-extract the live version with:
 
