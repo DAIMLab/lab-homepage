@@ -1,14 +1,18 @@
 /* Footer. Super Code editor > CSS tab (site-wide).
 
-   Two pieces, both on every page:
-     1. A Notion synced callout (blue background) holding the two contact
-        columns. It is a synced block, so editing it in Notion updates all
-        five pages — that is the point of putting the copy there.
-     2. Super's native footer under it: logo, divider, footnote, all set in
-        Navigation → Footer. No code.
+   The whole footer is one Notion synced callout, so lab members edit the copy
+   in Notion and all five pages follow. Super's own footer is switched off
+   (Navigation → Footer → Footer Type: None) — two stacked footers read as a
+   duplicate, and the legacy design was a single photo band anyway.
 
-   Only the photo band needs CSS. Notion's blue background renders as
-   `bg-blue-light`, not `bg-blue`; re-check with
+   Notion structure, synced onto every page:
+
+     Callout (Blue background)
+       ├─ 2 columns   Contact & Info  |  Korean greeting
+       ├─ Divider
+       └─ Text        Copyright …
+
+   Notion's blue renders as `bg-blue-light`, not `bg-blue`; re-check with
      curl -sL https://daim.super.site/ | grep -o 'class="notion-callout[^"]*"'
 
    Convention: a top-level blue callout IS the footer band. Use another colour
@@ -17,9 +21,8 @@
 
    Uses CSS nesting, as css/home-hero.css does. */
 
-/* Not scoped to .has-footer: the band must sit flush whether Super's native
-   footer is switched on or off. Without this, turning it off restores
-   notion.css's 30vh bottom padding and drops a gap under the band. */
+/* Not scoped to .has-footer: with Super's footer off, notion.css applies 30vh
+   of bottom padding and the band would float above a gap. */
 .notion-root {
   padding-bottom: 0 !important;
 }
@@ -52,13 +55,18 @@
   .notion-heading,
   .notion-text,
   .notion-link {
-    color: #fff !important;
+    color: #ffffff !important;
   }
-}
 
-/* The native footer continues the band instead of starting a new surface.
-   Both variables are read by .super-footer itself. */
-.super-footer {
-  --footer-background-color: #14161a;
-  --footer-text-color: #ffffff;
+  /* The rule above the copyright, as on the legacy site. */
+  .notion-divider {
+    border-color: rgb(255 255 255 / 0.28);
+    margin: 32px 0 20px;
+  }
+
+  /* The copyright is the band's last block; it should not shout. */
+  .notion-text:last-child {
+    font-size: 0.8125rem;
+    opacity: 0.72;
+  }
 }
