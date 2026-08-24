@@ -70,6 +70,21 @@ Every page carries its slug on `<main>` and its parent on the same element. Veri
 
 Scope with `.page__projects .notion-collection-card { … }` rather than restyling a block type site-wide. `<main>` also has `id="page-<slug>"`, and the root article has `id="block-<slug>"`.
 
+## Native Before Custom
+
+Custom code is the last resort, not the first. These native paths are confirmed against the docs and replace code this repo used to carry:
+
+| Need | Native path | Replaces |
+| --- | --- | --- |
+| Video autoplay | `super:{{ autoplay }}` at the end of the video block's caption (`/additional-features`) | a Body-tab script |
+| Image eager load | `super:{{ eager }}` in the image caption | — |
+| Image links to a URL | put the URL in the image caption; Super hides the caption | an `<a>` wrapper |
+| Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`, Personal plan) | a Head-tab `<link>` plus a `--primary-font` override |
+| Palette | Design → Colors, manual or a preset | per-color CSS |
+| Pretty URLs, SEO, redirects, password, hiding a page via 404 | per-page settings (`/site-pages`) | — |
+
+Two things that are **not** native, checked so nobody re-checks them: there is no per-page setting to hide the page title or icon, so `.notion-header { display: none }` stays CSS; and Site Files (`/site-files`) accepts only `.txt` in `root` or `.well-known`, so it cannot host assets — jsDelivr stays.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on `html.theme-light` and `:root`. Override the variable instead of writing per-block rules; that is the shortest path from the Ascent template's look to the DAIM design.

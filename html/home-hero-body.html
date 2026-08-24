@@ -1,34 +1,32 @@
-<!-- Home page hero autoplay. Paste into the Home page's per-page Code editor, Body tab.
-     Notion renders a video block as <video width="400px" controls> with no autoplay
-     attribute, and neither Notion nor CSS can add one. This flips those properties.
-     Styles live in css/home-hero.css. -->
+<!-- Home hero, loop + controls fallback. Home page's per-page Code editor, Body tab.
+
+     TRY DELETING THIS FIRST. Super has a native autoplay snippet: put
+       super:{{ autoplay }}
+     at the end of the video block's caption in Notion, per
+     https://docs.super.so/additional-features. Autoplay only works muted, so
+     that one caption may cover everything this file does.
+
+     Paste this back only if, with the caption in place, the video still stops
+     after one pass or still shows player controls. Neither loop nor controls
+     is documented as part of the native snippet. -->
 <script>
 (function () {
   /* Keep in step with the selector used in css/home-hero.css. */
-  var HERO = '.page__index .notion-root > .notion-callout.bg-gray-light';
+  var HERO = '.notion-root > .notion-callout.bg-gray-light';
 
-  function start(video) {
+  function fix(video) {
     if (video.dataset.daimHero) return;
     video.dataset.daimHero = '1';
-    video.muted = true;
-    video.defaultMuted = true;
     video.loop = true;
-    video.autoplay = true;
     video.controls = false;
     video.removeAttribute('controls');
-    video.removeAttribute('width');
-    video.setAttribute('playsinline', '');
-    var played = video.play();
-    /* Some browser settings reject autoplay outright; the first frame stays. */
-    if (played && played.catch) played.catch(function () {});
   }
 
   function scan() {
-    document.querySelectorAll(HERO + ' video').forEach(start);
+    document.querySelectorAll(HERO + ' video').forEach(fix);
   }
 
   scan();
-  document.addEventListener('DOMContentLoaded', scan);
   /* Super navigates client-side, so the hero can mount after first paint. */
   new MutationObserver(scan).observe(document.documentElement, {
     childList: true,
