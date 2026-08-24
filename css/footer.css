@@ -76,12 +76,14 @@
     background: rgb(0 0 0 / 0.62);
   }
 
-  /* Everything that is not the photo returns to the content column. */
+  /* Everything that is not the photo is held off the edges by a fluid inset
+     rather than capped at --layout-max-width. The band is full-bleed, so the
+     text tracks the viewport and lines up with the hero, which uses the same
+     clamp. A fixed 1100px column left it stranded in the middle on wide
+     screens. */
   > .notion-callout__content > *:not(.notion-image) {
     position: relative;
-    max-width: var(--layout-max-width);
-    margin-inline: auto;
-    padding-inline: 24px;
+    padding-inline: clamp(24px, 6vw, 96px);
   }
 
   .notion-heading,
