@@ -16,7 +16,15 @@
   function play(video) {
     if (!video.paused) return;
     var started = video.play();
-    if (started && started.catch) started.catch(function () {});
+    if (started && started.catch) {
+      started.catch(function (err) {
+        /* Silence here once cost an afternoon: the console looked clean while
+           playback was being refused. Warn, but only once per element. */
+        if (video.dataset.daimWarned) return;
+        video.dataset.daimWarned = '1';
+        console.warn('[daim] hero video did not start:', err.name, err.message);
+      });
+    }
   }
 
   function fix(video) {
