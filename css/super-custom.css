@@ -1,7 +1,15 @@
-/* DAIM homepage — custom CSS for Super. Selector reference: https://docs.super.so/super-css-classes */
+/* DAIM homepage — site-wide CSS. Super Code editor > CSS tab.
+   Selector reference: https://docs.super.so/super-css-classes */
+
+/* Montserrat for Latin, NanumSquare for Korean: the browser falls through
+   per character, so one stack covers both. Faces load in html/head-fonts.html. */
+:root {
+  --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
+  --secondary-font: var(--primary-font);
+}
 
 /* Hide the 🎛 Control panel toggle from the published site.
-   Taken from the Ascent template (reference/ascent-template.css:46).
+   From the Ascent template (reference/ascent-template.css:46).
    Matches any brown-background toggle, so keep brown reserved for hidden blocks. */
 .notion-toggle.bg-brown {
   display: none !important;
