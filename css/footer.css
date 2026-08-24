@@ -43,10 +43,13 @@
   border: 0 !important;   /* .notion-callout.bg-blue-light.border ties on specificity */
   border-radius: 0;
   overflow: hidden;
+  background: #14161a;   /* the callout's blue would flash before the photo loads */
 
-  /* Full width, so the photo can fill it; the text is re-narrowed below. */
+  /* Deliberately NOT positioned: the photo below anchors to its nearest
+     positioned ancestor, and that has to be the callout, not this box. This
+     box sits inside the callout's vertical padding, so anchoring here left
+     the callout's blue showing in a strip above and below the photo. */
   > .notion-callout__content {
-    position: relative;
     margin: 0;
   }
 
