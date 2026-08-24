@@ -1,0 +1,35 @@
+<!-- Home page hero autoplay. Paste into the Home page's per-page Code editor, Body tab.
+     Notion renders a video block as <video controls> with no autoplay attribute,
+     and neither Notion nor CSS can add one. This flips those properties instead.
+     Styles live in css/home-hero.css. -->
+<script>
+(function () {
+  /* Keep in step with the callout color used in css/home-hero.css. */
+  var HERO = '.page__index .notion-root > .notion-callout.bg-gray';
+
+  function start(video) {
+    if (video.dataset.daimHero) return;
+    video.dataset.daimHero = '1';
+    video.muted = true;
+    video.loop = true;
+    video.autoplay = true;
+    video.controls = false;
+    video.setAttribute('playsinline', '');
+    var played = video.play();
+    /* Browsers reject autoplay in some settings; the poster frame stays. */
+    if (played && played.catch) played.catch(function () {});
+  }
+
+  function scan() {
+    document.querySelectorAll(HERO + ' .notion-video video').forEach(start);
+  }
+
+  scan();
+  document.addEventListener('DOMContentLoaded', scan);
+  /* Super navigates client-side, so the hero can mount after first paint. */
+  new MutationObserver(scan).observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+})();
+</script>
