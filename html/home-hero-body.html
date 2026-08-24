@@ -1,14 +1,12 @@
-<!-- Home hero, loop + controls fallback. Home page's per-page Code editor, Body tab.
+<!-- Home hero video. Home page's per-page Code editor, Body tab.
+     Pairs with super:{{ autoplay }} in the video block's caption in Notion.
 
-     TRY DELETING THIS FIRST. Super has a native autoplay snippet: put
-       super:{{ autoplay }}
-     at the end of the video block's caption in Notion, per
-     https://docs.super.so/additional-features. Autoplay only works muted, so
-     that one caption may cover everything this file does.
-
-     Paste this back only if, with the caption in place, the video still stops
-     after one pass or still shows player controls. Neither loop nor controls
-     is documented as part of the native snippet. -->
+     Measured on the live site: that caption makes Super emit
+       <video width="624px" controls="" autoPlay="">
+     and nothing else. No browser honours autoplay without muted, so the clip
+     never starts; loop and controls are not covered either. This supplies the
+     three missing pieces and re-triggers playback, since setting muted after
+     the browser has already refused does not retry on its own. -->
 <script>
 (function () {
   /* Keep in step with the selector used in css/home-hero.css. */
@@ -17,9 +15,14 @@
   function fix(video) {
     if (video.dataset.daimHero) return;
     video.dataset.daimHero = '1';
+    video.muted = true;
     video.loop = true;
     video.controls = false;
     video.removeAttribute('controls');
+    video.setAttribute('playsinline', '');
+    var played = video.play();
+    /* Some browser settings refuse regardless; the first frame stays. */
+    if (played && played.catch) played.catch(function () {});
   }
 
   function scan() {
