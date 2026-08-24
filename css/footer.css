@@ -1,0 +1,18 @@
+/* Footer background photo. Super Code editor > CSS tab (site-wide).
+
+   Everything else in the footer is native, under Navigation → Footer:
+   type, logo, menu items, socials, divider, footnote. Super exposes
+   --footer-background-color but no background image, so this one rule is
+   the only part that needs code.
+
+   The gradient is stacked over the photo in the same property, which avoids
+   adding an overlay element just to keep the white text readable. */
+
+.super-footer {
+  background-image:
+    linear-gradient(rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.55)),
+    url("https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@bd7204272ad2e813ef8d6935a2e2910c4a44b80e/assets/images/footer-background.jpg");
+  background-size: cover;
+  background-position: center;
+  --footer-text-color: #fff;
+}
