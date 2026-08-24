@@ -24,7 +24,7 @@
 /* Not scoped to .has-footer: with Super's footer off, notion.css applies 30vh
    of bottom padding and the band would float above a gap. */
 .notion-root {
-  padding-bottom: 0 !important;
+  padding-bottom: 0 !important;   /* .notion-root.has-footer outranks us if refooted */
 }
 
 .notion-root > .notion-callout.bg-blue-light {
@@ -32,16 +32,18 @@
   left: 50%;
   width: 100vw;
   margin: 0 0 0 -50vw;
-  padding: clamp(32px, 5vh, 60px) 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
+  padding: clamp(32px, 5vh, 60px) 0;
+  border: 0 !important;   /* .notion-callout.bg-blue-light.border ties on specificity */
+  border-radius: 0;
   background-image:
     linear-gradient(rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.62)),
     url("https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@bd7204272ad2e813ef8d6935a2e2910c4a44b80e/assets/images/footer-background.jpg");
   background-size: cover;
   background-position: center;
 
-  /* Notion always renders a callout icon; the legacy footer had none. */
+  /* Drop this once the 📍 is removed from the callout in Notion (click the
+     icon → Remove). Notion only emits the element when an icon is set, so the
+     hero's iconless callout needs no such rule. */
   > .notion-callout__icon {
     display: none;
   }
