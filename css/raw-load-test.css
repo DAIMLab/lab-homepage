@@ -1,0 +1,35 @@
+/* Probe: did this external stylesheet actually apply?
+   Temporary. Delete this file and the <link> once the answer is recorded.
+   Loud on purpose — a null result must mean "blocked", not "too subtle to notice". */
+
+/* 1. Fixed banner across the top. Impossible to miss, impossible to confuse. */
+body::before {
+  content: "EXTERNAL CSS LOADED";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  padding: 10px 16px;
+  background: #000000;
+  color: #00ff88;
+  font: 700 16px/1.2 ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* 2. Second signal, in case a fixed pseudo-element is clipped by the theme. */
+.super-navbar {
+  background: #ff00a0 !important;
+}
+
+.super-navbar__item,
+.super-navbar__logo-text {
+  color: #ffffff !important;
+}
+
+/* 3. Third signal, independent of Super's chrome. */
+.notion-root {
+  outline: 4px dashed #ff00a0;
+  outline-offset: -4px;
+}
