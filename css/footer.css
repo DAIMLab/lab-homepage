@@ -36,7 +36,7 @@
   position: relative;
   left: 50%;
   width: 100vw;
-  margin: 0 0 0 -50vw;
+  margin: 100px 0 0 -50vw;   /* breathing room between page content and the band */
   padding: clamp(20px, 3vh, 36px) 0 clamp(12px, 2vh, 20px);
   border: 0 !important;   /* .notion-callout.bg-blue-light.border ties on specificity */
   border-radius: 0;

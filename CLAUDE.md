@@ -32,6 +32,7 @@ Super server-renders every page, so `curl https://daim.super.site/<slug>` return
 
 ```
 css/super-custom.css   mirror of the site-wide CSS tab
+css/footer.css         site-wide CSS tab, the Notion footer band
 css/home-hero.css      Home page per-page CSS tab
 css/lab-news.css       Lab News page per-page CSS tab
 html/home-hero.html    Home page per-page Body tab
