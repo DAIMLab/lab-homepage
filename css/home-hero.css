@@ -1,0 +1,117 @@
+/* Home page hero. Paste into the Home page's per-page Code editor, CSS tab.
+   Markup lives in html/home-hero.html (same page's Body tab).
+   Per-page, not site-wide: the navbar overrides below must not reach other pages. */
+
+:root {
+  --daim-hero-height: clamp(440px, 82vh, 880px);
+  --daim-hero-radius: 48px;
+}
+
+/* The hero paints from the very top of the document, under the navbar.
+   Absolute rather than in-flow, so it does not depend on where Super drops
+   the Body-tab markup. The navbar (z-index 40) stays above it. */
+.daim-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--daim-hero-height);
+  overflow: hidden;
+  border-radius: 0 0 var(--daim-hero-radius) var(--daim-hero-radius);
+  background: #1c1c1e;
+  z-index: 1;
+}
+
+/* Cover-fit a 16:9 iframe: whichever of the two sizings is larger wins. */
+.daim-hero__media iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 56.25vw;
+  min-width: 177.78vh;
+  min-height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+/* The video is bright, so white text needs a floor under it. */
+.daim-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.28) 45%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+}
+
+.daim-hero__title {
+  position: absolute;
+  left: clamp(24px, 6vw, 96px);
+  bottom: clamp(48px, 9vh, 104px);
+  right: clamp(24px, 6vw, 96px);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  color: #ffffff;
+  font-family: "NanumSquare", var(--primary-font);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.daim-hero__line--lead {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.daim-hero__line--sub {
+  font-size: clamp(1.25rem, 2.6vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+/* Navbar rides on top of the hero: transparent, white text.
+   Safe because .super-navbar is position: relative — it scrolls away
+   rather than sitting over the white content below. */
+.super-navbar {
+  background: transparent !important;
+  --navbar-text-color: #ffffff;
+  --navbar-text-color-dark: #ffffff;
+  --navbar-list-item-hover: rgba(255, 255, 255, 0.16);
+}
+
+.super-navbar__item,
+.super-navbar__logo-text {
+  color: #ffffff !important;
+}
+
+/* Push the page content clear of the hero. */
+.super-content.page__index {
+  margin-top: calc(var(--daim-hero-height) - var(--navbar-height));
+  position: relative;
+  z-index: 2;
+}
+
+/* The hero replaces the Notion page title and icon. */
+#page-index .notion-header {
+  display: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    --daim-hero-height: clamp(380px, 68vh, 560px);
+    --daim-hero-radius: 28px;
+  }
+}
+
+/* Autoplaying video is a motion trigger; drop to the still background. */
+@media (prefers-reduced-motion: reduce) {
+  .daim-hero__media {
+    display: none;
+  }
+}
