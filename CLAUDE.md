@@ -101,6 +101,10 @@ Assets live in this repo and are served from GitHub. The repo is public, so no t
 | Video (mp4) | jsDelivr | raw returns `application/octet-stream`, which `<video>` will not play |
 | CSS / JS files | jsDelivr, or paste into Super's Code editor | raw returns `text/plain`, which `nosniff` blocks for `<link>` and `<script>` |
 
+The CSS row is measured on this site, not inferred. A `<link rel="stylesheet">` pointing at a raw URL was injected into Super's Head tab on 2026-08-25: devtools showed the request completing `200 OK` while none of the file's rules took effect. Do not re-test this; a stylesheet that "loads but does nothing" is the expected raw behavior, not a broken file.
+
+Two traps when checking a raw URL by hand. GitHub caches the branch-ref lookup for about five minutes, so a freshly pushed file 404s on `…/main/…` while already resolving on `…/<commit-sha>/…` — a 404 read as "blocked" is a false positive. And `curl -I` on a raw URL returns `text/plain` for both the 200 and the 404, so check the status line, not just the type.
+
 jsDelivr serves the same repo with correct MIME types and a CDN in front:
 
 ```
