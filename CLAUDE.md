@@ -26,7 +26,9 @@ Notion page (source of truth for content)
 
 No build, lint, or test step. Do not add `npm` scaffolding unless asked; a preprocessor breaks the paste-into-Super workflow.
 
-Super server-renders every page, so `curl https://daim.super.site/<slug>` returns the real DOM with all classes intact. Use it to check selectors without opening a browser. The legacy IMweb site is the opposite: client-rendered, so `curl` yields almost nothing and it must be inspected in a browser.
+Super server-renders every page, so `curl https://daim.super.site/<slug>` returns the real DOM with all classes intact. Use it to check selectors without opening a browser.
+
+The legacy IMweb site is mostly client-rendered, but its **board pages are not**: a post at `https://daim.kaist.ac.kr/29/?q=<token>&bmode=view&idx=<idx>&t=board` arrives complete, and `curl` plus BeautifulSoup reads it without a browser. `<title>` carries the post title (suffixed ` : DAIM`), `.board_view span.category` the category, and `.board_txt_area` the body and its images. The list at `/29` pages twelve at a time via `&page=N`; the `q` token is a fixed base64 filter shared by every URL. What the board does *not* render anywhere is a publish date — the only date is the one typed into the title.
 
 ## Repository Layout
 
@@ -267,3 +269,17 @@ Notion page by hand.
 ## Legacy Site Inventory
 
 The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/38`, `/122325403`) with no readable labels. Use it as a migration checklist and open each in a browser to identify it.
+
+`/29` is **Lab News**, and it is migrated: 58 posts and 246 photos now live in
+`Lab News Posts`. The photos were downscaled to 1600px at JPEG q82 — 198MB of
+originals became 34MB — and sit in `assets/lab-news/`, named
+`<legacy-idx>-<n>.jpg` so any one of them traces back to its source post. They
+are served from the `lab-news-assets` tag rather than a branch, per the caching
+rule above.
+
+Field mapping, for whoever migrates the next board: `Title` is the legacy title
+with its date prefix and any `@Place` suffix stripped, `Date` is parsed from
+that prefix (`2026.06` and `2026.2` both mean the first of the month, only
+`2026.03.23` is a real day), `Location` is the `@Place`, and `Summary` is the
+first 180 characters of the body. 32 of the 58 posts carry photos and no text
+at all, which is why the gallery card CSS cannot assume a summary row exists.
