@@ -1,1 +1,8 @@
 /* DAIM homepage — custom CSS for Super. Selector reference: https://docs.super.so/super-css-classes */
+
+/* Hide the 🎛 Control panel toggle from the published site.
+   Taken from the Ascent template (reference/ascent-template.css:46).
+   Matches any brown-background toggle, so keep brown reserved for hidden blocks. */
+.notion-toggle.bg-brown {
+  display: none !important;
+}
