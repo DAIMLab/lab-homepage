@@ -17,8 +17,11 @@
 
    Uses CSS nesting, as css/home-hero.css does. */
 
-.notion-root.has-footer {
-  padding-bottom: 0 !important;        /* let the band meet the footer */
+/* Not scoped to .has-footer: the band must sit flush whether Super's native
+   footer is switched on or off. Without this, turning it off restores
+   notion.css's 30vh bottom padding and drops a gap under the band. */
+.notion-root {
+  padding-bottom: 0 !important;
 }
 
 .notion-root > .notion-callout.bg-blue-light {
