@@ -1,16 +1,23 @@
 /* Footer. Super Code editor > CSS tab (site-wide).
 
-   The whole footer is one Notion synced callout, so lab members edit the copy
-   in Notion and all five pages follow. Super's own footer is switched off
-   (Navigation → Footer → Footer Type: None) — two stacked footers read as a
-   duplicate, and the legacy design was a single photo band anyway.
+   The whole footer is one Notion synced callout — photo included — so lab
+   members edit every part of it in Notion and all five pages follow. Super's
+   own footer is switched off (Navigation → Footer → Footer Type: None); two
+   stacked footers read as a duplicate, and the legacy design was a single
+   photo band anyway.
 
    Notion structure, synced onto every page:
 
-     Callout (Blue background)
-       ├─ 2 columns   Contact & Info  |  Korean greeting
+     Callout (Blue background, no icon)
+       ├─ Image       the background photo
+       ├─ 2 columns   Contact & Info (60) | Korean greeting (40)
        ├─ Divider
        └─ Text        Copyright …
+
+   The photo is a Notion image block rather than a CSS background, so swapping
+   it is a drag-and-drop in Notion and this file never names a host. That costs
+   about ten declarations over the background-image version — the price of
+   handing the asset to Notion.
 
    Notion's blue renders as `bg-blue-light`, not `bg-blue`; re-check with
      curl -sL https://daim.super.site/ | grep -o 'class="notion-callout[^"]*"'
@@ -24,7 +31,7 @@
 /* Not scoped to .has-footer: with Super's footer off, notion.css applies 30vh
    of bottom padding and the band would float above a gap. */
 .notion-root {
-  padding-bottom: 0 !important;   /* .notion-root.has-footer outranks us if refooted */
+  padding-bottom: 0 !important;
 }
 
 .notion-root > .notion-callout.bg-blue-light {
@@ -35,23 +42,43 @@
   padding: clamp(32px, 5vh, 60px) 0;
   border: 0 !important;   /* .notion-callout.bg-blue-light.border ties on specificity */
   border-radius: 0;
-  background-image:
-    linear-gradient(rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.62)),
-    url("https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@bd7204272ad2e813ef8d6935a2e2910c4a44b80e/assets/images/footer-background.jpg");
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
 
-  /* Drop this once the 📍 is removed from the callout in Notion (click the
-     icon → Remove). Notion only emits the element when an icon is set, so the
-     hero's iconless callout needs no such rule. */
-  > .notion-callout__icon {
-    display: none;
+  /* Full width, so the photo can fill it; the text is re-narrowed below. */
+  > .notion-callout__content {
+    position: relative;
+    margin: 0;
   }
 
-  > .notion-callout__content {
+  /* The photo leaves the flow and fills the band. Absolute, not negative
+     z-index: the blocks after it are positioned too, so document order alone
+     puts the text on top. */
+  .notion-image {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+
+  .notion-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Scrim, so white text survives the bright half of the photo. */
+  .notion-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.62);
+  }
+
+  /* Everything that is not the photo returns to the content column. */
+  > .notion-callout__content > *:not(.notion-image) {
+    position: relative;
     max-width: var(--layout-max-width);
-    margin: 0 auto;
-    padding: 0 24px;
+    margin-inline: auto;
+    padding-inline: 24px;
   }
 
   .notion-heading,
@@ -63,7 +90,7 @@
   /* The rule above the copyright, as on the legacy site. */
   .notion-divider {
     border-color: rgb(255 255 255 / 0.28);
-    margin: 24px 0 16px;
+    margin-block: 24px 16px;
   }
 
   /* The copyright is the band's last block; it should not shout. */
