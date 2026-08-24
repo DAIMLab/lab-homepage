@@ -1,18 +1,61 @@
-/* Footer background photo. Super Code editor > CSS tab (site-wide).
+/* Footer. Super Code editor > CSS tab (site-wide).
 
-   Everything else in the footer is native, under Navigation → Footer:
-   type, logo, menu items, socials, divider, footnote. Super exposes
-   --footer-background-color but no background image, so this one rule is
-   the only part that needs code.
+   Two pieces, both on every page:
+     1. A Notion synced callout (blue background) holding the two contact
+        columns. It is a synced block, so editing it in Notion updates all
+        five pages — that is the point of putting the copy there.
+     2. Super's native footer under it: logo, divider, footnote, all set in
+        Navigation → Footer. No code.
 
-   The gradient is stacked over the photo in the same property, which avoids
-   adding an overlay element just to keep the white text readable. */
+   Only the photo band needs CSS. Notion's blue background renders as
+   `bg-blue-light`, not `bg-blue`; re-check with
+     curl -sL https://daim.super.site/ | grep -o 'class="notion-callout[^"]*"'
 
-.super-footer {
+   Convention: a top-level blue callout IS the footer band. Use another colour
+   for ordinary callouts. Full-width trick is Super's own, from
+   https://docs.super.so/code-snippets/full-width-section
+
+   Uses CSS nesting, as css/home-hero.css does. */
+
+.notion-root.has-footer {
+  padding-bottom: 0 !important;        /* let the band meet the footer */
+}
+
+.notion-root > .notion-callout.bg-blue-light {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin: 0 0 0 -50vw;
+  padding: clamp(48px, 8vh, 88px) 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
   background-image:
-    linear-gradient(rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.55)),
+    linear-gradient(rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.62)),
     url("https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@bd7204272ad2e813ef8d6935a2e2910c4a44b80e/assets/images/footer-background.jpg");
   background-size: cover;
   background-position: center;
-  --footer-text-color: #fff;
+
+  /* Notion always renders a callout icon; the legacy footer had none. */
+  > .notion-callout__icon {
+    display: none;
+  }
+
+  > .notion-callout__content {
+    max-width: var(--layout-max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .notion-heading,
+  .notion-text,
+  .notion-link {
+    color: #fff !important;
+  }
+}
+
+/* The native footer continues the band instead of starting a new surface.
+   Both variables are read by .super-footer itself. */
+.super-footer {
+  --footer-background-color: #14161a;
+  --footer-text-color: #ffffff;
 }
