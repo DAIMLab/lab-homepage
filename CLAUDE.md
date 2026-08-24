@@ -79,9 +79,11 @@ Custom code is the last resort, not the first. These native paths are confirmed 
 | Video autoplay | `super:{{ autoplay }}` at the end of the video block's caption (`/additional-features`) | a Body-tab script |
 | Image eager load | `super:{{ eager }}` in the image caption | — |
 | Image links to a URL | put the URL in the image caption; Super hides the caption | an `<a>` wrapper |
-| Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`, Personal plan) | a Head-tab `<link>` plus a `--primary-font` override |
+| Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`) | a Head-tab `<link>` plus a `--primary-font` override |
 | Palette | Design → Colors, manual or a preset | per-color CSS |
 | Pretty URLs, SEO, redirects, password, hiding a page via 404 | per-page settings (`/site-pages`) | — |
+
+This site is on Super's **Personal** plan. Font upload is included, so NanumSquare goes in Design → Typography rather than a Head-tab `<link>`. Site Files is Pro-only and out of reach; it would not help anyway (see below).
 
 Two things that are **not** native, checked so nobody re-checks them: there is no per-page setting to hide the page title or icon, so `.notion-header { display: none }` stays CSS; and Site Files (`/site-files`) accepts only `.txt` in `root` or `.well-known`, so it cannot host assets — jsDelivr stays.
 
