@@ -49,7 +49,7 @@
 .page__lab-news .notion-collection-card > div:not([class]) {
   height: auto !important;
   min-height: 0;
-  aspect-ratio: 1 / 1.3;
+  aspect-ratio: 1 / 1.2;
 }
 
 /* Rows line up across cards only when each row is a fixed number of lines,
