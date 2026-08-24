@@ -1,0 +1,46 @@
+@charset "UTF-8";
+/* Mirror of the CSS pasted into Super's Code editor > CSS tab (site-wide).
+   Super does not read this repo: after editing, paste this file back into Super.
+   Selector reference: https://docs.super.so/super-css-classes */
+/* 1. 높이 고정 해제 */
+.super-navbar,
+.super-navbar__content,
+.super-navbar__content div:has(.super-navbar__item-list) {
+  height: auto;
+  min-height: var(--navbar-height);
+  max-height: none;
+}
+
+/* 2. 잘라내기 해제 + 줄바꿈된 행 정렬 */
+.super-navbar__item-list {
+  height: auto;
+  overflow: visible;
+  justify-content: center;
+  row-gap: 2px;
+  padding: 6px 0;
+  gap: clamp(14px, 1.8vw, 28px);
+}
+
+/* 3. li가 100% 높이면 2행에서 세로로 늘어난다 */
+.super-navbar__item-list li {
+  height: auto;
+}
+
+/* 4. 링크 칸을 필요한 만큼 쓰게 (기본값 1fr 2fr 1fr → 50%에 갇힘) */
+.super-navbar.balanced .super-navbar__content {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.super-navbar__item {
+  font-size: clamp(14px, 1.15vw, 16px);
+  white-space: nowrap;
+}
+
+/* 드롭다운 패널을 오른쪽 끝에서 가운데로 */
+.super-navbar__viewport-wrapper {
+  justify-content: center;
+}
+
+.super-navbar__viewport {
+  right: auto;
+}
