@@ -112,14 +112,14 @@ media query is needed. Measured defaults on this site:
 
 | Variable | Default | What it drives |
 | --- | --- | --- |
-| `--collection-card-cover-size-{small,medium,large}` | 260px (medium) | minimum card width, hence the column count |
-| `--collection-card-cover-height-{small,medium,large}` | 200px (medium) | cover height |
+| `--collection-card-cover-size-{small,medium,large}` | 172 / 260 / 320px | minimum card width, hence the column count |
+| `--collection-card-cover-height-{small,medium,large}` | 128 / 200 / 200px | cover height; `large` is no taller than `medium`, so switching a view to Large widens the columns and nothing else |
 | `--collection-card-gap` | 10px | grid gap; takes a two-value pair |
 | `--collection-card-padding` | 0px | card padding |
 | `--collection-card-border-radii` | `var(--border-radii-layout)` | card corners |
 | `--collection-card-shadow` | 1px hairline + 2px drop | the card's border look; there is no `border` |
 | `--collection-card-content-padding` | `var(--padding-layout)` | gap between cover and text |
-| `--collection-header-border` | `var(--border-layout)` | rule above the grid |
+| `--collection-header-border` | `var(--border-layout)` | rule above the grid; switching off Notion's database title puts `no-border-top` on the gallery and clears it natively |
 | `--color-card-bg` | `#ffffff` | card background |
 
 Two places the variables run out, both hit while building Lab News. A card
@@ -133,6 +133,14 @@ A percentage inside the minimum, e.g. `minmax(clamp(260px, 30%, 420px), 1fr)`,
 does not work: the auto-fill repetition count ignores the `clamp` floor and
 holds the column count constant, so a 340px viewport still renders three
 97px cards. Use a plain length.
+
+Every one of these is scoped to the card size the view is set to, so a rule
+naming `medium` goes silent the moment someone switches the gallery to Large
+in Notion. Where a cover has to hold a shape rather than a height, skip the
+height variable and set `aspect-ratio` on
+`.page__lab-news .notion-collection-card__cover.<size>` — a length cannot keep
+a ratio across changing column counts. Reframing a photo inside that ratio is
+native: drag the cover in Notion and it writes `object-position`.
 
 The Ascent template applies green (`<span color="green">`) throughout as its accent. Notion colors are per-block, so retinting is a CSS job: override `--green-h/-s/-l` to the DAIM cyan rather than editing every block in Notion.
 

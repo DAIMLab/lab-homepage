@@ -18,20 +18,38 @@
   --padding-left: clamp(16px, 3vw, 48px);
   --padding-right: clamp(16px, 3vw, 48px);
 
-  /* Minimum card width; the column count follows from it. 380px holds three
-     across a desktop, two on a tablet, one on a phone, and never lets a card
-     fall below about 360px. */
-  --collection-card-cover-size-medium: 380px;
-  --collection-card-cover-height-medium: 300px;
+  /* Minimum card width, and so the column count: 380px holds three across a
+     desktop, two on a tablet, one on a phone. The `large` suffix must match
+     the card size chosen on the gallery view in Notion — Super scopes this
+     per size, and the small/medium names are inert while the view is Large.
+
+     There is no matching height variable here on purpose; the cover is set
+     by ratio below instead. */
+  --collection-card-cover-size-large: 380px;
   --collection-card-gap: 36px 24px;
   --collection-card-content-padding: 14px 0 0;
 
-  /* The legacy design is a bare photo over text: no card chrome, and no rule
-     above the grid. */
+  /* The legacy design is a bare photo over text, with no card chrome. The
+     rule above the grid is already gone natively: Notion's database title is
+     switched off for this block, which puts `no-border-top` on the gallery. */
   --collection-card-border-radii: 0;
   --collection-card-shadow: none;
   --color-card-bg: transparent;
-  --collection-header-border: 0;
+}
+
+/* Covers are pinned by ratio rather than by Super's height variable, which
+   takes a length and so only holds the shape at one column count — a phone
+   showing cards one up would letterbox them. A post with no cover gets an
+   unclassed spacer div in place of the image, carrying an inline height, so
+   it is shaped here too; only !important reaches past an inline style. The
+   size class has to appear in the selector, because Super's
+   `.notion-collection-card__cover.large` ties a bare page scope on
+   specificity and wins on order. */
+.page__lab-news .notion-collection-card__cover.large,
+.page__lab-news .notion-collection-card > div:not([class]) {
+  height: auto !important;
+  min-height: 0;
+  aspect-ratio: 1 / 1.3;
 }
 
 /* Rows line up across cards only when each row is a fixed number of lines,
@@ -70,11 +88,4 @@
   margin-top: 8px;
   font-size: 14px;
   color: #4a4a4f;
-}
-
-/* A post with no cover gets a spacer div instead, unclassed and carrying an
-   inline height that ignores the variable above. Only !important reaches past
-   an inline style. */
-.page__lab-news .notion-collection-card > div:not([class]) {
-  height: var(--collection-card-cover-height-medium) !important;
 }
