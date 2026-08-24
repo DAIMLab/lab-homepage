@@ -1,28 +1,39 @@
 <!-- Home hero video. Home page's per-page Code editor, Body tab.
-     Pairs with super:{{ autoplay }} in the video block's caption in Notion.
 
-     Measured on the live site: that caption makes Super emit
-       <video width="624px" controls="" autoPlay="">
-     and nothing else. No browser honours autoplay without muted, so the clip
-     never starts; loop and controls are not covered either. This supplies the
-     three missing pieces and re-triggers playback, since setting muted after
-     the browser has already refused does not retry on its own. -->
+     Measured on the live site: Notion emits <video controls>, and Super adds
+     only autoPlay. No browser honours autoplay without muted, so the clip never
+     starts on its own; loop and controls are not covered either.
+
+     Playback is re-asserted rather than kicked off once. Super is a React app:
+     hydration re-renders the <video>, which reloads the source and aborts any
+     play() already in flight. Retrying on canplay and on every mutation tick
+     survives that; the paused check keeps it from fighting a real pause. -->
 <script>
 (function () {
   /* Keep in step with the selector used in css/home-hero.css. */
   var HERO = '.notion-root > .notion-callout.bg-gray-light';
 
+  function play(video) {
+    if (!video.paused) return;
+    var started = video.play();
+    if (started && started.catch) started.catch(function () {});
+  }
+
   function fix(video) {
-    if (video.dataset.daimHero) return;
-    video.dataset.daimHero = '1';
     video.muted = true;
     video.loop = true;
-    video.controls = false;
-    video.removeAttribute('controls');
-    video.setAttribute('playsinline', '');
-    var played = video.play();
-    /* Some browser settings refuse regardless; the first frame stays. */
-    if (played && played.catch) played.catch(function () {});
+    video.playsInline = true;
+    if (video.controls) {
+      video.controls = false;
+      video.removeAttribute('controls');
+    }
+    if (!video.dataset.daimHero) {
+      video.dataset.daimHero = '1';
+      video.preload = 'auto';
+      video.addEventListener('canplay', function () { play(video); });
+      video.addEventListener('loadeddata', function () { play(video); });
+    }
+    play(video);
   }
 
   function scan() {
@@ -30,7 +41,6 @@
   }
 
   scan();
-  /* Super navigates client-side, so the hero can mount after first paint. */
   new MutationObserver(scan).observe(document.documentElement, {
     childList: true,
     subtree: true

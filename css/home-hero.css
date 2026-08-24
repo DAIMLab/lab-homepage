@@ -63,9 +63,16 @@ body,
   }
 
   video {
-    width: 100% !important;           /* Notion emits width="400px" */
+    width: 100% !important;           /* Notion emits its own width attribute */
     height: 100% !important;
     object-fit: cover;
+  }
+
+  /* The script strips the controls attribute, but only once the element has
+     been parsed. Without this the player chrome flashes on first paint. */
+  video::-webkit-media-controls,
+  video::-webkit-media-controls-enclosure {
+    display: none !important;
   }
 
   > .notion-callout__content {
