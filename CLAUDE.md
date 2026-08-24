@@ -104,6 +104,36 @@ Super defines its whole palette and layout as custom properties on `html.theme-l
 
 Variables worth knowing: `--color-{text,bg,pill,pill-text}-<color>` and `--<color>-h/-s/-l` (each Notion color is built from HSL parts, so shifting `--green-h` retints every green block at once), `--navbar-*`, `--footer-*`, `--sidebar-*`, `--primary-font` / `--secondary-font`, `--text-weight` / `--heading-weight`, `--heading{1..5}-size`, `--layout-max-width` (currently 1100px), `--padding-left` / `--padding-right`, `--navbar-height` (60px), and the per-block `--*-border-radii` / `--*-padding` / `--*-shadow` set.
 
+Collections are worth calling out, because a gallery looks like it needs
+layout CSS and does not. Super already renders one as
+`grid-template-columns: repeat(auto-fill, minmax(var(--collection-card-cover-size-<size>), 1fr))`,
+so setting that one variable changes the column count at every width and no
+media query is needed. Measured defaults on this site:
+
+| Variable | Default | What it drives |
+| --- | --- | --- |
+| `--collection-card-cover-size-{small,medium,large}` | 260px (medium) | minimum card width, hence the column count |
+| `--collection-card-cover-height-{small,medium,large}` | 200px (medium) | cover height |
+| `--collection-card-gap` | 10px | grid gap; takes a two-value pair |
+| `--collection-card-padding` | 0px | card padding |
+| `--collection-card-border-radii` | `var(--border-radii-layout)` | card corners |
+| `--collection-card-shadow` | 1px hairline + 2px drop | the card's border look; there is no `border` |
+| `--collection-card-content-padding` | `var(--padding-layout)` | gap between cover and text |
+| `--collection-header-border` | `var(--border-layout)` | rule above the grid |
+| `--color-card-bg` | `#ffffff` | card background |
+
+Two places the variables run out, both hit while building Lab News. A card
+size class beats a single page scope on specificity — `.notion-collection-card__cover.medium`
+ties `.page__lab-news .notion-collection-card__cover` and wins on order — so
+reach for the variable rather than a longer selector. And a row with no cover
+gets an unclassed spacer `div` carrying an inline `height`, which no variable
+and no selector can reach; that one needs `!important`.
+
+A percentage inside the minimum, e.g. `minmax(clamp(260px, 30%, 420px), 1fr)`,
+does not work: the auto-fill repetition count ignores the `clamp` floor and
+holds the column count constant, so a 340px viewport still renders three
+97px cards. Use a plain length.
+
 The Ascent template applies green (`<span color="green">`) throughout as its accent. Notion colors are per-block, so retinting is a CSS job: override `--green-h/-s/-l` to the DAIM cyan rather than editing every block in Notion.
 
 ## Design Reference

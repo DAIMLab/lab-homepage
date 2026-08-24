@@ -1,122 +1,74 @@
 /* Lab News — gallery of posts.
    Per-page CSS: Super → Lab News → Code → CSS tab. Not site-wide.
 
-   Markup comes from a linked gallery view over the `Lab News Posts` database.
-   Card properties, in order: Title, Date, Location, Summary.
+   Markup is a linked gallery view over `Lab News Posts`, showing Title, Date,
+   Location and Summary.
 
-   Date, Location and Summary are addressed by the `property-<id>` class Super
-   emits alongside the generic ones. Those ids are stable per property, and
-   unlike :nth-child() they survive a post that leaves Location empty — Notion
-   drops the element entirely rather than rendering it blank, which would
-   otherwise shift every row below it on that one card. */
+   Super already renders the gallery as a CSS grid and drives every card
+   dimension from a custom property, so most of what this page needs is a
+   variable block rather than rules. The column count comes out of
+   `repeat(auto-fill, …)` in Super's own rule, from the minimum card width
+   set below — which is why there are no media queries here. */
 
-/* The page's own h1 already says Lab News; the database title repeats it. */
+.page__lab-news {
+  /* Super pads pages 96px a side. This page is `full-width`, so that padding
+     is the only thing holding the grid in, and the legacy Lab News ran much
+     nearer the edge. Safe for the footer, whose full-bleed is measured
+     against the viewport rather than against this box. */
+  --padding-left: clamp(16px, 3vw, 48px);
+  --padding-right: clamp(16px, 3vw, 48px);
+
+  /* Minimum card width; the column count follows from it. 380px holds three
+     across a desktop, two on a tablet, one on a phone, and never lets a card
+     fall below about 360px. */
+  --collection-card-cover-size-medium: 380px;
+  --collection-card-cover-height-medium: 300px;
+  --collection-card-gap: 36px 24px;
+  --collection-card-content-padding: 14px 0 0;
+
+  /* The legacy design is a bare photo over text: no card chrome, and no rule
+     above the grid. */
+  --collection-card-border-radii: 0;
+  --collection-card-shadow: none;
+  --color-card-bg: transparent;
+  --collection-header-border: 0;
+}
+
+/* Two leftovers from the database sitting on this page: Super renders the
+   source database as a child-page link, and the linked view above the grid
+   carries the database title. The page h1 already says Lab News, and which
+   of the two Super emits varies between renders, so both are covered here.
+   Dragging the database into the Control panel in Notion retires the rule. */
+.page__lab-news .notion-page,
 .page__lab-news .notion-collection__header-wrapper {
   display: none;
 }
 
-/* Super pads every page 96px on each side. The legacy Lab News grid ran much
-   closer to the edge, and that padding is the only thing constraining this
-   page — `.notion-root` here is `full-width`, so `--layout-max-width` never
-   applies. Overriding the variable widens the cards without touching the
-   footer, whose full-bleed is measured against the viewport, not this box. */
-.page__lab-news {
-  --padding-left: clamp(16px, 3vw, 48px);
-  --padding-right: clamp(16px, 3vw, 48px);
-}
-
-/* Super's default gallery is a percentage-width flex wrap, which leaves a
-   ragged last row. A grid keeps every card the same width. */
-.page__lab-news .notion-collection-gallery {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 36px 24px;
-}
-
-@media (max-width: 900px) {
-  .page__lab-news .notion-collection-gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
-  .page__lab-news .notion-collection-gallery {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Strip the card chrome; the legacy design is a bare photo over text. */
-.page__lab-news .notion-collection-card {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-}
-
-/* Covers arrive at whatever aspect the uploaded photo has. Pinning the ratio
-   is what makes titles line up across a row.
-
-   The size class has to be in the selector. Super sets `height: 200px` from
-   `.notion-collection-card__cover.medium`, which ties a two-class selector on
-   specificity and wins on order, and an explicit height beats `aspect-ratio`.
-   The legacy cards were near square; 4:3 keeps group photos from losing heads
-   at the crop. Change to `1 / 1` for exact parity with the old site. */
-.page__lab-news .notion-collection-card__cover.medium {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 2px;
-}
-
-/* A post with no cover still gets a spacer div from Super, unclassed and
-   carrying an inline `height:200px`. Left alone it sits shorter than a real
-   cover and drops that one card's rows out of line with its neighbours.
-   Only !important reaches past an inline style. */
-.page__lab-news .notion-collection-card > div:not([class]) {
-  height: auto !important;
-  aspect-ratio: 4 / 3;
-}
-
-.page__lab-news .notion-collection-card__content {
-  padding: 14px 0 0;
-}
-
-/* Every text row below is held to a fixed number of lines. That is what keeps
-   the date, location and summary of one card level with the next card's, no
-   matter how long a headline runs. */
+/* Rows line up across cards only when each row is a fixed number of lines,
+   and neither Notion nor Super expresses that. What follows is here for that
+   reason, or for type the theme variables do not reach. */
 .page__lab-news .notion-collection-card__property.title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.9em; /* 2 lines at the line-height below */
+  min-height: 2.9em;
   font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
   color: #212121;
 }
 
-/* Notion prefixes every card title with a page icon. The legacy cards have none. */
-.page__lab-news .notion-property__title__icon-wrapper {
-  display: none;
-}
-
-/* Date and Location read as one muted metadata line under the title. */
+/* Date, then Location: one clipped line each. The classes are Notion property
+   ids, which unlike :nth-child() survive a post that leaves Location empty —
+   Notion drops the element rather than rendering it blank. */
 .page__lab-news .notion-collection-card__property.property-4856717d,
 .page__lab-news .notion-collection-card__property.property-6e756d61 {
   overflow: hidden;
-  height: 1.6em;
   font-size: 13px;
-  line-height: 1.6;
   color: #8a8a8e;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.page__lab-news .notion-collection-card__property.property-4856717d {
-  margin-top: 4px;
 }
 
 .page__lab-news .notion-collection-card__property.property-686f7844 {
@@ -127,6 +79,12 @@
   height: 2.9em;
   margin-top: 8px;
   font-size: 14px;
-  line-height: 1.45;
   color: #4a4a4f;
+}
+
+/* A post with no cover gets a spacer div instead, unclassed and carrying an
+   inline height that ignores the variable above. Only !important reaches past
+   an inline style. */
+.page__lab-news .notion-collection-card > div:not([class]) {
+  height: var(--collection-card-cover-height-medium) !important;
 }
