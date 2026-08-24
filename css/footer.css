@@ -32,7 +32,7 @@
   left: 50%;
   width: 100vw;
   margin: 0 0 0 -50vw;
-  padding: clamp(48px, 8vh, 88px) 0 !important;
+  padding: clamp(32px, 5vh, 60px) 0 !important;
   border: 0 !important;
   border-radius: 0 !important;
   background-image:
@@ -61,7 +61,7 @@
   /* The rule above the copyright, as on the legacy site. */
   .notion-divider {
     border-color: rgb(255 255 255 / 0.28);
-    margin: 32px 0 20px;
+    margin: 24px 0 16px;
   }
 
   /* The copyright is the band's last block; it should not shout. */
