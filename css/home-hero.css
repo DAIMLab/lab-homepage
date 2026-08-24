@@ -90,6 +90,7 @@ body,
 
   h1.notion-heading {
     font-size: clamp(2.5rem, 6vw, 5.5rem) !important;
+    font-weight: 700 !important;   /* Super's uploader tops out at 700 */
   }
 
   h3.notion-heading {
