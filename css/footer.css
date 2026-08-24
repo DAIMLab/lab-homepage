@@ -39,7 +39,7 @@
   left: 50%;
   width: 100vw;
   margin: 0 0 0 -50vw;
-  padding: clamp(32px, 5vh, 60px) 0;
+  padding: clamp(32px, 5vh, 60px) 0 clamp(16px, 2.5vh, 28px);
   border: 0 !important;   /* .notion-callout.bg-blue-light.border ties on specificity */
   border-radius: 0;
   overflow: hidden;
@@ -64,7 +64,7 @@
 
   .notion-image img {
     width: 100%;
-    height: 100%;
+    height: 100% !important;   /* Notion ships style="height:auto" inline */
     object-fit: cover;
   }
 
