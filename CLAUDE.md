@@ -105,13 +105,28 @@ The CSS row is measured on this site, not inferred. A `<link rel="stylesheet">` 
 
 Two traps when checking a raw URL by hand. GitHub caches the branch-ref lookup for about five minutes, so a freshly pushed file 404s on `…/main/…` while already resolving on `…/<commit-sha>/…` — a 404 read as "blocked" is a false positive. And `curl -I` on a raw URL returns `text/plain` for both the 200 and the 404, so check the status line, not just the type.
 
-jsDelivr serves the same repo with correct MIME types and a CDN in front:
+jsDelivr serves the same repo with correct MIME types and a CDN in front. There is no upload or registration step: it fetches from GitHub on the first request for a path and caches the result.
 
 ```
-https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@main/<path>
+https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@<ref>/<path>
 ```
 
-Pin a tag or commit instead of `@main` for anything that must not change under the live site; `@main` is cached by jsDelivr for up to 24 hours, so a push is not immediately visible. For CSS, pasting into Super's CSS tab stays the primary route — it applies instantly and avoids the render-blocking external request. Keep video files under GitHub's 100 MB per-file limit; anything larger belongs on YouTube or Vimeo as a Notion embed.
+`<ref>` is a branch, tag, or full commit SHA. Measured `Cache-Control` differs sharply between them:
+
+| Ref form | Browser `max-age` | CDN `s-maxage` |
+| --- | --- | --- |
+| `@main` (or no ref) | 604800 (7 days) | 43200 (12 hours) |
+| `@<full-sha>` or tag | 31536000 (1 year), `immutable` | same |
+
+The 7-day browser cache is the trap. Purging the CDN does nothing for a visitor who already loaded the file, so **never point the live site at `@main`**. Pin a full SHA or tag and change the URL when the asset changes — a new URL is the only reliable cache bust.
+
+Purging a branch URL does work without an access request, confirmed against this repo:
+
+```bash
+curl -s "https://purge.jsdelivr.net/gh/DAIMLab/lab-homepage@main/<path>"   # → status: finished
+```
+
+Limits: 20 MB per file (GitHub-sourced), well under GitHub's own 100 MB. Video above 20 MB belongs on YouTube or Vimeo as a Notion embed. HTML files are served as `text/plain` deliberately, so jsDelivr cannot host a page — only assets. For CSS, pasting into Super's CSS tab stays the primary route: it applies instantly and avoids a render-blocking external request.
 
 ## Notion Structure
 
