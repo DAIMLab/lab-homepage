@@ -37,6 +37,34 @@
   --color-card-bg: transparent;
 }
 
+/* Post count above the grid, the way the legacy page carried "Lab News 58".
+   Neither Notion nor Super publishes a count, so it is counted in CSS.
+
+   The counter has to be printed by the gallery's own ::after, because CSS
+   counters read in document order and nothing earlier in the page can see how
+   many cards follow. `order: -1` then moves that box to the top of the grid,
+   which changes where it paints but not what it counted.
+
+   It counts the cards Super rendered, which is the database total only while
+   the view returns every row — true below Notion's 100-row page. Past that,
+   check the number against Notion before trusting it. */
+.page__lab-news .notion-collection-gallery {
+  counter-reset: post;
+}
+
+.page__lab-news .notion-collection-card {
+  counter-increment: post;
+}
+
+.page__lab-news .notion-collection-gallery::after {
+  order: -1;
+  grid-column: 1 / -1;
+  content: counter(post) " posts";
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #8a8a8e;
+}
+
 /* Covers are pinned by ratio rather than by Super's height variable, which
    takes a length and so only holds the shape at one column count — a phone
    showing cards one up would letterbox them. A post with no cover gets an
@@ -60,7 +88,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.9em;
+  min-height: 2.0em;
   font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
