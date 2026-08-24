@@ -87,6 +87,16 @@ This site is on Super's **Personal** plan. Font upload is included, so NanumSqua
 
 Two things that are **not** native, checked so nobody re-checks them: there is no per-page setting to hide the page title or icon, so `.notion-header { display: none }` stays CSS; and Site Files (`/site-files`) accepts only `.txt` in `root` or `.well-known`, so it cannot host assets — jsDelivr stays.
 
+## Known Console Noise
+
+`GET https://daim.super.site/fit=scale-down 404` and `.../quality=90 404` are Super's bug, not ours, and they are cosmetic. Diagnosed 2026-08-25, recorded so nobody re-derives it.
+
+Super mirrors Notion-uploaded images to `images.spr.so` behind Cloudflare Images, whose options are comma-separated: `…/logo-kaist-daim-labs/w=1920,quality=90,fit=scale-down`. `srcset` also separates its candidates with commas, and Super emits the URL without encoding them, so the browser splits one URL into three candidates. Two of them (`quality=90`, `fit=scale-down`) are not URLs, resolve relative to the origin, and 404.
+
+The `src` attribute is a single well-formed URL, so the image itself renders. Nothing in CSS can help — `srcset` is parsed regardless of `display: none`. Expect it to reappear for any raster image uploaded into Notion; images referenced by external URL are not proxied and do not trigger it.
+
+The one on Home comes from the leftover Ascent logo image inside the hidden `🎛 Control panel` toggle. Deleting that image block in Notion removes both 404s.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on `html.theme-light` and `:root`. Override the variable instead of writing per-block rules; that is the shortest path from the Ascent template's look to the DAIM design.
