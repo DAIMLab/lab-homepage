@@ -1,27 +1,30 @@
 <!-- Home page hero autoplay. Paste into the Home page's per-page Code editor, Body tab.
-     Notion renders a video block as <video controls> with no autoplay attribute,
-     and neither Notion nor CSS can add one. This flips those properties instead.
+     Notion renders a video block as <video width="400px" controls> with no autoplay
+     attribute, and neither Notion nor CSS can add one. This flips those properties.
      Styles live in css/home-hero.css. -->
 <script>
 (function () {
-  /* Keep in step with the callout color used in css/home-hero.css. */
-  var HERO = '.page__index .notion-root > .notion-callout.bg-gray';
+  /* Keep in step with the block id used in css/home-hero.css. */
+  var HERO = '#block-3c611c7b703c80388d88dd7a3c203767';
 
   function start(video) {
     if (video.dataset.daimHero) return;
     video.dataset.daimHero = '1';
     video.muted = true;
+    video.defaultMuted = true;
     video.loop = true;
     video.autoplay = true;
     video.controls = false;
+    video.removeAttribute('controls');
+    video.removeAttribute('width');
     video.setAttribute('playsinline', '');
     var played = video.play();
-    /* Browsers reject autoplay in some settings; the poster frame stays. */
+    /* Some browser settings reject autoplay outright; the first frame stays. */
     if (played && played.catch) played.catch(function () {});
   }
 
   function scan() {
-    document.querySelectorAll(HERO + ' .notion-video video').forEach(start);
+    document.querySelectorAll(HERO + ' video').forEach(start);
   }
 
   scan();

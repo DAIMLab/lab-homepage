@@ -1,24 +1,30 @@
 /* Home page hero, built from Notion blocks. Paste into the Home page's
-   per-page Code editor, CSS tab. Autoplay needs js/home-hero.js in the Body tab.
+   per-page Code editor, CSS tab. Autoplay needs html/home-hero-body.html
+   in the same page's Body tab.
 
-   Notion structure this expects, as the FIRST block on the Home page:
+   Notion structure, as the first block after the control panel:
 
-     Callout (Gray background, icon hidden by CSS)
-       ├─ Video block   → the background
-       ├─ Heading 1     → 로봇과 로봇을
-       └─ Heading 3     → 연결하여 제조혁신을 선도합니다.
+     Callout (Gray background)          → #block-3c611c7b703c80388d88dd7a3c203767
+       ├─ Video block                   → the background
+       ├─ Heading 1  로봇과 로봇을
+       └─ Heading 3  연결하여 제조혁신을 선도합니다.
+
+   The hero is keyed to that block id, measured off the live DOM. Recreating
+   the callout in Notion mints a new id and the hero goes flat; re-read it from
+   `curl -sL https://daim.super.site/ | grep -o 'id="block-[^"]*" class="notion-callout[^"]*"'`
+   and swap it below. The class on that callout is `bg-gray-light`, not `bg-gray`.
 
    Full-width technique is Super's official one from
    https://docs.super.so/code-snippets/full-width-section — a colored callout
-   escapes the content column with margin-left: -50vw + left: 50%.
-   Rewritten here rather than linked, so the hero can keep rounded corners
-   and zero padding, which that snippet forces off. */
+   escapes the content column with margin-left: -50vw + left: 50%. Rewritten
+   here rather than linked, so the hero keeps rounded corners and zero padding,
+   which that snippet forces off. */
 
-/* Swap .bg-gray if you pick a different callout color in Notion.
-   Avoid brown: .notion-toggle.bg-brown is the control-panel hide rule. */
 :root {
+  --daim-hero: #block-3c611c7b703c80388d88dd7a3c203767;
   --daim-hero-height: clamp(440px, 82vh, 880px);
   --daim-hero-radius: 48px;
+  --daim-hero-inset: clamp(24px, 6vw, 96px);
 }
 
 /* The -50vw break-out overflows the viewport unless this is clamped. */
@@ -32,29 +38,37 @@ body,
   display: none !important;
 }
 
+/* Pull the content column up so the hero starts under the navbar. */
+.super-content.page__index {
+  margin-top: calc(var(--navbar-height) * -1);
+}
+
+.page__index .notion-root {
+  padding-top: 0 !important;
+}
+
 /* --- The hero callout ------------------------------------------------- */
 
-.page__index .notion-root > .notion-callout.bg-gray {
+#block-3c611c7b703c80388d88dd7a3c203767 {
   position: relative;
   width: 100vw;
   max-width: 100vw;
   margin: 0 0 0 -50vw;
   left: 50%;
   height: var(--daim-hero-height);
-  padding: 0;
-  border: 0;
+  padding: 0 !important;
+  border: 0 !important;
   border-radius: 0 0 var(--daim-hero-radius) var(--daim-hero-radius);
   overflow: hidden;
   background: #1c1c1e;
 }
 
-/* Notion always renders a callout icon; the hero has no use for it. */
-.page__index .notion-root > .notion-callout.bg-gray > .notion-callout__icon {
+#block-3c611c7b703c80388d88dd7a3c203767 > .notion-callout__icon {
   display: none !important;
 }
 
 /* Scrim: the video is bright, so white text needs a floor under it. */
-.page__index .notion-root > .notion-callout.bg-gray::after {
+#block-3c611c7b703c80388d88dd7a3c203767::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -68,47 +82,17 @@ body,
   );
 }
 
-/* --- The video block, as background ----------------------------------- */
+/* --- Layout inside the callout ---------------------------------------- */
+/* Full width, so the video bleeds edge to edge; the text is held off the
+   left edge by padding rather than by a centered max-width column. */
 
-.page__index .notion-root > .notion-callout.bg-gray .notion-video {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  margin: 0;
-  width: 100%;
+#block-3c611c7b703c80388d88dd7a3c203767 > .notion-callout__content {
+  position: relative;
   height: 100%;
-}
-
-.page__index .notion-root > .notion-callout.bg-gray .notion-video video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0;
-  display: block;
-}
-
-/* A YouTube or Vimeo link lands in an embed iframe instead of a <video>.
-   It cannot autoplay silently, but at least it fills the panel. */
-.page__index .notion-root > .notion-callout.bg-gray .notion-embed,
-.page__index .notion-root > .notion-callout.bg-gray .notion-embed__container {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  height: 100% !important;
   max-width: none;
   margin: 0;
-  padding: 0;
-}
-
-/* --- The tagline ------------------------------------------------------- */
-
-.page__index .notion-root > .notion-callout.bg-gray > .notion-callout__content {
-  position: relative;
-  z-index: 3;
-  height: 100%;
-  margin: 0 auto;
-  max-width: var(--layout-max-width);
-  padding: 0 var(--padding-right) clamp(48px, 9vh, 104px) var(--padding-left);
+  padding: 0 var(--daim-hero-inset) clamp(48px, 9vh, 104px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -119,27 +103,67 @@ body,
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
 }
 
-.page__index .notion-root > .notion-callout.bg-gray .notion-heading,
-.page__index .notion-root > .notion-callout.bg-gray .notion-text {
+/* The callout's own (empty) text node would otherwise take a flex slot. */
+#block-3c611c7b703c80388d88dd7a3c203767
+  > .notion-callout__content
+  > span.notion-semantic-string:empty {
+  display: none;
+}
+
+/* --- The video block, as background ----------------------------------- */
+/* Markup is .notion-video > .notion-video__content > video, and the <video>
+   carries width="400px" as an attribute. */
+
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-video,
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-video__content {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-video video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  pointer-events: none;
+}
+
+/* The script strips the controls attribute; this covers the gap before it runs. */
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-video video::-webkit-media-controls {
+  display: none !important;
+}
+
+/* --- The tagline ------------------------------------------------------- */
+
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-heading,
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-text {
+  position: relative;
+  z-index: 3;
   color: #ffffff !important;
   margin: 0 !important;
 }
 
-.page__index .notion-root > .notion-callout.bg-gray h1.notion-heading {
+#block-3c611c7b703c80388d88dd7a3c203767 h1.notion-heading {
   font-size: clamp(2.5rem, 6vw, 5.5rem) !important;
   font-weight: 800 !important;
   line-height: 1.15 !important;
   letter-spacing: -0.02em;
 }
 
-.page__index .notion-root > .notion-callout.bg-gray h3.notion-heading {
+#block-3c611c7b703c80388d88dd7a3c203767 h3.notion-heading {
   font-size: clamp(1.25rem, 2.6vw, 2.5rem) !important;
   font-weight: 400 !important;
   line-height: 1.35 !important;
 }
 
-/* Heading anchors would put a link icon in the middle of the hero. */
-.page__index .notion-root > .notion-callout.bg-gray .notion-heading__anchor {
+/* Heading anchors would drop a link icon into the middle of the hero. */
+#block-3c611c7b703c80388d88dd7a3c203767 .notion-heading__anchor {
   display: none !important;
 }
 
@@ -159,24 +183,9 @@ body,
   color: #ffffff !important;
 }
 
-/* Pull the hero up under the navbar. */
-.page__index .super-content,
-.page__index.super-content {
-  margin-top: calc(var(--navbar-height) * -1);
-}
-
-.page__index .notion-root > .notion-callout.bg-gray {
-  margin-top: 0;
-}
-
 @media screen and (max-width: 768px) {
   :root {
     --daim-hero-height: clamp(380px, 68vh, 560px);
     --daim-hero-radius: 28px;
-  }
-
-  .page__index .notion-root > .notion-callout.bg-gray > .notion-callout__content {
-    padding-left: var(--padding-left-mobile);
-    padding-right: var(--padding-right-mobile);
   }
 }
