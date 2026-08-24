@@ -10,9 +10,7 @@
 
      Callout (Blue background, no icon)
        ├─ Image       the background photo
-       ├─ 2 columns   Contact & Info (60) | Korean greeting (40)
-       ├─ Divider
-       └─ Text        Copyright …
+       └─ 2 columns   Contact & Info + copyright (60) | Korean greeting (40)
 
    The photo is a Notion image block rather than a CSS background, so swapping
    it is a drag-and-drop in Notion and this file never names a host. That costs
@@ -92,15 +90,12 @@
     color: #ffffff !important;
   }
 
-  /* The rule above the copyright, as on the legacy site. */
-  .notion-divider {
-    border-color: rgb(255 255 255 / 0.28);
-    margin-block: 24px 16px;
-  }
-
-  /* The copyright is the band's last block; it should not shout. */
-  .notion-text:last-child {
+  /* The copyright now closes the left column instead of sitting on its own
+     row, which is what took the height out. Scoped to that column so the
+     greeting's last line in the right column keeps its size. */
+  .notion-column:first-child .notion-text:last-child {
     font-size: 0.8125rem;
     opacity: 0.72;
+    margin-top: 12px;
   }
 }
