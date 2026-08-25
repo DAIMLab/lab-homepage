@@ -67,6 +67,36 @@ Two things that are **not** native, checked so nobody re-checks them:
 - Site Files (`/site-files`) is Pro-only and accepts only `.txt` in `root` or
   `.well-known`, so it cannot host assets. jsDelivr stays. See `hosting.md`.
 
+## Fonts
+
+Design → Typography is the loader, `css/super-custom.css` decides what paints what.
+
+Both faces are uploaded on the Personal plan and named in Typography, currently
+Primary NanumSquare and Secondary Montserrat. That selection is what ships their
+`@font-face`; measured on the live site, Super serves four NanumSquare faces from
+`assets-v2.super.so/sites/…` and Montserrat from `…/global/fonts/`, and
+`document.fonts` reports NanumSquare 400 and 700 plus Montserrat 400, 600 and 700
+loaded.
+
+Which face paints which character is not Typography's decision here. Super's two
+slots split by role, primary against secondary, and a role cannot know whether a
+run is Latin or Korean. `css/super-custom.css` overrides both variables with one
+stack, `Montserrat, NanumSquare, …`, and lets the browser fall through per
+character. Measured with a canvas: "Lab News Conference" through that stack renders
+at Montserrat's 174.53px rather than NanumSquare's 157.68px, and
+"대한산업공학회 춘계공동학술대회" renders at NanumSquare's 222.4px rather than
+Montserrat's 224.99px.
+
+The trap: because the override wins, changing Typography no longer changes the
+site's look, but it does change what loads. Drop Montserrat from either slot and
+the stack keeps naming a face the browser can no longer fetch, so Latin silently
+falls back. Keep both faces named in Typography whatever roles they sit in.
+
+The other site-wide rule hides `.notion-toggle.bg-brown`, which is how the
+`🎛 Control panel` stays off the published site. It comes from the Ascent template
+(`reference/ascent-template.css:46`) and matches any brown-background toggle, so
+brown stays reserved for hidden blocks.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on
