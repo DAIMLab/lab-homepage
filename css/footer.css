@@ -1,50 +1,12 @@
 /* Footer. Super Code editor > CSS tab (site-wide).
 
-   The whole footer is one Notion callout, photo included, so lab members edit
-   every part of it in Notion. It sits on exactly one page, /footer, and
-   js/footer-inject.js clones it onto the rest at runtime. The clone is appended
-   as a direct child of .notion-root, so the selector below matches either copy.
-   Super's own footer is switched off (Navigation > Footer > Footer Type: None);
-   two stacked footers read as a duplicate, and the legacy design was a single
-   photo band anyway.
+   Notion, on /footer:  Callout (Blue background, no icon)
+                          ├─ Image       the background photo
+                          └─ 2 columns   Contact & Info + copyright (60) | greeting (40)
 
-   Notion structure, on /footer:
-
-     Callout (Blue background, no icon)
-       ├─ Image       the background photo
-       └─ 2 columns   Contact & Info + copyright (60) | Korean greeting (40)
-
-   Notion's blue renders as `bg-blue-light`, not `bg-blue`, and a top-level blue
-   callout IS the footer band, so ordinary callouts need another colour. Re-check
-   the class with
-     curl -sL https://daim.super.site/ | grep -o 'class="notion-callout[^"]*"'
-
-   How the band is layered. The callout is the positioned ancestor and the photo
-   goes absolute inside it, which is why .notion-callout__content is deliberately
-   left unpositioned: that box sits inside the callout's vertical padding, and
-   anchoring there left the callout's blue showing in a strip above and below the
-   photo. Everything that is not the photo is then positioned back on top of it.
-   Document order alone puts the text over the image, so no z-index is involved.
-   The band is full-bleed, so that text takes a fluid inset rather than
-   --layout-max-width, which had left it stranded mid-screen on wide monitors;
-   the clamp matches the hero's.
-
-   Four !important declarations, each against something a selector cannot
-   outrank: Super's 30vh bottom padding on .notion-root, which it applies because
-   its own footer is off and which would float the band above a gap; the .border
-   variant of the callout class, which ties on specificity; Notion's inline
-   style="height:auto" on the image; and Super's own text colours.
-
-   The photo is a Notion image block rather than a CSS background, so swapping it
-   is a drag-and-drop in Notion and this file never names a host. That costs about
-   ten declarations over the background-image version, the price of handing the
-   asset to Notion. #14161a stands in until it loads, because the callout's blue
-   would flash first.
-
-   Full-width trick is Super's own, from
-   https://docs.super.so/code-snippets/full-width-section
-
-   Uses CSS nesting, as css/home-hero.css does. */
+   A top-level blue callout IS the band; give ordinary callouts another colour.
+   js/footer-inject.js clones it onto every other page. Layering, and what each
+   !important outranks: docs/super.md, "Site-Wide Footer". */
 
 .notion-root {
   padding-bottom: 0 !important;

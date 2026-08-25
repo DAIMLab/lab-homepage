@@ -1,18 +1,8 @@
-/* Footer band injector. Super Code editor > Head tab (site-wide), wrapped in <script>.
+/* Footer band injector. Super Code editor > Head tab (site-wide), in <script>.
 
-   The band is one Notion callout living on /footer alone. Super server-renders every
-   page, so /footer is a same-origin document that already holds the band's markup:
-   fetch it once, clone the node onto whatever page the visitor is on. Reading Notion
-   directly is impossible, since app.notion.com sends no CORS headers and the API
-   needs a secret that cannot sit in client-side JS.
-
-   Two things this depends on. /footer stays published and out of the sitemap; the
-   404 setting would break the fetch. And a top-level blue callout IS the footer
-   band, the convention css/footer.css also relies on, so ordinary callouts need
-   another colour.
-
-   Rationale, measured costs, and what it gives up: docs/super.md, "Site-Wide Footer".
-*/
+   Clones the blue callout from /footer, a same-origin page Super server-renders,
+   onto every other page. Notion is unreadable from the browser: no CORS headers,
+   and the API needs a secret. Costs and caveats: docs/super.md. */
 
 (() => {
   const SOURCE = '/footer';

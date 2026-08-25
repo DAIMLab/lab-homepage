@@ -1,30 +1,18 @@
-/* Home hero. Home page's per-page Code editor, CSS tab.
-   Autoplay needs html/home-hero-body.html in the same page's Body tab.
+/* Home. The page's per-page Code editor, CSS tab. Two sections, hero then the
+   Lab News strip.
 
-   Notion:  Callout (gray background)
+   Notion:  Callout (gray background)          the hero
               ├─ Video block
               ├─ Heading 1  로봇과 로봇을
               └─ Heading 3  연결하여 제조혁신을 선도합니다.
+            Heading 2  Lab News
+            Linked gallery view of `Lab News Posts`, sorted Date DESC,
+              showing Title and Date only
+            Link  모든 소식 보기 →
 
-   The top-level gray callout on Home is the hero; give ordinary callouts here
-   another colour. Notion's gray renders as `bg-gray-light`, not `bg-gray`.
-
-   Per-page CSS, so the bare .notion-header / .super-content / .super-navbar
-   rules below only ever reach Home. Do not move this file site-wide. They pull
-   the hero under the navbar, make the navbar transparent over it, and drop the
-   page title and icon the hero replaces. --navbar-text-color is set rather than
-   a colour rule because super.css reads that variable for links and icons alike,
-   and overflow-x on body answers the sideways scroll the -50vw break-out causes.
-
-   The !important declarations answer Notion and Super rather than a specificity
-   guess: Notion emits its own width attribute on <video>, Super's uploaded face
-   tops out at weight 700, and the heading colours and margins come from theme
-   rules. ::-webkit-media-controls hides player chrome that would flash on first
-   paint, before the Body-tab script strips the attribute. The footage is bright,
-   so ::after lays a gradient scrim under the white text.
-
-   Full-width trick is Super's own: https://docs.super.so/code-snippets/full-width-section
-   Uses CSS nesting; if the hero renders flat, check that first. */
+   Bare selectors below are Home-only because this is per-page; do not move it
+   site-wide. The strip is Super's gallery grid turned into one scroll-snapping
+   row. Why each rule is here: docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -112,4 +100,67 @@ body,
     font-size: clamp(1.25rem, 2.6vw, 2.5rem) !important;
     font-weight: 400 !important;
   }
+}
+
+.page__index {
+  --news-gap: 24px;
+
+  --collection-card-border-radii: 0;
+  --collection-card-shadow: none;
+  --collection-card-padding: 0;
+  --collection-card-content-padding: 14px 0 0;
+  --color-card-bg: transparent;
+}
+
+.page__index h2.notion-heading {
+  margin-top: clamp(64px, 9vh, 112px);
+  text-align: center;
+}
+
+.page__index .notion-collection-gallery {
+  display: flex;
+  gap: var(--news-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.page__index .notion-collection-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.page__index .notion-collection-card {
+  flex: 0 0 clamp(240px, 31%, 400px);
+  scroll-snap-align: start;
+}
+
+.page__index .notion-collection-card:nth-child(n + 10) {
+  display: none;
+}
+
+.page__index .notion-collection-card .notion-collection-card__cover {
+  height: auto !important;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
+}
+
+.page__index .notion-collection-card__property.title {
+  overflow: hidden;
+  height: 2.0em;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #212121;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.page__index .notion-collection-card__property:not(.title) {
+  overflow: hidden;
+  height: 24px;
+  font-size: 13px;
+  color: #8a8a8e;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

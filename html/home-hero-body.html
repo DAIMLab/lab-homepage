@@ -1,19 +1,8 @@
 <!-- Home hero video. Home page's per-page Code editor, Body tab.
 
-     Measured on the live site: Notion emits <video controls>, and Super adds
-     only autoPlay. No browser honours autoplay without muted, so the clip never
-     starts on its own; loop and controls are not covered either.
-
-     Playback is re-asserted rather than kicked off once. Super is a React app:
-     hydration re-renders the <video>, which reloads the source and aborts any
-     play() already in flight. Retrying on canplay and on every mutation tick
-     survives that, and the paused check keeps it from fighting a real pause.
-
-     The rejection handler warns once per element rather than staying silent.
-     Silence here once cost an afternoon: the console looked clean while playback
-     was being refused.
-
-     The HERO selector has to stay in step with css/home-hero.css. -->
+     Notion emits <video controls> and Super adds only autoPlay, which no browser
+     honours without muted. Playback is re-asserted on every mutation tick because
+     hydration reloads the source. Detail: docs/super.md, "Hero Video Autoplay". -->
 <script>
 (function () {
   var HERO = '.notion-root > .notion-callout.bg-gray-light';

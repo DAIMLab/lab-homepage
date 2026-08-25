@@ -173,6 +173,35 @@ Cost is one extra same-origin request per page:
 `/footer` is the smallest page Super will serve; the floor is the navbar plus the
 Next.js payload every page carries.
 
+### How the band is layered
+
+The callout is the positioned ancestor and the photo goes absolute inside it, which
+is why `.notion-callout__content` is deliberately left unpositioned: that box sits
+inside the callout's vertical padding, and anchoring there left the callout's blue
+showing in a strip above and below the photo. Everything that is not the photo is
+then positioned back on top of it. Document order alone puts the text over the
+image, so no `z-index` is involved. The band is full-bleed, so that text takes a
+fluid inset rather than `--layout-max-width`, which had left it stranded mid-screen
+on wide monitors; the clamp matches the hero's.
+
+`css/footer.css` carries four `!important` declarations, each against something a
+selector cannot outrank: Super's 30vh bottom padding on `.notion-root`, which it
+applies because its own footer is off and which would float the band above a gap;
+the `.border` variant of the callout class, which ties on specificity; Notion's
+inline `style="height:auto"` on the image; and Super's own text colours.
+
+The photo is a Notion image block rather than a CSS background, so swapping it is a
+drag-and-drop in Notion and the stylesheet never names a host. That costs about ten
+declarations over the background-image version. `#14161a` stands in until it loads,
+because the callout's blue would flash first.
+
+`js/footer-inject.js` starts its fetch immediately and defers the DOM work to
+`DOMContentLoaded`, so it is safe in the Head tab where `document.body` does not
+exist yet. It clones with `importNode`, and re-places under a `MutationObserver`
+because Super routes between pages on the client and React swaps `.notion-root` out
+without a reload. If JS is off there is no band; Super's own footer would be the
+fallback and it is switched off, so the page simply ends after its content.
+
 Three things to keep true:
 
 1. `/footer` stays published and stays out of the sitemap. The 404 setting would
@@ -185,6 +214,86 @@ Three things to keep true:
 The band is absent from the served HTML everywhere except `/footer`, so crawlers
 miss it. Footer links carry little SEO weight and the band sits below the fold, so
 nothing visible shifts.
+
+## Home Page
+
+`css/home.css` is the whole Home CSS tab and covers two sections.
+
+The hero is a top-level gray callout (`bg-gray-light`, not `bg-gray`) holding the
+video and two headings, broken full-bleed and pulled up under the navbar. Its bare
+`.notion-header` / `.super-content` / `.super-navbar` rules only ever reach Home
+because the file is per-page; do not move it site-wide. `--navbar-text-color` is set
+rather than a colour rule, because super.css reads that variable for links and icons
+alike, and `overflow-x` on body answers the sideways scroll the -50vw break-out
+causes. Its `!important` declarations answer Notion and Super rather than a
+specificity guess: Notion emits its own width attribute on `<video>`, and Super's
+uploaded face tops out at weight 700.
+
+Below it sits a second linked gallery view of `Lab News Posts`, turned into one
+scroll-snapping row. Three cards land in the 1100px column with the fourth peeking,
+which is the only affordance the scroller gets: the scrollbar is hidden and there
+are no arrows, so paging is a swipe or a trackpad flick. `flex-basis` accepts a
+`clamp`, unlike the auto-fill `minmax` on Lab News, so the row needs no media query;
+the 240px floor turns three columns into one and a half on a phone.
+
+Notion cannot say "top 3". The view DSL has no `LIMIT` and a gallery has no page
+size, so the cap is `:nth-child(n + 10)`, which keeps the strip to three swipes.
+
+Card size is deliberately absent from every selector there. Super scopes
+`--collection-card-cover-size-*` and the cover's own class per size, so naming one
+would go silent the moment someone switches the view in Notion. Sizing the cards
+through `flex-basis` and reaching the cover with a third class instead leaves the
+strip working at any size. Prefer that approach to the size-class selector Lab News
+still uses.
+
+## Lab News Page
+
+`css/lab-news.css` styles a linked gallery view showing Title, Date, Location and
+Summary. Super renders the grid and drives every card dimension from a custom
+property, so most of the file is a variable block; the column count falls out of
+Super's `repeat(auto-fill, …)` from the minimum card width, which is why there are
+no media queries. The `large` suffix has to match the card size set on the view in
+Notion. Super's 96px side padding is overridden, because the legacy page ran much
+nearer the edge.
+
+The `property-*` classes are Notion property ids, and the only stable handle on a
+card row: `:nth-child()` shifts the moment a post leaves a field empty, because
+Notion drops the element rather than rendering it blank.
+
+| Class | Field |
+| --- | --- |
+| `property-4856717d` | Date |
+| `property-6e756d61` | Location |
+| `property-686f7844` | Summary |
+
+Cards line up only when every row is a fixed height, so each row is given one and
+the property list is a flex column, which keeps those heights exact: in block flow
+the reserved Location row collapses against the summary's top margin and lands 8px
+short of a real one. Half the posts carry no Location, so the date stands that row
+in for them, selected with `:not(:has(…))`.
+
+Covers are pinned by `aspect-ratio` rather than by Super's height variable, which
+takes a length and would letterbox a phone showing one card across. A post with no
+cover gets an unclassed spacer div carrying an inline height, and only `!important`
+reaches past that.
+
+The post count is a CSS counter over the rendered cards, printed by the gallery's
+own `::after` because counters read in document order.
+
+## Hero Video Autoplay
+
+`html/home-hero-body.html` is the Home Body tab. Notion emits `<video controls>` and
+Super adds only `autoPlay`; no browser honours autoplay without `muted`, so the clip
+never starts on its own, and loop and controls are not covered either.
+
+Playback is re-asserted rather than kicked off once. Super is a React app, so
+hydration re-renders the `<video>`, reloads the source, and aborts any `play()`
+already in flight. Retrying on `canplay` and on every mutation tick survives that,
+and the paused check keeps it from fighting a real pause. The rejection handler
+warns once per element rather than staying silent: silence there once cost an
+afternoon, because the console looked clean while playback was being refused.
+
+Its HERO selector has to stay in step with `css/home.css`.
 
 ## Known Console Noise
 

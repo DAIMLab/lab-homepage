@@ -27,7 +27,7 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | --- | --- |
 | `css/super-custom.css` | site-wide CSS tab |
 | `css/footer.css` | site-wide CSS tab, the footer band |
-| `css/home-hero.css` | Home per-page CSS tab |
+| `css/home.css` | Home per-page CSS tab |
 | `css/lab-news.css` | Lab News per-page CSS tab |
 | `html/head-fonts.html` | site-wide Head tab |
 | `js/footer-inject.js` | site-wide Head tab, wrapped in `<script>` |

@@ -13,13 +13,14 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 
 | Page | Slug | Notion ID |
 | --- | --- | --- |
-| Home | `/` | `fd211c7b703c8315b76b81c4858d6152` |
+| Home | `/` | `3c611c7b703c809fb685f773804f1684` |
 | About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | none | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
+| Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
 Team DAIM splits into `Professor` (`3c611c7b703c80768b7fd009d6c075ed`), `Students`
 (`3c611c7b703c80549898c426d40729cc`), and `Alumni`
@@ -30,6 +31,12 @@ Team DAIM splits into `Professor` (`3c611c7b703c80768b7fd009d6c075ed`), `Student
 absent from the navbar, but it must stay published, so exclude it from the sitemap
 under Site Pages rather than hiding it with the 404 setting. Mechanics are in
 [`super.md`](super.md#site-wide-footer).
+
+`Lab News Posts` is shown twice. The Lab News page carries the full gallery; Home
+carries a second linked view, `3c711c7b703c817f9adaed9272c9ce71`, named `Latest`,
+sorted `Date` DESC and showing only `Title` and `Date`. `css/home.css` turns that
+one into a horizontal strip. Both are linked views over the same data source, so
+neither owns the database and neither shows a view switcher.
 
 ## Collections
 
@@ -42,7 +49,7 @@ Verified: `/projects` has 4 views and a dropdown, `/publications` has 1 and none
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Projects, Publications |
-| Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News |
+| Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
