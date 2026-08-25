@@ -84,6 +84,22 @@ the day a project is `Ongoing`; that is what makes Super emit a dropdown.
   into a gallery. Create the gallery as a linked view instead.
 - The MCP move tool cannot target a toggle, so moving a database into the Control
   panel is a manual drag in Notion.
+- The schema DDL builds a `status` property but cannot name its options. Both
+  `ADD COLUMN "X" STATUS('Planned':gray, …)` and the `ALTER … SET STATUS(…)` form come
+  back `Expected ADD, DROP, RENAME, or ALTER keyword, got "("`. A new status property
+  always arrives as Notion's default `Not started` / `In progress` / `Done` in the
+  `to_do` / `in_progress` / `complete` groups, and renaming them is a Notion UI step.
+- **Converting `select` to `status` discards the option names and blanks every row.**
+  Measured on a throwaway column before touching the real one: a select holding
+  `Completed` came back as a status whose options were the three defaults, with the
+  value reset. Rename an option afterwards rather than deleting and re-adding it, and
+  the rows assigned to it follow. The property id survives the conversion, so any CSS
+  keyed on `property-<id>` keeps working.
+- A `formula` property can be created from the DDL, but **its computed values are not
+  readable through MCP**: `query_data_sources` lists formula columns under
+  `notAvailableInQuerySql`, and `fetch` returns a `formulaResult://` reference it then
+  refuses to resolve. The only way to check a formula's output is to read the rendered
+  Super page.
 
 ### Row URLs carry the database slug
 

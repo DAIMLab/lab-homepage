@@ -236,9 +236,12 @@ both still over the video.
 Verified at 390x844: links and icons `rgb(0, 0, 0)`, 21:1 on the panel and 18.4:1 on
 the pill, with the logo and desktop items still white at 1600px.
 
-One trap for anyone testing this: patching the served HTML does not work for CSS.
-Super's stylesheet text also rides in the React flight payload, so hydration
-restores the original and the edit vanishes. Inject at runtime instead.
+Two traps for anyone testing this. Patching the served HTML does not work for CSS:
+Super's stylesheet text also rides in the React flight payload, so hydration restores
+the original and the edit vanishes. Inject at runtime instead — but **append the test
+`<style>` to `document.body`, not `document.head`**. Super drops a page's CSS tab into
+a `<style>` near the end of the body, so a tag added to the head loses every
+specificity tie against it and the test silently reads as "my CSS does not work".
 
 ## Theming Through CSS Variables
 
@@ -506,6 +509,170 @@ reaches past that.
 
 The post count is a CSS counter over the rendered cards, printed by the gallery's
 own `::after` because counters read in document order.
+
+## Projects Page
+
+`css/projects.css` is the whole Projects CSS tab; `js/projects-date-format.js` is its
+Body tab. Three columns of figure-topped cards, chosen over a coverless index and a
+split card after seeing all three rendered with the real 16 rows.
+
+| Property | Class | On the card |
+| --- | --- | --- |
+| Title | `.title` | wraps freely, no cap |
+| Partner | `property-75626b3b` | under the date |
+| Period | `property-475c4c48` | monospaced, above the partner |
+| Summary | `property-45774b6f` | clamped at two lines, no fixed height |
+| Status | `property-46414376` | a chip trailing the date |
+
+The chip took two moves to place. On the cover it washed out: the figures are dense
+with no quiet corner. In front of the title it was legible but a wrapped title
+indented past it, which looked worse than the problem it solved. It now trails the
+date.
+
+That needs the property list to be a wrapping flex **row** rather than a column.
+Every property is `width: 100%` and claims a line of its own; the date and the chip
+are the two exceptions at `width: auto`, so they share one line and the title keeps a
+full line to itself.
+
+Sizing the chip needs `line-height: 1` explicitly. Super hands the pill an 18px line
+box whatever its font size, so at 10px the chip stood 27.6px tall against a 19.2px
+date line. With the line box collapsed it measures 19.6px, within a pixel of the text
+it sits beside.
+
+`Status` is a Notion `status` property, not a select: Planned / In progress / Done in
+the to-do / in-progress / complete groups. Super renders it as
+`notion-property__select` all the same, and the property id survived the conversion,
+so nothing in the CSS is keyed differently. Notion's colour per option arrives as a
+`pill-*` class, and the CSS keeps each state's own colour: grey waiting, blue running,
+green finished.
+
+The grid is capped at three columns by the floor inside `minmax()`:
+
+```css
+grid-template-columns: repeat(auto-fill, minmax(max(268px, 30%), 1fr));
+```
+
+Four tracks would need 120% of the row, so `auto-fill` can never place a fourth. Below
+about 900px the 268px half of the `max()` wins instead and the grid steps down to two,
+then one. Measured: 3 at 1600px and 1440px, 2 at 860px, 1 at 390px. No media query.
+
+### What the card is made of
+
+Worth knowing before writing any rule that changes the card's own layout, because it
+is not what the class names suggest:
+
+```
+div.notion-collection-card          position: relative
+├─ a.notion-collection-card__anchor position: absolute, covers the whole card
+├─ span                             display: contents  ← the cover lives in here
+│   └─ img.notion-collection-card__cover
+└─ div.notion-collection-card__content.notion-collection-card__property-list
+```
+
+Two consequences. Setting `display: grid` on the card gives exactly two grid items,
+the cover and the property list, because the anchor is out of flow and the `span`
+around the cover is `display: contents`. And the card is already `position: relative`,
+so `position: absolute` on the status property lands on the cover with no extra rule;
+it needs `z-index: 3` only to clear the anchor.
+
+The property list is a flex column here, and `order` puts Period back above Partner,
+which is not the order the view emits. Nothing carries a fixed height: an earlier
+version locked the title to two lines so the date rows would align across a row, and
+that left a visible gap under every one-line title. Cards now size to their own
+content and rows no longer line up, which is the trade that was wanted.
+
+The summary keeps a two-line `-webkit-line-clamp`, which is a ceiling and never a
+floor. It is worth keeping: without it the longest excerpt here runs to four lines.
+Chrome reports the clamped element's `display` as `flow-root` rather than
+`-webkit-box`, so that computed value is not evidence the clamp has failed — measure
+the rendered height instead.
+
+### Status tabs are a restyled dropdown
+
+Super emits a `.notion-dropdown` for any collection with more than one view; it has no
+tab rendering at all. The tabs on Ascent's own blog are that same dropdown restyled,
+and `reference/ascent-template.css:386` is the recipe this page follows: hide
+`__button`, pin `__menu` open with `position: relative; opacity: 1; transform: none;
+animation: none`, and lay `__option-list` out as a flex row. Below 576px the dropdown
+is left alone, because four tabs do not fit a phone.
+
+The four views live on the linked block, not on the source database, and
+`notion-create-view` reaches them by passing the linked block's id as `database_id`.
+Each new view needs its own **Card preview → Page cover** click in Notion; the DSL
+cannot set it, so a new tab renders coverless until someone does.
+
+Two of the four tabs are empty, every project being `Done`. That was accepted
+deliberately, to have the scaffolding in place before the data needs it.
+
+Wrapping is a view setting, not CSS. Super marks a property `no-wrap` unless the view
+wraps cells, and that class beat every `white-space: normal` written against it.
+`WRAP CELLS true` on the view removes the class and the CSS override with it.
+
+Covers are `aspect-ratio: 16 / 10` against sources that average 1.87:1, so roughly 7%
+of the figure's height is cropped. The legacy board ran the same figures at a similar
+crop.
+
+### The date needs JavaScript
+
+Notion emits `2018/03/01 → 2025/01/01` and offers no year-month date format; CSS
+cannot cut text out of a string. `js/projects-date-format.js` rewrites it to
+`2018.03 – 2025.01` and re-runs under a `MutationObserver`, because Super swaps
+`.notion-root` on client-side navigation and the original format comes back otherwise.
+
+Two projects have no end date, and Notion emits those as a bare start, so they read
+`2019.01` with no dash.
+
+Two alternatives were tried first and both lost:
+
+- **A formula property does not render.** `Term`, a formula building the same string
+  from `Period`, computes correctly in Notion and never appears on a Super card. Its
+  `notion-property__formula` class is absent from the served HTML while every other
+  property in the same view renders. Simplifying it to a bare
+  `formatDate(dateStart(prop("Period")), "YYYY.MM")` changed nothing, so this is not
+  the complexity limit Super's `/compatible-blocks` lists under unsupported blocks as
+  *Complex formulas* — Super appears to skip formula properties on collection cards
+  outright. The property was deleted once that was settled; do not rebuild it.
+- **Retyping the period into a text property** keeps sorting, since a zero-padded
+  `YYYY.MM` string sorts the same as the date it came from, but gives up date filters
+  and puts 16 values under manual upkeep.
+
+### Load More is on Lab News, not here
+
+Sixteen projects fit one screen and a button would be decoration. The mechanism is
+built for Lab News and written up under that page; the measurements that decided it
+are there too.
+
+### Load More
+
+`js/lab-news-load-more.js` shows 18 of the 57 cards and adds 18 per click. This is
+display control, not paging: Super server-renders every card into the initial HTML,
+with no cursor, no `hasMore`, and no load-more markup, so nothing here shrinks the
+document. What it buys is a first screen that ends after six rows, and covers that are
+never fetched until asked for, the images carrying `loading="lazy"`. Measured with the
+cap in place, 12 covers load against 18 uncapped. Crawlers still see all 57.
+
+Three things had to line up.
+
+**CSS makes the first cut, not the script.** The rule keys on the grid *not* having a
+`data-total` attribute yet, so the page paints capped with no JavaScript involved. The
+script sets `data-total` once React has hydrated, which switches the cut over to
+`.is-beyond` and reveals the button. Letting the script make the first cut instead
+costs a React #418: measured 1 against a control of 0, the same hydration mismatch
+`footer-inject.js` hit, and it is deferred the same way.
+
+**The post count needs the attribute.** `css/lab-news.css` prints the count from a CSS
+counter over the cards, and a `display: none` card does not increment it, so the
+heading would have read `18 posts`. The script writes the true total into
+`data-total` and a second rule reads it back with `attr()`.
+
+**The observer has to settle.** `paint()` runs on every mutation and mutates the DOM
+itself, so every write is guarded by a compare-first helper; without it the button's
+own label rewrites the text node forever.
+
+Testing this needs care. Patching the served HTML to inject the CSS throws #418 on its
+own, script or no script, because React restores the stylesheet from the flight
+payload. Inject the script by patching the HTML, and the CSS at runtime — never both
+at once, or the harness's own error is read as the code's.
 
 ## Hero Video Autoplay
 

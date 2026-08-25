@@ -1,0 +1,214 @@
+/* Projects. The page's per-page Code editor, CSS tab. Not site-wide.
+
+   Notion:  Linked gallery view of `Projects Database`
+              showing Title, Partner, Period, Summary, Status
+
+   property-75626b3b is Partner, property-475c4c48 Period, property-45774b6f
+   Summary, property-46414376 Status. A wrapping flex row reorders the rows the
+   view emits and seats the status chip after the date; no row has a fixed
+   height, so a long title just makes its own card taller.
+   docs/super.md, "Projects Page". */
+
+.page__projects {
+  --collection-card-gap: 34px 26px;
+  --collection-card-content-padding: 13px 0 0;
+  --collection-card-border-radii: 0;
+  --collection-card-shadow: none;
+  --color-card-bg: transparent;
+
+  --sub: #66717d;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Status tabs. Super emits a dropdown, never tabs, for a multi-view collection;
+     Ascent's template restyles that same markup into a row and this does the
+     same, from reference/ascent-template.css:386. The button is hidden, the menu
+     is pinned open, and the option list becomes a flex row. Under 576px the
+     dropdown is left alone, because four tabs do not fit a phone. */
+
+  .notion-collection__header-wrapper {
+    margin-bottom: 22px;
+  }
+
+  .notion-dropdown__menu-header,
+  .notion-dropdown__option-icon {
+    display: none;
+  }
+
+  @media (min-width: 576px) {
+    .notion-dropdown__button {
+      display: none;
+    }
+
+    .notion-dropdown__menu-wrapper {
+      position: relative;
+    }
+
+    .notion-dropdown__menu,
+    .notion-dropdown__menu.initial-state,
+    .notion-dropdown__menu.animate-in,
+    .notion-dropdown__menu.animate-out {
+      position: relative;
+      inset: auto;
+      width: auto;
+      transform: none;
+      opacity: 1;
+      background: none;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .notion-dropdown__option-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0;
+    }
+
+    .notion-dropdown__option {
+      height: auto;
+      padding: 7px 14px;
+      border: 1px solid #dde3e8;
+      border-radius: 2px;
+      transition: border-color 0.15s, background 0.15s;
+
+      p {
+        font-size: 13px;
+      }
+
+      &:hover {
+        border-color: #c6cfd7;
+        background: #f4f6f7;
+      }
+
+      &.active {
+        border-color: #17516e;
+        background: #17516e;
+
+        p {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  /* Three columns at most: four tracks would need 120% of the row, so auto-fill
+     can never place a fourth. Under about 900px the 268px floor wins instead and
+     the grid steps down to two, then one. */
+
+  .notion-collection-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(max(268px, 30%), 1fr));
+  }
+
+  .notion-collection-card__cover {
+    height: auto !important;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid #dde3e8;
+  }
+
+  /* A wrapping row, not a column: every property claims a full line of its own,
+     so only the date and the status chip, the two sized to content, share one. */
+
+  .notion-collection-card__property-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+  }
+
+  .notion-collection-card__property {
+    width: 100%;
+
+    &.title {
+      order: 1;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.42;
+      color: #212121;
+    }
+
+    &.property-475c4c48 {
+      order: 2;
+      width: auto;
+      margin-top: 7px;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: #98a2ad;
+    }
+
+    /* Status trails the date on the same line. It sat on the cover first and
+       was unreadable there, the figures being dense with no quiet corner; then
+       in front of the title, where a wrapped title indented awkwardly past it. */
+
+    &.property-46414376 {
+      order: 3;
+      width: auto;
+      margin-top: 7px;
+    }
+
+    &.property-75626b3b {
+      order: 4;
+      margin-top: 2px;
+      font-size: 12.5px;
+      color: var(--sub);
+    }
+
+    /* The clamp is a ceiling, never a floor: a one-line excerpt stays one line.
+       Without it the longest summary here runs to four. */
+
+    &.property-45774b6f {
+      order: 5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--sub);
+    }
+
+  }
+
+  /* Notion's colour per status option arrives as a pill-* class, so each state
+     keeps its meaning: grey waiting, blue running, green finished.
+
+     line-height: 1 is the load-bearing line. Super hands the pill an 18px line
+     box for a 10px glyph, which left the chip taller than the date beside it. */
+
+  .notion-pill {
+    padding: 4px 9px;
+    border: 1px solid #c6cfd7;
+    border-radius: 2px;
+    background: #eef1f4;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sub);
+
+    &.pill-blue {
+      border-color: #a9c8dd;
+      background: #e3edf3;
+      color: #17516e;
+    }
+
+    &.pill-green {
+      border-color: #a9d6c4;
+      background: #dff0e9;
+      color: #1f6b55;
+    }
+  }
+
+  .notion-collection-card:hover {
+    .notion-collection-card__cover {
+      border-color: #c6cfd7;
+    }
+
+    .notion-collection-card__property.title {
+      color: #17516e;
+    }
+  }
+}
