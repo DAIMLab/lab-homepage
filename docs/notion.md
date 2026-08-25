@@ -15,16 +15,19 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | --- | --- | --- |
 | Home | `/` | `3c611c7b703c809fb685f773804f1684` |
 | About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
-| Team DAIM | none | `dfc11c7b703c83fd8dcb01007f12d3c0` |
+| Team DAIM | `/team-daim` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
-Team DAIM splits into `Professor` (`3c611c7b703c80768b7fd009d6c075ed`), `Students`
-(`3c611c7b703c80549898c426d40729cc`), and `Alumni`
-(`3c611c7b703c805d942dca6661c145dc`).
+Team DAIM is the People page; the navbar labels it `People` while the Notion title,
+and so the `h1`, still reads `Team DAIM`. The slug lives in Super under Site Pages
+and a Notion rename does not move it, so renaming the page is safe but has to be
+done knowing the slug stays `team-daim`. It once split into `Professor`, `Students`
+and `Alumni` sub-pages; all three are in the trash and the `People` database
+replaced them.
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
@@ -53,9 +56,18 @@ gone and its single `All` view emits no switcher.
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
+| People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | Team DAIM |
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
+
+`People` is the one database that breaks the rule above: it sits **under** the page
+that shows it, because nothing in the Control panel subtree can hold a database.
+Every candidate parent there is a toggle or a column, and both refuse: `Parent block
+type toggle cannot contain databases`, `Parent block type column_list cannot contain
+databases`. The move tool reports the same refusal as a 404 on the destination,
+which reads like a permissions problem and is not one. Until someone drags it across
+in Notion, `css/team-daim.css` hides the child-page link Super prints for it.
 
 `Lab News Posts` schema: `Title`, `Date`, `Location`, `Summary`, `Category` (select:
 Activity / Conference). The gallery shows the first four; `Category` is carried for
@@ -72,6 +84,44 @@ All 16 rows are `Completed`, which is what the legacy board says, so the page ca
 one view and no switcher. The legacy All / 진행중 / 완료 tabs come back as extra views
 the day a project is `Ongoing`; that is what makes Super emit a dropdown.
 
+`People` schema: `Name`, `Role` (select: Professor / Researcher / Ph.D. Student /
+M.S. Student / Intern / Staff), `Research` (multi-select), `Admitted`, `Email`,
+`Homepage`, `LinkedIn`, `GitHub`, `CV`, `Status` (select: Current / Alumni). Covers
+are page covers, as in Lab News and Projects.
+
+`Admitted` is text, not a date, and holds `2024.09`. A date property would print
+through Notion's own formatting and month precision would still need a fake day;
+text prints exactly and `YYYY.MM` sorts correctly because it is zero-padded.
+
+`Research` is a multi-select rather than free text so the lab shares one vocabulary
+instead of fourteen spellings of the same interest. The seeded options come from the
+`Projects DB` rows, which are the lab's own evidence of what it works on. Add options
+freely. `css/team-daim.css` strips the pill chrome and stacks them one per line.
+
+`Status` exists for the Alumni section nobody has built yet. Every view filters
+`Status = Current`, so a graduate keeps their `Role` and drops off the page the
+moment they are switched to `Alumni`. The section itself is one more linked view.
+
+Six linked gallery views, one per `Role`, each under its own H2 on the page:
+
+| View | Filter | Collection block |
+| --- | --- | --- |
+| Professor | `Role = Professor AND Status = Current` | `3c711c7b703c81cb96adcf098a8b3d1c` |
+| Researchers | `Role = Researcher AND Status = Current` | `3c711c7b703c8187ace6c37fa9346118` |
+| Ph.D. Students | `Role = Ph.D. Student AND Status = Current` | `3c711c7b703c81aa93fec1c673eeaf6e` |
+| M.S. Students | `Role = M.S. Student AND Status = Current` | `3c711c7b703c8193980fc3578650f37a` |
+| Interns | `Role = Intern AND Status = Current` | `3c711c7b703c81538b25fccbbebf29b0` |
+| Staff | `Role = Staff AND Status = Current` | `3c711c7b703c81778100de046ebd0847` |
+
+The block id matters: it is the only handle that tells the professor's gallery from
+the students', because the view DSL cannot set card size without also setting a
+cover property, so all six views share one size class.
+
+No view carries a sort. Notion falls back to the collection's manual order, which
+follows creation, and the rows were created in the order the legacy Team page listed
+them. Once `Admitted` is filled, `SORT BY "Admitted" ASC` is the sort each student
+section wants; adding it now would only scatter the rows, every value being empty.
+
 ### Limits worth not re-deriving
 
 - The view DSL cannot set the page cover as the card preview. `COVER` takes a
@@ -80,10 +130,21 @@ the day a project is `Ongoing`; that is what makes Super emit a dropdown.
   it either, measured on Projects 2026-08-25: 16 cards, 0 covers, while Lab News with
   the setting on renders 60 covers over 63 cards. Every new gallery needs the same
   click in Notion, `⋯` → Properties → Card preview → Page cover.
+- **A files property cannot be filled over MCP, so it is not a way around that
+  click.** `COVER` does take a files property, which looks like the escape: attach
+  the image, name the property, and the DSL sets the preview. `notion-create-attachment`
+  with a `source_url` does upload, returning `status: uploaded` and an id. Writing
+  that id into the property then fails, `File <id> not found`, for all three forms
+  the tool documents: the bare id, `file-upload://<id>`, at creation time through
+  `create-pages` and afterwards through `update-page`. Measured on People 2026-08-25,
+  20 uploads, every write refused. Page covers plus the manual click are the route;
+  the files property was dropped from the schema rather than left dead.
 - `notion-update-view` cannot change a view's type, so a table view cannot be turned
   into a gallery. Create the gallery as a linked view instead.
-- The MCP move tool cannot target a toggle, so moving a database into the Control
-  panel is a manual drag in Notion.
+- The MCP move tool cannot target a toggle or a column, so moving a database into the
+  Control panel is a manual drag in Notion. It reports the refusal as
+  `Could not find block with ID`, a 404 on the destination, which reads like missing
+  access and is not: the same tool moves the same database to a plain page fine.
 - The schema DDL builds a `status` property but cannot name its options. Both
   `ADD COLUMN "X" STATUS('Planned':gray, …)` and the `ALTER … SET STATUS(…)` form come
   back `Expected ADD, DROP, RENAME, or ALTER keyword, got "("`. A new status property

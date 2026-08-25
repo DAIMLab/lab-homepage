@@ -13,6 +13,30 @@ Three tabs in Super's Code editor: **CSS**, **Head** (analytics, embeds,
 `<script>`), **Body** (HTML at the top of the page). Apply site-wide from the site
 editor's Code page, or per-page via the code icon on an individual page.
 
+## Notion Edits Need a Sync
+
+**Editing Notion does not change the live site. Someone has to press Sync in the
+Super dashboard.** Measured 2026-08-25 while building People: the page was rewritten
+in Notion, six linked views added, and `/team-daim` served the old lorem ipsum for
+ten minutes across 62 requests. Cache-busting query strings and
+`Cache-Control: no-cache` change nothing, because the staleness is Super's build,
+not a cache in front of it.
+
+This is worth knowing before reaching for devtools. A gallery that renders empty, a
+heading that will not appear, a card with no cover: check the sync first, because an
+unsynced page is indistinguishable from broken CSS.
+
+It also means CSS can be built before the page exists. Super's own stylesheets are
+four public files, so the markup can be reproduced locally and the CSS checked
+against it:
+
+```bash
+for f in notion static super; do curl -sO "https://daim.super.site/styles/$f.css"; done
+```
+
+That is how `css/team-daim.css` was measured, and it caught a `minmax()` overflow
+that would otherwise have shipped.
+
 ## Classes
 
 `notion-*` for rendered Notion blocks, `super-*` for Super's own chrome (navbar,
@@ -673,6 +697,81 @@ Testing this needs care. Patching the served HTML to inject the CSS throws #418 
 own, script or no script, because React restores the stylesheet from the flight
 payload. Inject the script by patching the HTML, and the CSS at runtime — never both
 at once, or the harness's own error is read as the code's.
+
+## People Page
+
+`css/team-daim.css` is the page's own CSS tab. Six linked gallery views of `People`,
+one per `Role`, each under an H2. Which properties each view shows and which block id
+belongs to which section are in [`notion.md`](notion.md#collections).
+
+A gallery card is a column: cover on top, properties below. Here it is a row, square
+portrait on the left and text on the right, two to a line on desktop and one on a
+phone. The reference is <https://hcil.snu.ac.kr/people>, measured at 1440px: a 176px
+portrait, a 24px gutter, a 440px row, two columns, and research interests one per
+line under the name. <https://ecl.snu.ac.kr/members> groups the same way and puts the
+principal investigator's full CV inline instead of behind a link.
+
+### The card is a div, not an anchor
+
+This is the fact the page is built on, and it is not what the markup looks like from
+the outside. Super emits:
+
+```html
+<div class="notion-collection-card gallery">
+  <a class="notion-collection-card__anchor" href="…">Name</a>
+  <span style="display:contents"><img class="notion-collection-card__cover small"></span>
+  <div class="notion-collection-card__content notion-collection-card__property-list">…</div>
+</div>
+```
+
+The anchor is a sibling, absolutely positioned over the whole card at `z-index: 10`
+with `color: transparent`. Two things follow.
+
+Flipping the card to `display: flex` gives exactly two in-flow children, the portrait
+and the content, because the anchor is out of flow and the lightbox span is
+`display: contents`. The cover class is on the `img` itself, so the portrait is a
+direct flex child and needs no wrapper rule.
+
+And a card can be made inert without touching what sits on it. Super already carries
+
+```css
+.notion-collection-card__content .notion-property__url { pointer-events: auto; z-index: 20 }
+```
+
+so `pointer-events: none` on the anchor leaves the email and link icons clickable and
+takes nothing else with it. That is what lets every student card be a dead end while
+the professor's card, the only one with a page behind it, keeps its link. No nested
+anchor is involved and no JavaScript.
+
+### Turning properties into icons
+
+Four properties share `notion-property__url`, so the icons need `property-<id>`
+hooks, and a URL property has no select option to leak its id through. Read them off
+the rendered page:
+
+```bash
+curl -sL https://daim.super.site/team-daim | grep -oE 'notion-property__url property-[0-9a-f]+'
+```
+
+They come back in `SHOW` order. The class is the property id hex-encoded: Lab News
+`property-6e756d61` is `numa`, `property-686f7844` is `hoxD`.
+
+The label would otherwise be the raw URL, five of them per card. The anchor keeps its
+box and its href and loses only its text, `text-indent: 110%` rather than
+`display: none`, so the hit area and the screen reader survive. Icons are inline SVG
+data URIs; recolouring is `opacity`, since the stroke is baked in.
+
+### Two traps
+
+The portrait needs its size class named. `.notion-collection-card__cover.small` sets
+`height` from a variable and ties a bare page scope, winning on order, so the rule
+names all three sizes. It sets `aspect-ratio` rather than a height, because a length
+cannot hold a square across a changing column count.
+
+`--collection-card-cover-size-*` carries the same 420px in all three sizes. Every one
+of those variables is scoped to the card size its view is set to, and the view DSL
+cannot set card size without also setting a cover property, so the size a view lands
+on is whatever Notion defaults to and whatever someone clicks later.
 
 ## Hero Video Autoplay
 

@@ -29,8 +29,12 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `css/footer.css` | site-wide CSS tab, the footer band |
 | `css/home.css` | Home per-page CSS tab |
 | `css/lab-news.css` | Lab News per-page CSS tab |
+| `css/projects.css` | Projects per-page CSS tab |
+| `css/team-daim.css` | People per-page CSS tab |
 | `js/footer-inject.js` | site-wide Head tab, wrapped in `<script>` |
 | `js/home-video-play.js` | Home per-page Body tab, wrapped in `<script>` |
+| `js/lab-news-load-more.js` | Lab News per-page Body tab, wrapped in `<script>` |
+| `js/projects-date-format.js` | Projects per-page Body tab, wrapped in `<script>` |
 | `assets/` | referenced by public URL, not pasted |
 | `reference/ascent-template.css` | vendored Super template CSS, read-only |
 
