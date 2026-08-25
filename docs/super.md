@@ -743,6 +743,39 @@ takes nothing else with it. That is what lets every student card be a dead end w
 the professor's card, the only one with a page behind it, keeps its link. No nested
 anchor is involved and no JavaScript.
 
+### How the file is shaped
+
+`css/team-daim.css` is one nested tree under `.page__team-daim`, not a list of
+`.page__team-daim …` rules. Native nesting does not change specificity against
+writing the descendant selector out, so this is free: the prefix went from 33
+occurrences to one and selector text from 2116 bytes to 1229, with every computed
+style on all 155 elements byte-identical before and after.
+
+Two idioms carry the rest. `:is()` collapses the selector pairs that only differ by
+property type, and it counts towards specificity where `:where()` would not, which
+matters because these rules exist to beat Super's own. And the six icons are custom
+properties on the page, with each property element setting `--icon` and one rule
+consuming it:
+
+```css
+.notion-property__url {
+  --icon: var(--icon-link);
+  &.property-6e4c7e43 { --icon: var(--icon-home); }
+}
+:is(.notion-property__email, .notion-property__url) a {
+  background: var(--icon) center / 17px 17px no-repeat;
+}
+```
+
+That is worth more than the bytes it saves. Before, the generic chain-link rule and
+the four per-property rules were all `(0,3,1)` and the specific ones won only on
+source order; now they win on specificity, and reordering the file cannot break them.
+
+The floor is the icons themselves: 2270 bytes of SVG data URIs, a quarter of the
+file. They stay inlined because Super's CSS tab avoids a render-blocking request and
+the caching rule in [`hosting.md`](hosting.md#jsdelivr) makes an external sprite a
+pinned-URL problem for no gain.
+
 ### Turning properties into icons
 
 Four properties share `notion-property__url`, so the icons need `property-<id>`
