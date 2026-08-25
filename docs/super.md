@@ -230,11 +230,22 @@ specificity guess: Notion emits its own width attribute on `<video>`, and Super'
 uploaded face tops out at weight 700.
 
 Below it sits a second linked gallery view of `Lab News Posts`, cut to the three
-newest posts. There is no layout CSS: Super already renders a gallery as
-`repeat(auto-fill, minmax(var(--collection-card-cover-size-<size>), 1fr))`, so
-setting that minimum to 240px gives three columns in Home's 908px content box, two
-on a tablet and one on a phone, with no media query. The cards sit flush to both
-edges of the column.
+newest posts.
+
+**`auto-fill` versus `auto-fit` is the whole layout.** Super ships
+`repeat(auto-fill, minmax(var(--collection-card-cover-size-<size>), 1fr))`, and
+`auto-fill` keeps every track it can fit whether or not anything lands in it. Once
+the page went Full width, a 1393px row held five 240px tracks, three cards filled
+the first three, and 567px sat empty on the right, which reads as a left-aligned
+strip. `auto-fit` collapses the empty tracks to zero and the surviving `1fr` tracks
+absorb the space: measured `448px 448px 448px 0px 0px`, flush to both edges. Cards
+then grow with the page instead of staying at their minimum, so no width is
+hard-coded anywhere. A `max-width` plus `margin-inline: auto` keeps it from running
+away on a very wide monitor.
+
+The heading is an H1 and a direct child of `.notion-root`, so
+`.notion-root > h1.notion-heading` reaches it without touching the hero's H1, which
+is nested inside the callout. Notion cannot centre a heading, so that stays CSS.
 
 An earlier pass made this a horizontal scroll-snap carousel with a peeking fourth
 card. It was replaced: the legacy design is three cards filling the width, and a
