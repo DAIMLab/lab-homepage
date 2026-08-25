@@ -169,6 +169,24 @@ them, and the item list grew 517px to 528px on the change, the small step a genu
 face swap gives. Add a Korean menu item and 600 would synthesise on it; 700 is the
 weight both faces share if that ever matters.
 
+### Full-opacity labels
+
+Super dims its navbar links: `.super-navbar__item` carries `opacity: 0.7`, lifted
+to 1 by `.super-navbar__item:hover, .super-navbar__item.active`. The colour is a
+true `#fff`, but 0.7 of it over the hero measured as grey 199 rather than 255, which
+is what made the menu look thin. `css/super-custom.css` sets `opacity: 1`.
+
+Composited against the scrim behind the menu, luminance 68:
+
+| opacity | rendered grey | contrast against the scrim |
+| --- | --- | --- |
+| 0.7, Super's default | 199 | 5.8:1 |
+| 1 | 255 | 9.7:1 |
+
+That costs Super's hover affordance, since hover also just set opacity to 1, so
+hover gets an underline instead. The active item is still obvious without it: it is
+the one keeping its icon.
+
 ### Icons on the active item only
 
 Super puts `active` on the current page's link, so
