@@ -205,6 +205,41 @@ exactly the four hidden icons at 16px plus their gaps. The logo is
 Home shows no icon at all, because Home is not one of the navbar items and nothing
 is marked active there. Verified on `/`: five items, none with `active`.
 
+### The mobile drawer takes the white back off
+
+Home's `--navbar-text-color: #fff` reached the mobile drawer, which is a white panel,
+so its links were white on white. Reported 2026-08-25 from a phone; contrast measured
+at 1.0:1 against the panel and 1.14:1 against the active item's `#f0f0f0` pill.
+
+The drawer is a third child of `.super-navbar`, beside `__content` and
+`__viewport-wrapper`, and its links are `.super-navigation-menu__item`, a different
+class from the bar's `.super-navbar__item`. It inherits the colour rather than
+setting one: Super declares `color: var(--navbar-text-color)` on `.super-navbar`
+itself, so the white is already computed by the time it reaches the drawer.
+
+That rules out two obvious fixes. Redefining the variable deeper does nothing,
+because no descendant re-reads it. Setting `color` on `.super-navigation-menu__item`
+does nothing either, because `.notion-link:not(.color-default, …)` wins on
+specificity with `color: inherit`. What works is `color` on a wrapper the links
+inherit through:
+
+```css
+.super-navbar__menu-wrapper {
+  color: #000;
+}
+```
+
+`#000` is Super's own value from `html.theme-light`, so the drawer matches every
+other page. The bar keeps white: `__content` holds the logo and the close button,
+both still over the video.
+
+Verified at 390x844: links and icons `rgb(0, 0, 0)`, 21:1 on the panel and 18.4:1 on
+the pill, with the logo and desktop items still white at 1600px.
+
+One trap for anyone testing this: patching the served HTML does not work for CSS.
+Super's stylesheet text also rides in the React flight payload, so hydration
+restores the original and the edit vanishes. Inject at runtime instead.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on

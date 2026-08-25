@@ -10,10 +10,9 @@
               showing Title and Date only
             Link  모든 소식 보기 →
 
-   Bare selectors below are Home-only because this is per-page; do not move it
-   site-wide. The hero scrim darkens its own top strip and the menu carries a text
-   shadow, so the navbar reads over the video with no chrome. The strip is Super's
-   own grid, auto-fit and capped at three. docs/super.md, "Home Page". */
+   Bare selectors below are Home-only; do not move this site-wide. The hero scrim
+   darkens its top strip so the white menu reads over the video, and the mobile
+   drawer takes that white back off. docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -41,6 +40,10 @@ body,
 
 .super-navbar__item svg {
   filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.60));
+}
+
+.super-navbar__menu-wrapper {
+  color: #000;
 }
 
 .notion-root > .notion-callout.bg-gray-light {
