@@ -753,7 +753,34 @@ the rendered page:
 curl -sL https://daim.super.site/team-daim | grep -oE 'notion-property__url property-[0-9a-f]+'
 ```
 
-They come back in `SHOW` order. The class is the property id hex-encoded, which is
+**They do not come back in `SHOW` order.** That was assumed here and it is wrong;
+the order is whichever card renders first and what that person happens to fill in.
+Measured 2026-08-26, first appearance ran LinkedIn, CV, Homepage, GitHub, because
+the professor's card leads the page and carries only a LinkedIn. Match by href
+instead, which is unambiguous and needs no second source:
+
+```bash
+curl -sL https://daim.super.site/team-daim | python3 -c '
+import sys, re, html
+h = html.unescape(sys.stdin.read())
+for m in re.finditer(r"notion-property__url property-([0-9a-f]+)", h):
+    a = re.search(r"href=\"([^\"]+)\"", h[m.end():m.end() + 400])
+    print(m.group(1), "->", a.group(1) if a else "no href")
+' | sort -u
+```
+
+| Class | Property | What gave it away |
+| --- | --- | --- |
+| `property-6e4c7e43` | Homepage | two `*.github.io` pages |
+| `property-7956403c` | LinkedIn | `linkedin.com/in/…` |
+| `property-5a4c6b3d` | GitHub | `github.com/Cotidie` |
+| `property-45444558` | CV | a Dropbox PDF |
+
+Homepage and GitHub are the pair that needs the href to separate: `legacy.md` records
+that two people labelled a `*.github.io` page as `Github`, and those rows are
+`Homepage`. Sorting by first appearance would have put the icons on the wrong two.
+
+The class is the property id hex-encoded, which is
 not a guess from the examples but what the bundle does:
 
 ```js
