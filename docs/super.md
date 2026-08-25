@@ -522,14 +522,22 @@ split card after seeing all three rendered with the real 16 rows.
 | Partner | `property-75626b3b` | under the date |
 | Period | `property-475c4c48` | monospaced, above the partner |
 | Summary | `property-45774b6f` | clamped at two lines, no fixed height |
-| Status | `property-46414376` | a chip leading the title |
+| Status | `property-46414376` | a chip trailing the date |
 
-The chip sat on the cover first and had to move: the covers are dense research
-figures with no quiet corner, so a small chip washed out over most of them. It now
-leads the title, which needs the property list to be a wrapping flex **row** rather
-than a column. Every property is `width: 100%` and so claims a line of its own; the
-chip and the title are the two exceptions at `width: auto`, so they share the first
-line, and a title that wraps keeps its own left edge clear of the chip.
+The chip took two moves to place. On the cover it washed out: the figures are dense
+with no quiet corner. In front of the title it was legible but a wrapped title
+indented past it, which looked worse than the problem it solved. It now trails the
+date.
+
+That needs the property list to be a wrapping flex **row** rather than a column.
+Every property is `width: 100%` and claims a line of its own; the date and the chip
+are the two exceptions at `width: auto`, so they share one line and the title keeps a
+full line to itself.
+
+Sizing the chip needs `line-height: 1` explicitly. Super hands the pill an 18px line
+box whatever its font size, so at 10px the chip stood 27.6px tall against a 19.2px
+date line. With the line box collapsed it measures 19.6px, within a pixel of the text
+it sits beside.
 
 `Status` is a Notion `status` property, not a select: Planned / In progress / Done in
 the to-do / in-progress / complete groups. Super renders it as
@@ -578,6 +586,23 @@ floor. It is worth keeping: without it the longest excerpt here runs to four lin
 Chrome reports the clamped element's `display` as `flow-root` rather than
 `-webkit-box`, so that computed value is not evidence the clamp has failed — measure
 the rendered height instead.
+
+### Status tabs are a restyled dropdown
+
+Super emits a `.notion-dropdown` for any collection with more than one view; it has no
+tab rendering at all. The tabs on Ascent's own blog are that same dropdown restyled,
+and `reference/ascent-template.css:386` is the recipe this page follows: hide
+`__button`, pin `__menu` open with `position: relative; opacity: 1; transform: none;
+animation: none`, and lay `__option-list` out as a flex row. Below 576px the dropdown
+is left alone, because four tabs do not fit a phone.
+
+The four views live on the linked block, not on the source database, and
+`notion-create-view` reaches them by passing the linked block's id as `database_id`.
+Each new view needs its own **Card preview → Page cover** click in Notion; the DSL
+cannot set it, so a new tab renders coverless until someone does.
+
+Two of the four tabs are empty, every project being `Done`. That was accepted
+deliberately, to have the scaffolding in place before the data needs it.
 
 Wrapping is a view setting, not CSS. Super marks a property `no-wrap` unless the view
 wraps cells, and that class beat every `white-space: normal` written against it.
