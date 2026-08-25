@@ -10,6 +10,7 @@ The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/3
 
 | Legacy path | What it is | Status |
 | --- | --- | --- |
+| `/22` | Projects | migrated, see below |
 | `/29` | Lab News | migrated, see below |
 | everything else | unidentified | open |
 
@@ -50,3 +51,28 @@ Field mapping, for whoever migrates the next board:
 
 32 of the 58 posts carry photos and no text at all, which is why the gallery card CSS
 cannot assume a summary row exists.
+
+## Projects, Migrated
+
+16 projects and their 16 figures now live in the `Projects DB` database. `/22` is the
+same board software as `/29`, so the same `curl` route reads it: the list pages twelve
+at a time via `&page=N`, and each post opens at `?bmode=view&idx=<idx>&t=board`.
+
+Every post follows one template, which is what let the fields split cleanly:
+
+| Notion property | Source line |
+| --- | --- |
+| `Title` | `프로젝트명:`, not the board title, which prefixes the partner in parentheses |
+| `Partner` | `협력 기관:` |
+| `Period` | `연구 기간:`, `2018.03 ~ 2025.01`; month precision, and two projects have no end |
+| `Status` | the board's own category badge |
+| `Summary` | the first bullet under `연구 내용:` |
+
+Page content is the `연구 내용` bullet list with its nesting kept, plus the `관련 논문`
+citations where a project has them. Each post carries exactly one figure, a research
+diagram rather than a photo, saved to `assets/projects/<legacy-idx>.png` at its source
+size of about 660x350 and served from the `projects-assets` tag. They were left as PNG:
+they are dense with small text that JPEG would smear, and the largest is 227 KB.
+
+All 16 carry the `완료` badge, so the board's `진행중` tab is empty. Its counterpart on
+the new site is a second view, not built yet for that reason.

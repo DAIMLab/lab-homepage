@@ -44,12 +44,15 @@ Databases live away from the page that shows them; the page carries a **linked v
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
 a page: Super renders `.notion-dropdown` only when a collection block holds more than
 one view, so a linked block with a single view emits no switcher markup at all.
-Verified: `/projects` has 4 views and a dropdown, `/publications` has 1 and none.
+Verified: `/publications` has 1 view and no dropdown. `/projects` had 4 and a
+dropdown while it still carried the Ascent template's Blog posts view; that block is
+gone and its single `All` view emits no switcher.
 
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
-| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Projects, Publications |
+| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
+| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -58,6 +61,16 @@ template's remaining list and gallery views.
 Activity / Conference). The gallery shows the first four; `Category` is carried for
 filtered views someone may add later. Card thumbnails come from each post's **page
 cover**, not a files property.
+
+`Projects DB` schema: `Title` (프로젝트명 only), `Partner` (협력 기관), `Period` (date
+range), `Status` (select: Ongoing / Completed), `Summary`. The legacy board wrote the
+partner into the title as a `(LG 전자)` prefix; here it is its own property so a card
+can show it as a separate line. `Period` carries month precision only, so every date
+is the first of its month. Covers are page covers, as in Lab News.
+
+All 16 rows are `Completed`, which is what the legacy board says, so the page carries
+one view and no switcher. The legacy All / 진행중 / 완료 tabs come back as extra views
+the day a project is `Ongoing`; that is what makes Super emit a dropdown.
 
 ### Limits worth not re-deriving
 
