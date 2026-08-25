@@ -97,6 +97,44 @@ The other site-wide rule hides `.notion-toggle.bg-brown`, which is how the
 (`reference/ascent-template.css:46`) and matches any brown-background toggle, so
 brown stays reserved for hidden blocks.
 
+## The Navbar Chip
+
+Site-wide, in `css/super-custom.css`. The navbar is a translucent pill rather than
+a bar: `.super-navbar` carries the inset as padding and stays transparent,
+`.super-navbar__content` is the chip.
+
+Two things it needs that are not obvious:
+
+- `width: auto` on the content. Super sizes that element to the full navbar, so a
+  margin alone leaves it overflowing to the right: measured 1585px wide inside a
+  1585px navbar with a 48px margin already applied.
+- `backdrop-filter: blur(14px) saturate(1.3)`. Without it a translucent fill is
+  just a wash; the blur is what makes the hero video read through as glass.
+
+The fill is a four-stop gradient at `background-size: 220% 100%`, slid by a 16s
+linear `background-position` animation. `prefers-reduced-motion` stops the slide.
+
+### Tinting it per page
+
+`.super-navbar` sits outside `main`, as a sibling that precedes it, so the
+`page__<slug>` class cannot reach it by descent. `:has()` on the shared parent can:
+`.super-root:has(main.page__index) .super-navbar`. Four custom properties carry the
+whole difference between pages, so the geometry is written once.
+
+| | Default | Home |
+| --- | --- | --- |
+| tint | black at 5% and 1.5% | white at 34% and 12% |
+| text | Super's `#000000` | `#fff` |
+| position | `sticky` | `static` |
+
+Home turns off sticky rather than switching Super's Navbar → Visible on Scroll,
+which is a site-wide setting. Past the hero the chip would otherwise sit on white
+page background with white links and the menu would vanish; verified at
+`scrollY: 900` before the fix, still pinned at top 0 with link colour
+`rgb(255, 255, 255)`. Making it `static` on Home alone lets it scroll away there
+while every other page keeps a pinned navbar. Measured after: Home reports
+`navTop: -900`, Lab News stays at `navTop: 0`.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on
@@ -260,28 +298,6 @@ alike, and `overflow-x` on body answers the sideways scroll the -50vw break-out
 causes. Its `!important` declarations answer Notion and Super rather than a
 specificity guess: Notion emits its own width attribute on `<video>`, and Super's
 uploaded face tops out at weight 700.
-
-### The navbar chip
-
-Over the hero the navbar is a translucent pill rather than a bar.
-`.super-navbar` keeps the inset as padding and stays transparent;
-`.super-navbar__content` is the chip. Its `width` has to be forced to `auto`,
-because Super sizes that element to the full navbar and a margin alone leaves it
-overflowing to the right: measured 1585px wide inside a 1585px navbar even with a
-48px margin applied.
-
-The fill is a four-stop white gradient at `background-size: 220% 100%`, slid by a
-16s linear `background-position` animation, over `backdrop-filter: blur(14px)
-saturate(1.3)`. The blur is what lets the video read through as more than a wash.
-`prefers-reduced-motion` stops the slide.
-
-**This needs Navbar → Visible on Scroll switched off.** The navbar is `position:
-sticky` by default, so once the page scrolls past the hero the chip sits on white
-page background with `--navbar-text-color: #fff` still on the links, and the menu
-disappears. Verified at `scrollY: 900`: the navbar is still pinned at top 0 and the
-link colour is still `rgb(255, 255, 255)`. No CSS fixes this on its own, because
-nothing in the cascade can see the scroll position across browsers; the native
-setting is the fix.
 
 Below it sits a second linked gallery view of `Lab News Posts`, cut to the three
 newest posts.
