@@ -7,10 +7,12 @@
    Summary; those ids are the only handle that survives an empty field. Every row
    is a fixed height on a flex column: docs/super.md, "Lab News Page". */
 
-.page__lab-news {
+.super-root {
   --padding-left: clamp(16px, 3vw, 48px);
   --padding-right: clamp(16px, 3vw, 48px);
+}
 
+.page__lab-news {
   --collection-card-cover-size-large: 380px;
   --collection-card-gap: 36px 24px;
   --collection-card-content-padding: 14px 0 0;

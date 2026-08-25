@@ -111,8 +111,17 @@ Two things it needs that are not obvious:
 - `backdrop-filter: blur(14px) saturate(1.3)`. Without it a translucent fill is
   just a wash; the blur is what makes the hero video read through as glass.
 
-The fill is a four-stop gradient at `background-size: 220% 100%`, slid by a 16s
-linear `background-position` animation. `prefers-reduced-motion` stops the slide.
+The chip ends where the page content ends, by taking its inset from Super's own
+`padding: 10px var(--padding-right) 10px var(--padding-left)`. Those variables
+inherit from the root, so the navbar sees them even though it sits outside `main`.
+The catch is that a page overriding them **on `main`** leaves the navbar on the root
+value: measured on Lab News, chip at 96px against content at 48px. `css/lab-news.css`
+therefore sets them on `.super-root` instead, which both elements inherit, and the
+mismatch goes to 0.
+
+The fill is a flat `background-color`. It started as a sliding four-stop gradient,
+a sheen crossing the glass, and that was dropped: on a bar this wide the highlight
+reads as a rendering artefact rather than a material.
 
 ### Tinting it per page
 
