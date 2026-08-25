@@ -1,0 +1,13 @@
+[     661ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at rQ (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:115151)
+    at r1 (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:116519)
+    at https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:210870
+    at uv (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:216037)
+    at um (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:207289)
+    at https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:202107
+    at ur (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:202208)
+    at uG (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:228789)
+    at MessagePort.N (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:76269)
+[    4519ms] [WARNING] The resource https://assets-v2.super.so/sites/45575435-fa8a-4937-8db6-13e338179f62/fonts/9fc7867d-0c48-46d1-9765-b438fc3db6b3.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://daim.super.site/lab-news:0
+[    4519ms] [WARNING] The resource https://assets-v2.super.so/sites/45575435-fa8a-4937-8db6-13e338179f62/fonts/721114e8-3b97-41bb-9261-0a26a355d10e.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://daim.super.site/lab-news:0
+[    4519ms] [WARNING] The resource https://assets-v2.super.so/sites/45575435-fa8a-4937-8db6-13e338179f62/fonts/15ea320c-d824-4ce1-b5c8-9f5d4d5d178f.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://daim.super.site/lab-news:0

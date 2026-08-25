@@ -636,23 +636,43 @@ Two alternatives were tried first and both lost:
   `YYYY.MM` string sorts the same as the date it came from, but gives up date filters
   and puts 16 values under manual upkeep.
 
-### Load More, if it is ever wanted
+### Load More is on Lab News, not here
 
-Not built. Measured 2026-08-25 in case it comes up: it is possible but it is display
-control, not paging. Super server-renders all 16 cards into the initial HTML, with no
-cursor, no `hasMore`, and no load-more markup, so hiding rows cannot shrink the
-document.
+Sixteen projects fit one screen and a button would be decoration. The mechanism is
+built for Lab News and written up under that page; the measurements that decided it
+are there too.
 
-It does cut image requests, because the covers carry `loading="lazy"` and a
-`display: none` card never fetches its own:
+### Load More
 
-| | image requests | cards shown |
-| --- | --- | --- |
-| no cap | 10 | 16 |
-| `:nth-child(n + 7)` hidden | 7 | 6 |
+`js/lab-news-load-more.js` shows 18 of the 57 cards and adds 18 per click. This is
+display control, not paging: Super server-renders every card into the initial HTML,
+with no cursor, no `hasMore`, and no load-more markup, so nothing here shrinks the
+document. What it buys is a first screen that ends after six rows, and covers that are
+never fetched until asked for, the images carrying `loading="lazy"`. Measured with the
+cap in place, 12 covers load against 18 uncapped. Crawlers still see all 57.
 
-Crawlers still see all 16, since the rows stay in the HTML. At 16 projects the reason
-to add one would be a calmer first screen, not performance.
+Three things had to line up.
+
+**CSS makes the first cut, not the script.** The rule keys on the grid *not* having a
+`data-total` attribute yet, so the page paints capped with no JavaScript involved. The
+script sets `data-total` once React has hydrated, which switches the cut over to
+`.is-beyond` and reveals the button. Letting the script make the first cut instead
+costs a React #418: measured 1 against a control of 0, the same hydration mismatch
+`footer-inject.js` hit, and it is deferred the same way.
+
+**The post count needs the attribute.** `css/lab-news.css` prints the count from a CSS
+counter over the cards, and a `display: none` card does not increment it, so the
+heading would have read `18 posts`. The script writes the true total into
+`data-total` and a second rule reads it back with `attr()`.
+
+**The observer has to settle.** `paint()` runs on every mutation and mutates the DOM
+itself, so every write is guarded by a compare-first helper; without it the button's
+own label rewrites the text node forever.
+
+Testing this needs care. Patching the served HTML to inject the CSS throws #418 on its
+own, script or no script, because React restores the stylesheet from the flight
+payload. Inject the script by patching the HTML, and the CSS at runtime — never both
+at once, or the harness's own error is read as the code's.
 
 ## Hero Video Autoplay
 

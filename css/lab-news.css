@@ -39,6 +39,44 @@
   color: #8a8a8e;
 }
 
+/* Load More, driven by js/lab-news-load-more.js. The first rule makes the cut on
+   its own, so the page paints capped and the script can wait for React to finish
+   hydrating before touching anything; setting data-total hands the cut over. The
+   script also writes the real total there, because a display:none card stops
+   incrementing `post` and the count above would otherwise read 18. */
+
+.page__lab-news .notion-collection-gallery:not([data-total])
+  > .notion-collection-card:nth-child(n + 19) {
+  display: none;
+}
+
+.page__lab-news .notion-collection-card.is-beyond {
+  display: none;
+}
+
+.page__lab-news .notion-collection-gallery[data-total]::after {
+  content: attr(data-total) " posts";
+}
+
+.page__lab-news .lab-news-more {
+  display: block;
+  margin: 34px auto 0;
+  padding: 11px 26px;
+  border: 1px solid #c6cfd7;
+  border-radius: 2px;
+  background: transparent;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #212121;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.page__lab-news .lab-news-more:hover {
+  border-color: #8a8a8e;
+  background: #f4f6f7;
+}
+
 .page__lab-news .notion-collection-card__cover.large,
 .page__lab-news .notion-collection-card > div:not([class]) {
   height: auto !important;
