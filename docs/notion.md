@@ -74,8 +74,12 @@ the day a project is `Ongoing`; that is what makes Super emit a dropdown.
 
 ### Limits worth not re-deriving
 
-- The view DSL has no directive for the page cover, so `COVER "Page cover"` is
-  rejected. Omit `COVER` and Notion's default card preview already is the page cover.
+- The view DSL cannot set the page cover as the card preview. `COVER` takes a
+  property name, and the page cover is not one: `COVER "Page cover"` comes back
+  `Could not find property with name or id`. Omitting `COVER` does not fall back to
+  it either, measured on Projects 2026-08-25: 16 cards, 0 covers, while Lab News with
+  the setting on renders 60 covers over 63 cards. Every new gallery needs the same
+  click in Notion, `⋯` → Properties → Card preview → Page cover.
 - `notion-update-view` cannot change a view's type, so a table view cannot be turned
   into a gallery. Create the gallery as a linked view instead.
 - The MCP move tool cannot target a toggle, so moving a database into the Control
