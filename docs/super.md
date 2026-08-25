@@ -229,13 +229,20 @@ causes. Its `!important` declarations answer Notion and Super rather than a
 specificity guess: Notion emits its own width attribute on `<video>`, and Super's
 uploaded face tops out at weight 700.
 
-Below it sits a second linked gallery view of `Lab News Posts`, turned into one
-scroll-snapping row. Three cards land in the content column, measured at 908px, and
-29% leaves the fourth peeking by about 47px, which is the only affordance the
-scroller gets: the scrollbar is hidden and there are no arrows, so paging is a swipe
-or a trackpad flick. `flex-basis` accepts a `clamp`, unlike the auto-fill `minmax`
-on Lab News, so the row needs no media query; the 240px floor turns three columns
-into one and a half on a phone.
+Below it sits a second linked gallery view of `Lab News Posts`, cut to the three
+newest posts. There is no layout CSS: Super already renders a gallery as
+`repeat(auto-fill, minmax(var(--collection-card-cover-size-<size>), 1fr))`, so
+setting that minimum to 240px gives three columns in Home's 908px content box, two
+on a tablet and one on a phone, with no media query. The cards sit flush to both
+edges of the column.
+
+An earlier pass made this a horizontal scroll-snap carousel with a peeking fourth
+card. It was replaced: the legacy design is three cards filling the width, and a
+cut-off fourth reads as a rendering fault rather than an affordance.
+
+Notion cannot say "top 3". The view DSL has no `LIMIT` and a gallery has no page
+size, so the cap is `:nth-child(n + 4)`. Every row of the database still reaches the
+browser; the rule only hides them.
 
 A view created with `notion-create-view` starts with **Card preview: None**, so the
 strip renders as text until someone sets it to Page cover in Notion. The DSL cannot
@@ -243,15 +250,10 @@ do it: `COVER "Page cover"` is rejected with "Could not find property with name 
 id", because the page cover is not a property. Cards with no cover at all get an
 unclassed spacer div, the same one Lab News handles, so the ratio rule names both.
 
-Notion cannot say "top 3". The view DSL has no `LIMIT` and a gallery has no page
-size, so the cap is `:nth-child(n + 10)`, which keeps the strip to three swipes.
-
-Card size is deliberately absent from every selector there. Super scopes
-`--collection-card-cover-size-*` and the cover's own class per size, so naming one
-would go silent the moment someone switches the view in Notion. Sizing the cards
-through `flex-basis` and reaching the cover with a third class instead leaves the
-strip working at any size. Prefer that approach to the size-class selector Lab News
-still uses.
+All three `--collection-card-cover-size-*` variables are set to the same value on
+purpose. Super scopes them per card size, so setting only the one the view uses
+today would go silent the moment someone switches it in Notion. Prefer that to the
+size-class selector Lab News still uses.
 
 ## Lab News Page
 

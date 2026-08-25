@@ -11,8 +11,8 @@
             Link  모든 소식 보기 →
 
    Bare selectors below are Home-only because this is per-page; do not move it
-   site-wide. The strip is Super's gallery grid turned into one scroll-snapping
-   row; the view needs Card preview = Page cover. Why: docs/super.md, "Home Page". */
+   site-wide. The strip is Super's own grid, capped at three cards; the view needs
+   Card preview = Page cover. Why each rule: docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -103,7 +103,10 @@ body,
 }
 
 .page__index {
-  --news-gap: 24px;
+  --collection-card-cover-size-small: 240px;
+  --collection-card-cover-size-medium: 240px;
+  --collection-card-cover-size-large: 240px;
+  --collection-card-gap: 24px;
 
   --collection-card-border-radii: 0;
   --collection-card-shadow: none;
@@ -117,25 +120,7 @@ body,
   text-align: center;
 }
 
-.page__index .notion-collection-gallery {
-  display: flex;
-  gap: var(--news-gap);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.page__index .notion-collection-gallery::-webkit-scrollbar {
-  display: none;
-}
-
-.page__index .notion-collection-card {
-  flex: 0 0 clamp(240px, 29%, 400px);
-  scroll-snap-align: start;
-}
-
-.page__index .notion-collection-card:nth-child(n + 10) {
+.page__index .notion-collection-card:nth-child(n + 4) {
   display: none;
 }
 
