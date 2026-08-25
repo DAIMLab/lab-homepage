@@ -808,10 +808,17 @@ which does happen to reach the professor because `Professor` is the first `Role`
 option. And the section heading is a `Property`, so for a select group-by it renders
 as a **pill inside a `div`**: no heading element anywhere.
 
-That last one decides it. On a People page the section labels are the page's
-structure, the thing a screen reader tabs through and a search engine reads, and
-six `<h2>` blocks are worth more than six one-time clicks. The pill could be
-restyled into something that looks like a heading; it would still not be one.
+That last one decides it, and it decides it alone. On a People page the section
+labels are the page's structure, the thing a screen reader tabs through and a search
+engine reads, and six `<h2>` blocks are worth more than six one-time clicks. The pill
+could be restyled into something that looks like a heading; it would still not be one.
+The collapse is the other cost, an accidental one: the header is a click target with
+no affordance, so a visitor clicking the words "Ph.D. Students" makes them vanish.
+
+The obvious third objection is not real, so nobody should re-derive it. One view means
+one set of display properties for all six groups, but a property with no value renders
+nothing, so giving the professor the same set as a student costs an empty `Admitted`
+and four empty links, which is to say nothing at all.
 
 Worth keeping in view, because nothing about the data would move: the seven views are
 a display choice over one unchanged table, and switching is deleting views and
