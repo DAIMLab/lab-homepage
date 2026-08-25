@@ -3,44 +3,13 @@
 
    One font stack rather than Super's two slots, so the browser falls through per
    character: Montserrat for Latin, NanumSquare for Korean. The navbar is a
-   translucent chip on every page, tinted per page, ending where the page content
-   ends, and only the active item keeps its icon. docs/super.md, "Fonts" and "The
-   Navbar Chip". A brown-background toggle is the hidden-block convention. */
+   Only the navbar's active item keeps its icon. docs/super.md, "Fonts" and
+   "The Navbar Over the Hero". A brown-background toggle is the hidden-block
+   convention. */
 
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
   --secondary-font: var(--primary-font);
-}
-
-.super-navbar {
-  --chip-tint: rgb(0 0 0 / 0.04);
-  --chip-border: rgb(0 0 0 / 0.08);
-  --chip-shadow: 0 6px 24px rgb(0 0 0 / 0.10);
-
-  padding: 10px var(--padding-right) 10px var(--padding-left);
-  background: transparent !important;
-}
-
-.super-root:has(main.page__index) .super-navbar {
-  --chip-tint: rgb(255 255 255 / 0.22);
-  --chip-border: rgb(255 255 255 / 0.30);
-  --chip-shadow: 0 10px 34px rgb(0 0 0 / 0.20);
-  --navbar-text-color: #fff;
-
-  position: static !important;
-}
-
-.super-navbar__content {
-  width: auto;
-  max-width: none;
-  height: 100%;
-  padding: 0 clamp(18px, 2vw, 30px);
-  border: 1px solid var(--chip-border);
-  border-radius: 999px;
-  background-color: var(--chip-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-  backdrop-filter: blur(14px) saturate(1.3);
-  box-shadow: var(--chip-shadow);
 }
 
 .super-navbar__item:not(.active) svg {

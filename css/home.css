@@ -11,9 +11,9 @@
             Link  모든 소식 보기 →
 
    Bare selectors below are Home-only because this is per-page; do not move it
-   site-wide. The navbar chip lives in css/super-custom.css instead, tinted per
-   page. The strip is Super's own grid switched to auto-fit and capped at three.
-   docs/super.md, "Home Page". */
+   site-wide. The hero scrim darkens its own top strip so the navbar reads without
+   any chrome. The strip is Super's own grid switched to auto-fit and capped at
+   three. docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -26,6 +26,12 @@ body,
 
 .notion-header {
   display: none !important;
+}
+
+.super-navbar {
+  background: transparent !important;
+  --navbar-text-color: #fff;
+  position: static !important;
 }
 
 .notion-root > .notion-callout.bg-gray-light {
@@ -45,7 +51,9 @@ body,
     position: absolute;
     inset: 0;
     z-index: 2;
-    background: linear-gradient(100deg, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.08));
+    background:
+      linear-gradient(to bottom, rgb(0 0 0 / 0.50) 0, rgb(0 0 0 / 0) 170px),
+      linear-gradient(100deg, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.08));
   }
 
   .notion-video,

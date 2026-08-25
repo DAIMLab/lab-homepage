@@ -97,52 +97,48 @@ The other site-wide rule hides `.notion-toggle.bg-brown`, which is how the
 (`reference/ascent-template.css:46`) and matches any brown-background toggle, so
 brown stays reserved for hidden blocks.
 
-## The Navbar Chip
+## The Navbar Over the Hero
 
-Site-wide, in `css/super-custom.css`. The navbar is a translucent pill rather than
-a bar: `.super-navbar` carries the inset as padding and stays transparent,
-`.super-navbar__content` is the chip.
+On Home the navbar is transparent with white links, sitting over the video. Nothing
+else: no background, no chip, no blur.
 
-Two things it needs that are not obvious:
+The menu was hard to read, and the cause is the hero's own scrim. It runs
+`linear-gradient(100deg, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.08))`, dark at the
+bottom-left where the headings are and almost clear at the top-right. Measured, the
+menu occupies x 936 to 1553, which is exactly the 8% end. The headings were always
+legible; the menu never was.
 
-- `width: auto` on the content. Super sizes that element to the full navbar, so a
-  margin alone leaves it overflowing to the right: measured 1585px wide inside a
-  1585px navbar with a 48px margin already applied.
-- `backdrop-filter: blur(14px) saturate(1.3)`. Without it a translucent fill is
-  just a wash; the blur is what makes the hero video read through as glass.
+The fix adds a second layer to that same `::after`, a top-down scrim over the first
+170px, so the top strip darkens whatever the horizontal position:
 
-The chip ends where the page content ends, by taking its inset from Super's own
-`padding: 10px var(--padding-right) 10px var(--padding-left)`. Those variables
-inherit from the root, so the navbar sees them even though it sits outside `main`.
-The catch is that a page overriding them **on `main`** leaves the navbar on the root
-value: measured on Lab News, chip at 96px against content at 48px. `css/lab-news.css`
-therefore sets them on `.super-root` instead, which both elements inherit, and the
-mismatch goes to 0.
+```css
+background:
+  linear-gradient(to bottom, rgb(0 0 0 / 0.50) 0, rgb(0 0 0 / 0) 170px),
+  linear-gradient(100deg, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.08));
+```
 
-The fill is a flat `background-color`. It started as a sliding four-stop gradient,
-a sheen crossing the glass, and that was dropped: on a bar this wide the highlight
-reads as a rendering artefact rather than a material.
+No new element, no navbar chrome, and the video still reads through everywhere else.
 
-### Tinting it per page
+Home also sets `position: static` on the navbar. It is `sticky` by default, and past
+the hero a transparent bar with white links leaves the menu invisible against white
+page background. Static lets it scroll away on Home while every other page keeps a
+pinned navbar, which is why this is not Super's site-wide Navbar → Visible on Scroll
+setting.
 
-`.super-navbar` sits outside `main`, as a sibling that precedes it, so the
-`page__<slug>` class cannot reach it by descent. `:has()` on the shared parent can:
-`.super-root:has(main.page__index) .super-navbar`. Four custom properties carry the
-whole difference between pages, so the geometry is written once.
+### The chip that was tried and dropped
 
-| | Default | Home |
-| --- | --- | --- |
-| tint | black at 5% and 1.5% | white at 34% and 12% |
-| text | Super's `#000000` | `#fff` |
-| position | `sticky` | `static` |
+A rounded translucent pill with `backdrop-filter` and a sliding gradient was built
+and then removed. Recorded so nobody rebuilds it: it read as extra chrome the design
+does not want, and the sheen looked like a rendering artefact on a bar that wide.
+Two things learned there are still worth knowing.
 
-Home turns off sticky rather than switching Super's Navbar → Visible on Scroll,
-which is a site-wide setting. Past the hero the chip would otherwise sit on white
-page background with white links and the menu would vanish; verified at
-`scrollY: 900` before the fix, still pinned at top 0 with link colour
-`rgb(255, 255, 255)`. Making it `static` on Home alone lets it scroll away there
-while every other page keeps a pinned navbar. Measured after: Home reports
-`navTop: -900`, Lab News stays at `navTop: 0`.
+`.super-navbar__content` is sized to the full navbar by Super, so a margin alone
+leaves it overflowing; `width: auto` is needed to inset it. And `.super-navbar` sits
+outside `main`, as a sibling that precedes it, so `page__<slug>` cannot reach it by
+descent. `.super-root:has(main.page__index) .super-navbar` can, which is the way to
+style the navbar per page from site-wide CSS. The same trap applies to
+`--padding-left` and `--padding-right`: a page overriding them on `main` leaves the
+navbar on the root value.
 
 ### Icons on the active item only
 
