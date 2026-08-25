@@ -230,11 +230,18 @@ specificity guess: Notion emits its own width attribute on `<video>`, and Super'
 uploaded face tops out at weight 700.
 
 Below it sits a second linked gallery view of `Lab News Posts`, turned into one
-scroll-snapping row. Three cards land in the 1100px column with the fourth peeking,
-which is the only affordance the scroller gets: the scrollbar is hidden and there
-are no arrows, so paging is a swipe or a trackpad flick. `flex-basis` accepts a
-`clamp`, unlike the auto-fill `minmax` on Lab News, so the row needs no media query;
-the 240px floor turns three columns into one and a half on a phone.
+scroll-snapping row. Three cards land in the content column, measured at 908px, and
+29% leaves the fourth peeking by about 47px, which is the only affordance the
+scroller gets: the scrollbar is hidden and there are no arrows, so paging is a swipe
+or a trackpad flick. `flex-basis` accepts a `clamp`, unlike the auto-fill `minmax`
+on Lab News, so the row needs no media query; the 240px floor turns three columns
+into one and a half on a phone.
+
+A view created with `notion-create-view` starts with **Card preview: None**, so the
+strip renders as text until someone sets it to Page cover in Notion. The DSL cannot
+do it: `COVER "Page cover"` is rejected with "Could not find property with name or
+id", because the page cover is not a property. Cards with no cover at all get an
+unclassed spacer div, the same one Lab News handles, so the ratio rule names both.
 
 Notion cannot say "top 3". The view DSL has no `LIMIT` and a gallery has no page
 size, so the cap is `:nth-child(n + 10)`, which keeps the strip to three swipes.

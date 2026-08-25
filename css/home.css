@@ -12,7 +12,7 @@
 
    Bare selectors below are Home-only because this is per-page; do not move it
    site-wide. The strip is Super's gallery grid turned into one scroll-snapping
-   row. Why each rule is here: docs/super.md, "Home Page". */
+   row; the view needs Card preview = Page cover. Why: docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -131,7 +131,7 @@ body,
 }
 
 .page__index .notion-collection-card {
-  flex: 0 0 clamp(240px, 31%, 400px);
+  flex: 0 0 clamp(240px, 29%, 400px);
   scroll-snap-align: start;
 }
 
@@ -139,7 +139,8 @@ body,
   display: none;
 }
 
-.page__index .notion-collection-card .notion-collection-card__cover {
+.page__index .notion-collection-card .notion-collection-card__cover,
+.page__index .notion-collection-card > div:not([class]) {
   height: auto !important;
   min-height: 0;
   aspect-ratio: 1 / 1;
