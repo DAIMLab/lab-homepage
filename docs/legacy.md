@@ -160,7 +160,7 @@ only a browser sees it. Reading it means walking the rendered DOM in document or
 and pairing each `<img>` with the `<span>` that follows it, because the markup carries
 no per-person container and no `alt` text to match on.
 
-20 people, six role groups, and 20 photos now live in the `People` database. It takes
+20 people, six role groups, and 20 photos were extracted for the member database. It takes
 **two** legacy pages to fill a row, which is the thing to know before reading either:
 `/Team` has the photos and no contact details, `/122325403` has the contact details
 and no photos. They are joined on the name, and the names do not match exactly.
@@ -223,8 +223,8 @@ ends at the card for a student.
 ## Alumni, Migrated
 
 `/36` is the third tab: 49 entries grouped by graduation year, 2013 through 2026,
-each with a degree, an email and a thesis title. No photos. 48 rows are in `People`
-with `Status = Alumni`.
+each with a degree, an email and a thesis title. No photos. 48 of them were extracted
+as alumni rows.
 
 The page is client-rendered like `/Team`, and it has no per-person container either,
 so it parses as a flat line stream: a bare four-digit line opens a year, a

@@ -26,8 +26,8 @@ Team DAIM is the People page; the navbar labels it `People` while the Notion tit
 and so the `h1`, still reads `Team DAIM`. The slug lives in Super under Site Pages
 and a Notion rename does not move it, so renaming the page is safe but has to be
 done knowing the slug stays `team-daim`. It once split into `Professor`, `Students`
-and `Alumni` sub-pages; all three are in the trash and the `People` database
-replaced them.
+and `Alumni` sub-pages; all three are in the trash. The page carries no member
+database; that is being rebuilt from scratch.
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
@@ -56,18 +56,9 @@ gone and its single `All` view emits no switcher.
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
-| People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | Team DAIM |
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
-
-`People` is the one database that breaks the rule above: it sits **under** the page
-that shows it, because nothing in the Control panel subtree can hold a database.
-Every candidate parent there is a toggle or a column, and both refuse: `Parent block
-type toggle cannot contain databases`, `Parent block type column_list cannot contain
-databases`. The move tool reports the same refusal as a 404 on the destination,
-which reads like a permissions problem and is not one. Until someone drags it across
-in Notion, `css/team-daim.css` hides the child-page link Super prints for it.
 
 `Lab News Posts` schema: `Title`, `Date`, `Location`, `Summary`, `Category` (select:
 Activity / Conference). The gallery shows the first four; `Category` is carried for
@@ -83,69 +74,6 @@ is the first of its month. Covers are page covers, as in Lab News.
 All 16 rows are `Completed`, which is what the legacy board says, so the page carries
 one view and no switcher. The legacy All / 진행중 / 완료 tabs come back as extra views
 the day a project is `Ongoing`; that is what makes Super emit a dropdown.
-
-`People` schema: `Name`, `Role` (select: Professor / Researcher / Ph.D. Student /
-M.S. Student / Intern / Staff), `Research` (multi-select), `Admitted`, `Email`,
-`Homepage`, `LinkedIn`, `GitHub`, `CV`, `Status` (select: Current / Alumni), and
-three that only alumni use, `Degree` (select: Ph.D. / M.S.), `Graduated` (number)
-and `Thesis`. Covers are page covers, as in Lab News and Projects; alumni have none.
-
-`Graduated` is a number where `Admitted` is text, and the split is deliberate. A
-year is one value the view has to sort newest-first, and a number does that with no
-zero-padding contract; `2024.09` is two values in a trench coat and only sorts
-because it is padded. Keep the number format plain, or Notion prints `2,026`.
-
-`Degree` duplicates what `Role` already implies for an alumnus, and earns it: the
-Alumni cards have to read `Ph.D.` rather than `Ph.D. Student`, and Notion sorts a
-select by option order, so `Degree ASC` puts doctorates first within a year because
-`Ph.D.` is declared first.
-
-`Admitted` is text, not a date, and holds `2024.09`. A date property would print
-through Notion's own formatting and month precision would still need a fake day;
-text prints exactly and `YYYY.MM` sorts correctly because it is zero-padded.
-
-`Research` is a multi-select rather than free text so the lab shares one vocabulary
-instead of fourteen spellings of the same interest. The option list is the lab's own,
-taken verbatim from the `Research Areas:` line on the legacy `/122325403` page. It was
-seeded from `Projects DB` first and that guess was wrong: the real vocabulary is
-narrower and AMHS-centric, `AMHS Simulation` on eight people and `AMHS Operations` on
-four. Add options freely. `css/team-daim.css` strips the pill chrome and stacks them
-one per line.
-
-Replacing a multi-select's whole option list with `ALTER COLUMN … SET MULTI_SELECT(…)`
-keeps the values whose option names survive and drops the rest. Measured on the
-professor's row: `Reinforcement Learning` appears in both lists and kept its option
-id, the four names that did not appear were dropped. So this is safe to re-run when
-the option name is unchanged, and destructive when it is renamed. It also blanks the
-property `description`, so put `COMMENT` back in the same statement.
-
-`Status` is what retires a row. The six current-member views filter
-`Status = Current` and the Alumni view filters `Status = Alumni`, so a graduate keeps
-their `Role`, gains `Degree`, `Graduated` and `Thesis`, and moves section by one
-property change. 48 alumni are in, 2013 through 2026; the migration record is in
-[`legacy.md`](legacy.md#alumni-migrated).
-
-Six linked gallery views, one per `Role`, each under its own H2 on the page:
-
-| View | Filter | Collection block |
-| --- | --- | --- |
-| Professor | `Role = Professor AND Status = Current` | `3c711c7b703c81cb96adcf098a8b3d1c` |
-| Researchers | `Role = Researcher AND Status = Current` | `3c711c7b703c8187ace6c37fa9346118` |
-| Ph.D. Students | `Role = Ph.D. Student AND Status = Current` | `3c711c7b703c81aa93fec1c673eeaf6e` |
-| M.S. Students | `Role = M.S. Student AND Status = Current` | `3c711c7b703c8193980fc3578650f37a` |
-| Interns | `Role = Intern AND Status = Current` | `3c711c7b703c81538b25fccbbebf29b0` |
-| Staff | `Role = Staff AND Status = Current` | `3c711c7b703c81778100de046ebd0847` |
-| Alumni | `Status = Alumni` | `3c711c7b703c81d3a55cca93eb2e4ecf` |
-
-The block id matters: it is the only handle that tells the professor's gallery from
-the students', because the view DSL cannot set card size without also setting a
-cover property, so all six views share one size class.
-
-Only Alumni carries a sort, `Graduated` DESC then `Degree` then `Name`. The other six
-fall back to the collection's manual order, which follows creation, and the rows were
-created in the order the legacy Team page listed them. Once `Admitted` is filled,
-`SORT BY "Admitted" ASC` is the sort each student section wants; adding it now would
-only scatter the rows, every value being empty.
 
 ### Limits worth not re-deriving
 
@@ -166,6 +94,12 @@ only scatter the rows, every value being empty.
   the files property was dropped from the schema rather than left dead.
 - `notion-update-view` cannot change a view's type, so a table view cannot be turned
   into a gallery. Create the gallery as a linked view instead.
+- **Replacing a multi-select's whole option list with `ALTER COLUMN … SET MULTI_SELECT(…)`
+  keeps the values whose option names survive and drops the rest.** Measured on one
+  row: a name present in both lists kept its option id, the four that did not appear
+  were dropped. Safe to re-run when an option name is unchanged, destructive when it
+  is renamed. It also blanks the property `description`, so put `COMMENT` back in the
+  same statement.
 - The MCP move tool cannot target a toggle or a column, so moving a database into the
   Control panel is a manual drag in Notion. It reports the refusal as
   `Could not find block with ID`, a 404 on the destination, which reads like missing
