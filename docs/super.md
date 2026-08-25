@@ -236,9 +236,12 @@ both still over the video.
 Verified at 390x844: links and icons `rgb(0, 0, 0)`, 21:1 on the panel and 18.4:1 on
 the pill, with the logo and desktop items still white at 1600px.
 
-One trap for anyone testing this: patching the served HTML does not work for CSS.
-Super's stylesheet text also rides in the React flight payload, so hydration
-restores the original and the edit vanishes. Inject at runtime instead.
+Two traps for anyone testing this. Patching the served HTML does not work for CSS:
+Super's stylesheet text also rides in the React flight payload, so hydration restores
+the original and the edit vanishes. Inject at runtime instead — but **append the test
+`<style>` to `document.body`, not `document.head`**. Super drops a page's CSS tab into
+a `<style>` near the end of the body, so a tag added to the head loses every
+specificity tie against it and the test silently reads as "my CSS does not work".
 
 ## Theming Through CSS Variables
 
@@ -518,15 +521,25 @@ split card after seeing all three rendered with the real 16 rows.
 | Title | `.title` | two lines, clamped, fixed at `2.84em` |
 | Partner | `property-75626b3b` | under the date |
 | Period | `property-475c4c48` | monospaced, above the partner |
-| Summary | `property-45774b6f` | hidden |
+| Summary | `property-45774b6f` | two lines, clamped, fixed at `3em` |
 | Status | `property-46414376` | lifted onto the cover |
 
 `Status` is a Notion `status` property, not a select: Planned / In progress / Done in
 the to-do / in-progress / complete groups. Super renders it as
 `notion-property__select` all the same, and the property id survived the conversion,
-so nothing in the CSS is keyed differently. All 16 rows are `Done`, which Notion
-colours green; the CSS puts that back to the quiet chip and gives the colour to
-`In progress` instead, so a running project is the thing that stands out.
+so nothing in the CSS is keyed differently. Notion's colour per option arrives as a
+`pill-*` class, and the CSS keeps each state's own colour: grey waiting, blue running,
+green finished.
+
+The grid is capped at three columns by the floor inside `minmax()`:
+
+```css
+grid-template-columns: repeat(auto-fill, minmax(max(268px, 30%), 1fr));
+```
+
+Four tracks would need 120% of the row, so `auto-fill` can never place a fourth. Below
+about 900px the 268px half of the `max()` wins instead and the grid steps down to two,
+then one. Measured: 3 at 1600px and 1440px, 2 at 860px, 1 at 390px. No media query.
 
 ### What the card is made of
 

@@ -21,8 +21,12 @@
   --sub: #66717d;
 }
 
+/* Three columns at most. The 30% floor is what caps it: four tracks would need
+   120% of the row, so auto-fill can never place a fourth. Below about 900px the
+   268px floor wins instead and the grid steps down to two, then one. */
+
 .page__projects .notion-collection-gallery {
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(max(var(--card-min), 30%), 1fr));
 }
 
 .page__projects .notion-collection-card__cover {
@@ -68,7 +72,17 @@
 }
 
 .page__projects .notion-collection-card__property.property-45774b6f {
-  display: none;
+  order: 4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 3em;
+  margin-top: 8px;
+  white-space: normal;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sub);
 }
 
 .page__projects .notion-collection-card__property.property-46414376 {
@@ -78,6 +92,11 @@
   left: 9px;
 }
 
+/* Status is a Notion `status` property: Planned (to-do), In progress, Done.
+   Notion's own colour per option arrives as a pill-* class, so each state keeps
+   its meaning: grey waiting, blue running, green finished. The chip sits on the
+   cover, so every state is a solid tint with a border rather than tinted text. */
+
 .page__projects .notion-pill {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 9.5px;
@@ -86,17 +105,7 @@
   padding: 4px 8px;
   border-radius: 2px;
   border: 1px solid #c6cfd7;
-  background: #ffffff;
-  color: #5b6773;
-}
-
-/* Status is a Notion `status` property: Planned (to-do), In progress, Done.
-   Done is every archived project, so it stays the quiet chip and only the
-   in-progress blue earns colour. Super renders all three as .notion-pill. */
-
-.page__projects .notion-pill.pill-green {
-  border-color: #c6cfd7;
-  background: #ffffff;
+  background: #eef1f4;
   color: #5b6773;
 }
 
@@ -104,6 +113,12 @@
   border-color: #a9c8dd;
   background: #e3edf3;
   color: #17516e;
+}
+
+.page__projects .notion-pill.pill-green {
+  border-color: #a9d6c4;
+  background: #dff0e9;
+  color: #1f6b55;
 }
 
 .page__projects .notion-collection-card:hover .notion-collection-card__cover {
