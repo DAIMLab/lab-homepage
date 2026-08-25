@@ -117,6 +117,22 @@ background:
   linear-gradient(100deg, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.08));
 ```
 
+The menu also carries `text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 0 14px
+rgb(0 0 0 / 0.40)`, with the same shadow as a `drop-shadow` filter on the icons,
+which are SVG and ignore `text-shadow`. The scrim does the bulk of the work; the
+shadow covers the bright pixels that still punch through it.
+
+Measured by screenshotting the page and reading the luminance of the menu's own
+bounding box, x 936 to 1553 by 88px tall, parked on a bright frame:
+
+| | mean | p90 | pixels above 180 | contrast against white text |
+| --- | --- | --- | --- | --- |
+| before | 250.1 | 255 | 96.9% | about 1.04:1 |
+| after | 67.7 | 101 | 1.2% | about 9.2:1 |
+
+WCAG AAA asks 7:1 for body text. Before, white on near-white, the menu was not
+readable at all on a bright frame.
+
 No new element, no navbar chrome, and the video still reads through everywhere else.
 
 Home also sets `position: static` on the navbar. It is `sticky` by default, and past

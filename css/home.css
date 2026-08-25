@@ -11,9 +11,9 @@
             Link  모든 소식 보기 →
 
    Bare selectors below are Home-only because this is per-page; do not move it
-   site-wide. The hero scrim darkens its own top strip so the navbar reads without
-   any chrome. The strip is Super's own grid switched to auto-fit and capped at
-   three. docs/super.md, "Home Page". */
+   site-wide. The hero scrim darkens its own top strip and the menu carries a text
+   shadow, so the navbar reads over the video with no chrome. The strip is Super's
+   own grid, auto-fit and capped at three. docs/super.md, "Home Page". */
 
 body,
 .super-content {
@@ -32,6 +32,15 @@ body,
   background: transparent !important;
   --navbar-text-color: #fff;
   position: static !important;
+}
+
+.super-navbar__item,
+.super-navbar__logo {
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 0 14px rgb(0 0 0 / 0.40);
+}
+
+.super-navbar__item svg {
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.60));
 }
 
 .notion-root > .notion-callout.bg-gray-light {
