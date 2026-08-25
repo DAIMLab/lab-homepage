@@ -4,10 +4,10 @@
               showing Title, Partner, Period, Summary, Status
 
    property-75626b3b is Partner, property-475c4c48 Period, property-45774b6f
-   Summary, property-46414376 Status. The card is already positioned, so the
-   status pill lifts onto the cover, a flex column reorders the rows the view
-   emits, and no row has a fixed height: a long title just makes its own card
-   taller. docs/super.md, "Projects Page". */
+   Summary, property-46414376 Status. A wrapping flex row reorders the rows the
+   view emits and seats the status chip beside the title; no row has a fixed
+   height, so a long title just makes its own card taller.
+   docs/super.md, "Projects Page". */
 
 .page__projects {
   --collection-card-gap: 34px 26px;
@@ -34,14 +34,24 @@
     border: 1px solid #dde3e8;
   }
 
+  /* A wrapping row, not a column: every property claims a full line of its own,
+     so only the status chip and the title, both sized to content, end up sharing
+     the first one. A title that wraps keeps its own left edge, clear of the chip. */
+
   .notion-collection-card__property-list {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
   }
 
   .notion-collection-card__property {
+    width: 100%;
+
     &.title {
       order: 1;
+      width: auto;
+      flex: 1;
       font-size: 15px;
       font-weight: 600;
       line-height: 1.42;
@@ -79,14 +89,12 @@
       color: var(--sub);
     }
 
-    /* Status. The card is position: relative already, so this lands on the
-       cover; the z-index only has to clear Super's own full-card anchor. */
+    /* Status leads the title. It sat on the cover first and was unreadable
+       there: the covers are dense research figures with no quiet corner. */
 
     &.property-46414376 {
-      position: absolute;
-      z-index: 3;
-      top: 9px;
-      left: 9px;
+      order: 0;
+      width: auto;
     }
   }
 

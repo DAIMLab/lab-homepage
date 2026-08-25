@@ -522,7 +522,14 @@ split card after seeing all three rendered with the real 16 rows.
 | Partner | `property-75626b3b` | under the date |
 | Period | `property-475c4c48` | monospaced, above the partner |
 | Summary | `property-45774b6f` | clamped at two lines, no fixed height |
-| Status | `property-46414376` | lifted onto the cover |
+| Status | `property-46414376` | a chip leading the title |
+
+The chip sat on the cover first and had to move: the covers are dense research
+figures with no quiet corner, so a small chip washed out over most of them. It now
+leads the title, which needs the property list to be a wrapping flex **row** rather
+than a column. Every property is `width: 100%` and so claims a line of its own; the
+chip and the title are the two exceptions at `width: auto`, so they share the first
+line, and a title that wraps keeps its own left edge clear of the chip.
 
 `Status` is a Notion `status` property, not a select: Planned / In progress / Done in
 the to-do / in-progress / complete groups. Super renders it as
