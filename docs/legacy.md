@@ -6,18 +6,42 @@ reference until the DNS cutover.
 ## Migration Checklist
 
 The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/38`,
-`/122325403`) with no readable labels. Open each in a browser to identify it.
+`/122325403`) with no readable labels. Opening each in a browser is not necessary:
+the nav markup carries the labels as link text on every page, so one fetch names
+them all.
+
+```bash
+curl -sL https://daim.kaist.ac.kr/23 | python3 -c '
+import sys, re
+html = sys.stdin.read()
+pat = r"<a[^>]+href=\"(/\d+|/home|/Team)\"[^>]*>\s*<span class=\"plain_name\"[^>]*>([^<]+)"
+for path, label in sorted(set(re.findall(pat, html))):
+    print(f"{path:<14} {label.strip()}")
+'
+```
+
+The label is not the anchor's own text; it sits in a nested
+`<span class="plain_name">`, and the anchor is split across lines, so a line-based
+`grep` finds nothing. Each path also appears several times per page, once per menu
+copy, which is what the `set` is for.
+
+Everything the navigation reaches is below. Paths that are in the sitemap but not in
+the nav are still unidentified.
 
 | Legacy path | What it is | Status |
 | --- | --- | --- |
+| `/home` | Home | migrated |
 | `/21` | Professor | migrated, see below |
 | `/22` | Projects | migrated, see below |
-| `/23` | Research Area | empty on the legacy site, nothing to migrate |
+| `/23` | Research Area | slide deck, see below |
+| `/24` | Accomplishment › Industry | slide deck, see below |
 | `/29` | Lab News | migrated, see below |
+| `/30` | About DAIM | slide deck, see below |
+| `/36` | Alumni, by graduation year | migrated, see below |
+| `/37` | Accomplishment | tab bar only, no content of its own |
+| `/38` | Accomplishment › Academic | open. A board under four tabs: International Journals, International Conferences, Domestic Conferences, Patents |
 | `/Team` | Team DAIM, the roster with photos | migrated, see below |
 | `/122325403` | Students, the roster with contact details | migrated, see below |
-| `/36` | Alumni, by graduation year | migrated, see below |
-| everything else | unidentified | open |
 
 `/21`, `/122325403` and `/36` are one three-tab set, `Professor` / `Students` /
 `Alumni`. The tabs are plain links, so each is its own path and there is no state to
@@ -40,6 +64,47 @@ base64 filter shared by every URL.
 
 What the board does **not** render anywhere is a publish date. The only date is the
 one typed into the title.
+
+## The Three Slide-Deck Pages
+
+`/23`, `/24` and `/30` are neither boards nor rosters. Each is a page-builder page
+whose entire body is a column of exported PowerPoint slides, one `<img>` per slide.
+
+**`curl` reads them as empty, and that is a false negative.** This checklist recorded
+`/23` as *empty on the legacy site, nothing to migrate*; it holds five slides. The
+body text is pixels, so a fetch returns the navigation and the footer and nothing
+else. The slide URLs are in the served HTML even though the rendered text is not:
+
+```bash
+curl -sL https://daim.kaist.ac.kr/23 | grep -o 'cdn\.imweb\.me/[a-zA-Z0-9/_.-]*\.png' | sort -u
+```
+
+The slides are the `/thumbnail/<date>/` entries, all sharing one date. The two
+`/upload/` hits on every page are the site logo and the OG image, not content.
+
+| Page | Slides | What they hold |
+| --- | --- | --- |
+| `/30` About DAIM | cover + 4 | Labs & DAIM Research Corp., Research Mission, Key Know-How, R&D Competencies. Plus a Target Journal list, a link to DAIM Research, and a 26-second video |
+| `/23` Research Area | 5 | MFRA, Research Topics, AI + digital twin, Industry Domains & Partners, the hardware testbed |
+| `/24` Industry | 5 | Case 1 to Case 5, one opening slide each |
+
+Four things to know before reusing any of it:
+
+1. **Every slide but the `/30` cover carries a `Confidential . N` stamp** and its page
+   number from the source deck. `/30` runs 3 to 6, `/23` runs 8 to 12, `/24` reaches
+   14. Crop that corner, and the `DAIM RESEARCH` watermark opposite it.
+2. **The slides are 886px wide**, 980px on `/24`. Body glyphs measure 10px and the
+   smallest bullets 6px, so a 390px phone renders them at 4.4px and 2.6px. They are
+   unreadable on a phone and cannot be enlarged past the source resolution.
+3. **`/24` publishes only the first slide of each case.** Case 1 is titled `(1/4)` and
+   Case 2 `(1/3)`; the other five slides are not on the site and the source deck has
+   not been located.
+4. **The content is dated.** The slide files are from July and August 2024, and the
+   headcount on `/30` carries a `2023년 2월 기준` footnote. `/23`'s testbed slide has
+   been superseded by KAIROS, announced 2026-03-23 and already covered in `Lab News`.
+
+All three are destined for one page, the new `/about`, replacing the Ascent template
+content still sitting there.
 
 ## Lab News, Migrated
 

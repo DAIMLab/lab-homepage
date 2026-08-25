@@ -8,8 +8,29 @@ everything except images:
 | Asset | Host | Verified `Content-Type` |
 | --- | --- | --- |
 | Images (png/jpg/svg/webp) | `https://raw.githubusercontent.com/DAIMLab/lab-homepage/main/assets/…` | `image/png`, works |
-| Video (mp4) | jsDelivr | raw returns `application/octet-stream`, which `<video>` will not play |
+| Video (mp4) | Notion upload, or jsDelivr | raw returns `application/octet-stream`, which `<video>` will not play |
 | CSS / JS files | jsDelivr, or paste into Super's Code editor | raw returns `text/plain`, which `nosniff` blocks for `<link>` and `<script>` |
+
+## Video Does Not Have to Live Here
+
+Dragging an mp4 into Notion is the route the site actually uses, and it is the one
+asset type with a working path outside this repo. Measured on the live Home hero:
+
+```
+https://assets.super.so/<site-id>/videos/<file-id>/hero-oht-720p.mp4
+Content-Type: video/mp4        5,589,688 bytes
+```
+
+Super mirrors Notion-uploaded files to `assets.super.so` with the right MIME type, so
+there is no 20 MB ceiling and no commit involved, and `super:{{ autoplay }}` in the
+block's caption is what starts playback (`super.md`, *Native Paths*). The cost is that
+the file is then not version-controlled here, so a clip worth keeping belongs in the
+repo too even when the site serves the Notion copy.
+
+A YouTube embed is the third route and suits a clip that is already published there,
+including an unlisted one. It is the wrong choice for short ambient b-roll: the player
+chrome and related-videos panel outweigh the clip, and a muted autoplay loop does not
+come out clean.
 
 The CSS row is measured on this site, not inferred. A `<link rel="stylesheet">`
 pointing at a raw URL was injected into Super's Head tab on 2026-08-25: devtools
@@ -55,7 +76,8 @@ curl -s "https://purge.jsdelivr.net/gh/DAIMLab/lab-homepage@main/<path>"   # →
 ```
 
 Limits: 20 MB per file (GitHub-sourced), well under GitHub's own 100 MB. Video above
-20 MB belongs on YouTube or Vimeo as a Notion embed. HTML files are served as
+20 MB goes through Notion instead, per the section above, or onto YouTube or Vimeo as
+a Notion embed. HTML files are served as
 `text/plain` deliberately, so jsDelivr cannot host a page, only assets.
 
 For CSS, pasting into Super's CSS tab stays the primary route: it applies instantly
