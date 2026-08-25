@@ -106,18 +106,19 @@
   flex: none;
 }
 
-/* Two full lines. `min-height: 2.0em` was one and a half, so a title that
-   wrapped pushed its date 15px below its neighbours'. */
+/* One line, clipped to an ellipsis, in a box half a line taller than the line
+   itself; that slack is the gap down to the date. It was `min-height: 2.0em`
+   over a wrapping title, which let a long name take a second line and push its
+   date 15px below its neighbours'. */
 .page__lab-news .notion-collection-card__property.title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 2.9em;
+  height: 2.0em;
   font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
   color: #212121;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* Date, then Location: one clipped line each. The classes are Notion property
