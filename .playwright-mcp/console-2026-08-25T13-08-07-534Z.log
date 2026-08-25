@@ -1,8 +1,0 @@
-[     626ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
-    at rQ (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:115151)
-    at sf (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:166399)
-    at um (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:207228)
-    at https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:202107
-    at ur (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:202208)
-    at uG (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:228789)
-    at MessagePort.N (https://daim.super.site/_next/static/chunks/0aeb0tj1g9hc8.js:21:76269)
