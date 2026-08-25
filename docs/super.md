@@ -507,6 +507,77 @@ reaches past that.
 The post count is a CSS counter over the rendered cards, printed by the gallery's
 own `::after` because counters read in document order.
 
+## Projects Page
+
+`css/projects.css` is the whole Projects CSS tab; `js/projects-date-format.js` is its
+Body tab. Three columns of figure-topped cards, chosen over a coverless index and a
+split card after seeing all three rendered with the real 16 rows.
+
+| Property | Class | On the card |
+| --- | --- | --- |
+| Title | `.title` | two lines, clamped, fixed at `2.84em` |
+| Partner | `property-75626b3b` | under the date |
+| Period | `property-475c4c48` | monospaced, above the partner |
+| Summary | `property-45774b6f` | hidden |
+| Status | `property-46414376` | lifted onto the cover |
+
+### What the card is made of
+
+Worth knowing before writing any rule that changes the card's own layout, because it
+is not what the class names suggest:
+
+```
+div.notion-collection-card          position: relative
+├─ a.notion-collection-card__anchor position: absolute, covers the whole card
+├─ span                             display: contents  ← the cover lives in here
+│   └─ img.notion-collection-card__cover
+└─ div.notion-collection-card__content.notion-collection-card__property-list
+```
+
+Two consequences. Setting `display: grid` on the card gives exactly two grid items,
+the cover and the property list, because the anchor is out of flow and the `span`
+around the cover is `display: contents`. And the card is already `position: relative`,
+so `position: absolute` on the status property lands on the cover with no extra rule;
+it needs `z-index: 3` only to clear the anchor.
+
+The property list is a flex column here. The view emits Partner before Period and
+`order` puts them back; `.title` also carries a fixed two-line height so the date rows
+line up across a row of cards whatever the title length. Same trick, same reason, as
+the Location row on Lab News.
+
+Covers are `aspect-ratio: 16 / 10` against sources that average 1.87:1, so roughly 7%
+of the figure's height is cropped. The legacy board ran the same figures at a similar
+crop.
+
+### The date needs JavaScript
+
+Notion emits `2018/03/01 → 2025/01/01` and offers no year-month date format; CSS
+cannot cut text out of a string. `js/projects-date-format.js` rewrites it to
+`2018.03 – 2025.01` and re-runs under a `MutationObserver`, because Super swaps
+`.notion-root` on client-side navigation and the original format comes back otherwise.
+
+The alternative, retyping the period into a text property, was rejected: it would
+lose `SORT BY "Period" DESC` and any later year filter. Two projects have no end date,
+and Notion emits those as a bare start, so they read `2019.01` with no dash.
+
+### Load More, if it is ever wanted
+
+Not built. Measured 2026-08-25 in case it comes up: it is possible but it is display
+control, not paging. Super server-renders all 16 cards into the initial HTML, with no
+cursor, no `hasMore`, and no load-more markup, so hiding rows cannot shrink the
+document.
+
+It does cut image requests, because the covers carry `loading="lazy"` and a
+`display: none` card never fetches its own:
+
+| | image requests | cards shown |
+| --- | --- | --- |
+| no cap | 10 | 16 |
+| `:nth-child(n + 7)` hidden | 7 | 6 |
+
+Crawlers still see all 16, since the rows stay in the HTML. At 16 projects the reason
+to add one would be a calmer first screen, not performance.
+
 ## Hero Video Autoplay
 
 `js/home-video-play.js` is the Home Body tab, pasted inside `<script>`. Notion emits `<video controls>` and
