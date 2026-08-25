@@ -261,6 +261,28 @@ causes. Its `!important` declarations answer Notion and Super rather than a
 specificity guess: Notion emits its own width attribute on `<video>`, and Super's
 uploaded face tops out at weight 700.
 
+### The navbar chip
+
+Over the hero the navbar is a translucent pill rather than a bar.
+`.super-navbar` keeps the inset as padding and stays transparent;
+`.super-navbar__content` is the chip. Its `width` has to be forced to `auto`,
+because Super sizes that element to the full navbar and a margin alone leaves it
+overflowing to the right: measured 1585px wide inside a 1585px navbar even with a
+48px margin applied.
+
+The fill is a four-stop white gradient at `background-size: 220% 100%`, slid by a
+16s linear `background-position` animation, over `backdrop-filter: blur(14px)
+saturate(1.3)`. The blur is what lets the video read through as more than a wash.
+`prefers-reduced-motion` stops the slide.
+
+**This needs Navbar → Visible on Scroll switched off.** The navbar is `position:
+sticky` by default, so once the page scrolls past the hero the chip sits on white
+page background with `--navbar-text-color: #fff` still on the links, and the menu
+disappears. Verified at `scrollY: 900`: the navbar is still pinned at top 0 and the
+link colour is still `rgb(255, 255, 255)`. No CSS fixes this on its own, because
+nothing in the cascade can see the scroll position across browsers; the native
+setting is the fix.
+
 Below it sits a second linked gallery view of `Lab News Posts`, cut to the three
 newest posts.
 
