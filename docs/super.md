@@ -156,6 +156,19 @@ style the navbar per page from site-wide CSS. The same trap applies to
 `--padding-left` and `--padding-right`: a page overriding them on `main` leaves the
 navbar on the root value.
 
+### Label weight
+
+Super has no navbar weight variable; `--text-weight` is the site body weight and
+would move every paragraph with it. `css/super-custom.css` sets
+`.super-navbar__item { font-weight: 600 }` instead.
+
+600 rather than 500 or 700 because it has to be a real face, not a synthesised
+bold. Measured what is actually declared: Montserrat ships 400, 500, 600 and 700,
+NanumSquare only 400 and 700. Every current label is Latin, so Montserrat answers
+them, and the item list grew 517px to 528px on the change, the small step a genuine
+face swap gives. Add a Korean menu item and 600 would synthesise on it; 700 is the
+weight both faces share if that ever matters.
+
 ### Icons on the active item only
 
 Super puts `active` on the current page's link, so

@@ -3,13 +3,17 @@
 
    One font stack rather than Super's two slots, so the browser falls through per
    character: Montserrat for Latin, NanumSquare for Korean. The navbar is a
-   Only the navbar's active item keeps its icon. docs/super.md, "Fonts" and
-   "The Navbar Over the Hero". A brown-background toggle is the hidden-block
-   convention. */
+   The navbar carries semibold labels and keeps an icon only on the active item.
+   docs/super.md, "Fonts" and "The Navbar Over the Hero". A brown-background
+   toggle is the hidden-block convention. */
 
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
   --secondary-font: var(--primary-font);
+}
+
+.super-navbar__item {
+  font-weight: 600;
 }
 
 .super-navbar__item:not(.active) svg {
