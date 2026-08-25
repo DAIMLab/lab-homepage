@@ -14,9 +14,14 @@ The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/3
 | `/22` | Projects | migrated, see below |
 | `/23` | Research Area | empty on the legacy site, nothing to migrate |
 | `/29` | Lab News | migrated, see below |
-| `/Team` | Team DAIM | migrated, see below |
-| `/122325403` | where every student name on `/Team` pointed | dead end, see below |
+| `/Team` | Team DAIM, the roster with photos | migrated, see below |
+| `/122325403` | Students, the roster with contact details | migrated, see below |
+| `/36` | Alumni, by graduation year | **not migrated**, see below |
 | everything else | unidentified | open |
+
+`/21`, `/122325403` and `/36` are one three-tab set, `Professor` / `Students` /
+`Alumni`. The tabs are plain links, so each is its own path and there is no state to
+drive. `/Team` is a fourth, separate page: same people, photos instead of details.
 
 ## Reading a Board Without a Browser
 
@@ -90,18 +95,40 @@ only a browser sees it. Reading it means walking the rendered DOM in document or
 and pairing each `<img>` with the `<span>` that follows it, because the markup carries
 no per-person container and no `alt` text to match on.
 
-20 people, six role groups, and 20 photos now live in the `People` database. What the
-legacy page held per person was a name, a photo and a group heading. Nothing else:
-no email, no research interests, no admission date. Those columns exist and are empty
-on purpose, waiting to be filled in Notion.
+20 people, six role groups, and 20 photos now live in the `People` database. It takes
+**two** legacy pages to fill a row, which is the thing to know before reading either:
+`/Team` has the photos and no contact details, `/122325403` has the contact details
+and no photos. They are joined on the name, and the names do not match exactly.
+`/122325403` writes `WonSeok Jang`, `SahngJin Ban` and `MinGyu SUH` where `/Team`
+writes `Wonseok Jang`, `Sahngjin Ban` and `MinGyu Suh`; the rows keep the `/Team`
+spellings.
 
 | Notion property | Source |
 | --- | --- |
-| `Name` | the `<span>` beside each photo |
-| `Role` | the group heading above it, `Researcher` / `Ph.D. course` / `Master course` / `Intern` / `Staff` |
-| page cover | the `<img>` beside the name |
-| `Email` | only two were anywhere on the legacy site, both in the footer |
-| `Research`, `Admitted`, `Homepage`, `LinkedIn`, `GitHub`, `CV` | nothing to migrate |
+| `Name` | `/Team`, the `<span>` beside each photo |
+| `Role` | `/Team`, the group heading above it, `Researcher` / `Ph.D. course` / `Master course` / `Intern` / `Staff` |
+| page cover | `/Team`, the `<img>` beside the name |
+| `Email` | `/122325403`, one per person |
+| `Research` | `/122325403`, the `Research Areas:` line |
+| `Homepage`, `LinkedIn`, `GitHub`, `CV` | `/122325403`, the `Personal page:` line, four people have one |
+| `Admitted` | nothing to migrate; neither page carries an admission date |
+
+`Research Areas:` is where the lab's own vocabulary comes from, and it is narrower
+and more specific than the project titles suggest: `AMHS Simulation` on eight people,
+`AMHS Operations` on four, then one-offs like `Deadlock Avoidance` and `Layout
+Generation`. The `Research` multi-select was seeded from `Projects DB` first and that
+guess was wrong; the option list is now this line, verbatim.
+
+The two Staff, `HyeMin Kim` and `HyunSuk Jung`, appear on `/Team` only. They have no
+email or research area anywhere on the legacy site.
+
+`B.S` / `M.S` / `Ph.D` lines were deliberately not migrated for students.
+
+One `Personal page:` href is broken at the source. Wonseok Jang's GitHub is written
+`github.com/Cotidie` with no scheme, so IMweb resolved it relative and served
+`daim.kaist.ac.kr/github.com/Cotidie`. The row carries `https://github.com/Cotidie`.
+Two others labelled `Github` point at `*.github.io` pages, so they are `Homepage`, not
+`GitHub`; Gookhee Shin's `Github` and `CV` are the same URL, recorded once.
 
 Photos are in `assets/people/<slug>.jpg`, served from the `people-assets` tag per the
 caching rule in [`hosting.md`](hosting.md#jsdelivr). They were EXIF-rotated, flattened
@@ -124,6 +151,27 @@ Education, Awards, Teaching and the 2010 book, plus a Contact list rebuilt from 
 page's own obfuscated `yjang (at) kaist (dot) edu`. Its `Media` section was empty and
 was dropped.
 
-Every other name on `/Team` linked to `/122325403`, one shared page for all 19 of
-them. It is a stub. That is the whole reason the new page ends at the card for a
-student: there was never anything behind those links to migrate.
+Every other name on `/Team` links to `/122325403`, one shared page carrying all of
+them, which is why no student has a page of their own to migrate and why the new page
+ends at the card for a student.
+
+## Alumni, Not Migrated
+
+`/36` is the third tab and it is the largest thing still outstanding: roughly 45
+graduates grouped by year, 2015 through 2026, each with a degree, an email and a
+thesis title. Photos: none.
+
+| Field | Source |
+| --- | --- |
+| Name and degree | `ChangHyun Chung (Ph.D.)`, the degree in parentheses |
+| Graduation year | the year heading above the group |
+| Email | `E-Mail :` |
+| Thesis | `Ph.D. thesis :` or `M.S. thesis :`, in curly quotes |
+
+Three things to settle before migrating it. The `People` schema has no thesis or
+graduation-year column, and an alumni row needs both. Six labels are wrong at the
+source: `SangPyo Hong (Ph.D.)` and `DongMin Kim (M.S.)` have their degree and their
+thesis label disagreeing, and a couple of emails are malformed, `kyoungmin,cho@`
+with a comma. And `ChangHyun Chung` is on both `/122325403` and the 2026 alumni list,
+a fresh Ph.D. who stayed on as a researcher, so he is one person who needs a rule
+rather than a row: he is `Researcher` / `Current` here, listed once.

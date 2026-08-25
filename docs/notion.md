@@ -94,13 +94,27 @@ through Notion's own formatting and month precision would still need a fake day;
 text prints exactly and `YYYY.MM` sorts correctly because it is zero-padded.
 
 `Research` is a multi-select rather than free text so the lab shares one vocabulary
-instead of fourteen spellings of the same interest. The seeded options come from the
-`Projects DB` rows, which are the lab's own evidence of what it works on. Add options
-freely. `css/team-daim.css` strips the pill chrome and stacks them one per line.
+instead of fourteen spellings of the same interest. The option list is the lab's own,
+taken verbatim from the `Research Areas:` line on the legacy `/122325403` page. It was
+seeded from `Projects DB` first and that guess was wrong: the real vocabulary is
+narrower and AMHS-centric, `AMHS Simulation` on eight people and `AMHS Operations` on
+four. Add options freely. `css/team-daim.css` strips the pill chrome and stacks them
+one per line.
+
+Replacing a multi-select's whole option list with `ALTER COLUMN … SET MULTI_SELECT(…)`
+keeps the values whose option names survive and drops the rest. Measured on the
+professor's row: `Reinforcement Learning` appears in both lists and kept its option
+id, the four names that did not appear were dropped. So this is safe to re-run when
+the option name is unchanged, and destructive when it is renamed. It also blanks the
+property `description`, so put `COMMENT` back in the same statement.
 
 `Status` exists for the Alumni section nobody has built yet. Every view filters
 `Status = Current`, so a graduate keeps their `Role` and drops off the page the
 moment they are switched to `Alumni`. The section itself is one more linked view.
+
+The legacy site has about 45 alumni waiting on `/36`, and they need two columns this
+schema does not have, a thesis title and a graduation year. What is there and what to
+watch for is in [`legacy.md`](legacy.md#alumni-not-migrated).
 
 Six linked gallery views, one per `Role`, each under its own H2 on the page:
 
