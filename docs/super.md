@@ -753,13 +753,70 @@ the rendered page:
 curl -sL https://daim.super.site/team-daim | grep -oE 'notion-property__url property-[0-9a-f]+'
 ```
 
-They come back in `SHOW` order. The class is the property id hex-encoded: Lab News
-`property-6e756d61` is `numa`, `property-686f7844` is `hoxD`.
+They come back in `SHOW` order. The class is the property id hex-encoded, which is
+not a guess from the examples but what the bundle does:
+
+```js
+E = x => [...x].map(c => Number(c.charCodeAt(0)).toString(16)).join("")
+W = "title" === type ? null : E(id)
+className = cn(`property-${W}`, …)
+```
+
+So Lab News `property-6e756d61` is `numa` and `property-686f7844` is `hoxD`, and the
+title property is the one that never gets a `property-` class. Knowing the encoding
+does not shortcut the lookup, because nothing over MCP exposes a Notion property id
+for a type that has no select options to leak one.
 
 The label would otherwise be the raw URL, five of them per card. The anchor keeps its
 box and its href and loses only its text, `text-indent: 110%` rather than
 `display: none`, so the hit area and the screen reader survive. Icons are inline SVG
 data URIs; recolouring is `opacity`, since the stroke is baked in.
+
+### Why six views and not one grouped one
+
+The obvious simplification is one gallery grouped by `Role`, which would trade six
+card-preview clicks for one and make a new role a new select option rather than a new
+view, a new heading and a new CSS hook. It was measured rather than assumed, and it
+loses on one point that matters.
+
+Super does render grouped collections. From the bundle:
+
+```js
+({collectionComponent, isBoard, index, children}) => {
+  const [open, setOpen] = useState(true)
+  return <div className={cn("notion-collection-group__section", open ? "open" : "", …)}>
+    <div onClick={() => setOpen(!open)}
+         className={cn("notion-collection-group__section-header", …, index > 0 ? "not-first" : "")}>
+      {children}
+    </div>
+    {open ? collectionComponent : null}
+  </div>
+}
+```
+
+and the caller passes the header its content:
+
+```js
+children: [<ToggleTrigger className="notion-collection-group__section-toggle"/>,
+           <Property type={group.title.type} value={group.title.value}/>]
+```
+
+Four things follow. Groups open by default, so nothing renders collapsed. A hidden
+group is skipped entirely, so an empty role costs nothing. The section carries **no
+class or id naming its group**, so per-section CSS has only `not-first` to work with,
+which does happen to reach the professor because `Professor` is the first `Role`
+option. And the section heading is a `Property`, so for a select group-by it renders
+as a **pill inside a `div`**: no heading element anywhere.
+
+That last one decides it. On a People page the section labels are the page's
+structure, the thing a screen reader tabs through and a search engine reads, and
+six `<h2>` blocks are worth more than six one-time clicks. The pill could be
+restyled into something that looks like a heading; it would still not be one.
+
+Worth keeping in view, because nothing about the data would move: the seven views are
+a display choice over one unchanged table, and switching is deleting views and
+rewriting a CSS block. Alumni stays its own view either way, filtered on `Status`
+rather than `Role` and showing a different set of properties.
 
 ### The Alumni section has no portraits
 
