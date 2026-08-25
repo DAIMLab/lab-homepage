@@ -1,9 +1,9 @@
-<!-- Home hero video. Home page's per-page Code editor, Body tab.
+/* Home hero video. Home page's per-page Code editor, Body tab, in <script>.
 
-     Notion emits <video controls> and Super adds only autoPlay, which no browser
-     honours without muted. Playback is re-asserted on every mutation tick because
-     hydration reloads the source. Detail: docs/super.md, "Hero Video Autoplay". -->
-<script>
+   Notion emits <video controls> and Super adds only autoPlay, which no browser
+   honours without muted. Playback is re-asserted on every mutation tick because
+   hydration reloads the source. Detail: docs/super.md, "Hero Video Autoplay". */
+
 (function () {
   var HERO = '.notion-root > .notion-callout.bg-gray-light';
 
@@ -46,4 +46,3 @@
     subtree: true
   });
 })();
-</script>

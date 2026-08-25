@@ -30,7 +30,7 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `css/home.css` | Home per-page CSS tab |
 | `css/lab-news.css` | Lab News per-page CSS tab |
 | `js/footer-inject.js` | site-wide Head tab, wrapped in `<script>` |
-| `html/home-hero-body.html` | Home per-page Body tab |
+| `js/home-video-play.js` | Home per-page Body tab, wrapped in `<script>` |
 | `assets/` | referenced by public URL, not pasted |
 | `reference/ascent-template.css` | vendored Super template CSS, read-only |
 

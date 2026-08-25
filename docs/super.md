@@ -384,7 +384,7 @@ own `::after` because counters read in document order.
 
 ## Hero Video Autoplay
 
-`html/home-hero-body.html` is the Home Body tab. Notion emits `<video controls>` and
+`js/home-video-play.js` is the Home Body tab, pasted inside `<script>`. Notion emits `<video controls>` and
 Super adds only `autoPlay`; no browser honours autoplay without `muted`, so the clip
 never starts on its own, and loop and controls are not covered either.
 

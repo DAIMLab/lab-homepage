@@ -28,8 +28,7 @@ guessing, and update it in the same commit that makes it stale.
 
 ```
 css/        one file per CSS tab, site-wide or per-page
-html/       one file per Head or Body tab
-js/         Head-tab scripts, pasted inside <script>
+js/         Head- and Body-tab scripts, pasted inside <script>
 assets/     images and video referenced by URL
 docs/       the reference above
 reference/  vendored third-party CSS, read-only
@@ -37,8 +36,9 @@ reference/  vendored third-party CSS, read-only
 
 - No build, lint, or test step. Do not add `npm` scaffolding unless asked; a
   preprocessor breaks the paste-into-Super workflow.
-- One file per Super injection target, named `<scope>-<purpose>`. A file named for a
-  page belongs in that page's per-page Code editor, not the site-wide one.
+- One file per Super injection target, named `<scope>-<action>.<ext>`: a page name
+  for per-page code (`home-video-play.js`), a feature name site-wide
+  (`footer-inject.js`). A file named for a page belongs in that page's Code editor.
 - Every file here is a **mirror, not a source**. Super does not read this repo. After
   editing, paste into Super; when someone edits in Super, pull it back so the two
   stay in sync.
