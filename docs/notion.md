@@ -86,8 +86,19 @@ the day a project is `Ongoing`; that is what makes Super emit a dropdown.
 
 `People` schema: `Name`, `Role` (select: Professor / Researcher / Ph.D. Student /
 M.S. Student / Intern / Staff), `Research` (multi-select), `Admitted`, `Email`,
-`Homepage`, `LinkedIn`, `GitHub`, `CV`, `Status` (select: Current / Alumni). Covers
-are page covers, as in Lab News and Projects.
+`Homepage`, `LinkedIn`, `GitHub`, `CV`, `Status` (select: Current / Alumni), and
+three that only alumni use, `Degree` (select: Ph.D. / M.S.), `Graduated` (number)
+and `Thesis`. Covers are page covers, as in Lab News and Projects; alumni have none.
+
+`Graduated` is a number where `Admitted` is text, and the split is deliberate. A
+year is one value the view has to sort newest-first, and a number does that with no
+zero-padding contract; `2024.09` is two values in a trench coat and only sorts
+because it is padded. Keep the number format plain, or Notion prints `2,026`.
+
+`Degree` duplicates what `Role` already implies for an alumnus, and earns it: the
+Alumni cards have to read `Ph.D.` rather than `Ph.D. Student`, and Notion sorts a
+select by option order, so `Degree ASC` puts doctorates first within a year because
+`Ph.D.` is declared first.
 
 `Admitted` is text, not a date, and holds `2024.09`. A date property would print
 through Notion's own formatting and month precision would still need a fake day;
@@ -108,13 +119,11 @@ id, the four names that did not appear were dropped. So this is safe to re-run w
 the option name is unchanged, and destructive when it is renamed. It also blanks the
 property `description`, so put `COMMENT` back in the same statement.
 
-`Status` exists for the Alumni section nobody has built yet. Every view filters
-`Status = Current`, so a graduate keeps their `Role` and drops off the page the
-moment they are switched to `Alumni`. The section itself is one more linked view.
-
-The legacy site has about 45 alumni waiting on `/36`, and they need two columns this
-schema does not have, a thesis title and a graduation year. What is there and what to
-watch for is in [`legacy.md`](legacy.md#alumni-not-migrated).
+`Status` is what retires a row. The six current-member views filter
+`Status = Current` and the Alumni view filters `Status = Alumni`, so a graduate keeps
+their `Role`, gains `Degree`, `Graduated` and `Thesis`, and moves section by one
+property change. 48 alumni are in, 2013 through 2026; the migration record is in
+[`legacy.md`](legacy.md#alumni-migrated).
 
 Six linked gallery views, one per `Role`, each under its own H2 on the page:
 
@@ -126,15 +135,17 @@ Six linked gallery views, one per `Role`, each under its own H2 on the page:
 | M.S. Students | `Role = M.S. Student AND Status = Current` | `3c711c7b703c8193980fc3578650f37a` |
 | Interns | `Role = Intern AND Status = Current` | `3c711c7b703c81538b25fccbbebf29b0` |
 | Staff | `Role = Staff AND Status = Current` | `3c711c7b703c81778100de046ebd0847` |
+| Alumni | `Status = Alumni` | `3c711c7b703c81d3a55cca93eb2e4ecf` |
 
 The block id matters: it is the only handle that tells the professor's gallery from
 the students', because the view DSL cannot set card size without also setting a
 cover property, so all six views share one size class.
 
-No view carries a sort. Notion falls back to the collection's manual order, which
-follows creation, and the rows were created in the order the legacy Team page listed
-them. Once `Admitted` is filled, `SORT BY "Admitted" ASC` is the sort each student
-section wants; adding it now would only scatter the rows, every value being empty.
+Only Alumni carries a sort, `Graduated` DESC then `Degree` then `Name`. The other six
+fall back to the collection's manual order, which follows creation, and the rows were
+created in the order the legacy Team page listed them. Once `Admitted` is filled,
+`SORT BY "Admitted" ASC` is the sort each student section wants; adding it now would
+only scatter the rows, every value being empty.
 
 ### Limits worth not re-deriving
 

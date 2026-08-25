@@ -28,6 +28,12 @@
    and substitute in SHOW order, Homepage, LinkedIn, GitHub, CV. Until then all four
    share the generic chain-link icon and still work.
 
+   Two more things wait on that same first read of the rendered page. Super has no
+   rule of its own for a plain number, so `.notion-property__number` is inferred from
+   how it names every other type; the Alumni year rides on it. And a Notion number in
+   the default plain format should print `2026` rather than `2,026`. Both are a
+   glance at the page, and both fall back to a Notion click, not a migration.
+
    `#block-3c711c7b703c81cb96adcf098a8b3d1c` is the Professor view's own block; a
    block id is the only handle that separates two galleries of the same card size,
    and the view DSL cannot set card size without also setting a cover property. */
@@ -337,6 +343,91 @@
       color: var(--accent);
       transform: translateX(3px);
     }
+  }
+}
+
+/* Alumni. No portraits anywhere in this section, so the row drops its left column
+   and becomes a text block: name, degree and year on one line, thesis under it.
+   48 rows, so it is also the one section where density is worth more than air.
+
+   Every row here hits the no-cover spacer div, the unclassed one carrying an inline
+   height. Elsewhere that gets drawn as a placeholder; here it is hidden, which still
+   needs `!important` because an inline style is what it is fighting. */
+
+#block-3c711c7b703c81d3a55cca93eb2e4ecf {
+  --collection-card-gap: 24px 28px;
+
+  .notion-collection-card {
+    gap: 0;
+  }
+
+  .notion-collection-card > div:not([class]) {
+    display: none !important;
+  }
+
+  .notion-collection-card__content {
+    column-gap: 7px;
+  }
+
+  .notion-collection-card__property.title {
+    width: auto;
+    font-size: 15px;
+  }
+
+  /* Degree and year read as one stamp after the name, so the year carries the
+     separator rather than a wrapper nobody has. */
+
+  .notion-collection-card__content .notion-property__select {
+    order: 2;
+    width: auto;
+    margin-top: 0;
+  }
+
+  .notion-property__number {
+    order: 3;
+    width: auto;
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+    color: var(--muted);
+
+    &::before {
+      content: "·";
+      margin-inline-end: 6px;
+    }
+  }
+
+  .notion-pill {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  /* The mail icon rides the end of the name line rather than claiming one of its
+     own. On a card this short a third line is a quarter of its height, and 48 of
+     them is most of a screen. */
+
+  .notion-collection-card__content .notion-property__email {
+    order: 4;
+    margin-top: 0;
+    margin-inline-start: 3px;
+  }
+
+  /* The thesis is the row's substance and the only long field, so it takes the
+     second line whole. No clamp: a title that wraps to three lines is still the
+     title, and cutting one would leave a graduate's work half-named. */
+
+  .notion-collection-card__content .notion-property__text {
+    order: 5;
+    width: 100%;
+    margin-top: 5px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-variant-numeric: normal;
+    letter-spacing: normal;
+    line-height: 1.5;
+    color: var(--sub);
   }
 }
 

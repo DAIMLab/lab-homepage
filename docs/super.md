@@ -761,6 +761,25 @@ box and its href and loses only its text, `text-indent: 110%` rather than
 `display: none`, so the hit area and the screen reader survive. Icons are inline SVG
 data URIs; recolouring is `opacity`, since the stroke is baked in.
 
+### The Alumni section has no portraits
+
+48 rows, none with a cover, which turns two of the rules above inside out.
+
+Every one of them hits the no-cover spacer, the unclassed `div` carrying an inline
+height. Elsewhere it is drawn as a placeholder so a row without a photo still lines
+up; here it is `display: none !important`, the `!important` fighting the inline style
+rather than a variable.
+
+The card then keeps its flex row and loses its left column, so it reads as a text
+block: name, degree and year on one line with the mail icon, thesis on the next. The
+mail icon shares the first line on purpose. On a card this short its own line is a
+quarter of the height, and 48 of those is most of a screen.
+
+Two type selectors carry it, and both are only unambiguous inside this block:
+`notion-property__number` is the year, `notion-property__text` the thesis. In the
+member sections the same `__text` is `Admitted`, which is why the rules are scoped to
+the block id rather than the page.
+
 ### Two traps
 
 The portrait needs its size class named. `.notion-collection-card__cover.small` sets

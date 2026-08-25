@@ -16,7 +16,7 @@ The IMweb sitemap lists `/home`, `/Team`, and fifteen numeric paths (`/21`–`/3
 | `/29` | Lab News | migrated, see below |
 | `/Team` | Team DAIM, the roster with photos | migrated, see below |
 | `/122325403` | Students, the roster with contact details | migrated, see below |
-| `/36` | Alumni, by graduation year | **not migrated**, see below |
+| `/36` | Alumni, by graduation year | migrated, see below |
 | everything else | unidentified | open |
 
 `/21`, `/122325403` and `/36` are one three-tab set, `Professor` / `Students` /
@@ -155,23 +155,43 @@ Every other name on `/Team` links to `/122325403`, one shared page carrying all 
 them, which is why no student has a page of their own to migrate and why the new page
 ends at the card for a student.
 
-## Alumni, Not Migrated
+## Alumni, Migrated
 
-`/36` is the third tab and it is the largest thing still outstanding: roughly 45
-graduates grouped by year, 2015 through 2026, each with a degree, an email and a
-thesis title. Photos: none.
+`/36` is the third tab: 49 entries grouped by graduation year, 2013 through 2026,
+each with a degree, an email and a thesis title. No photos. 48 rows are in `People`
+with `Status = Alumni`.
 
-| Field | Source |
+The page is client-rendered like `/Team`, and it has no per-person container either,
+so it parses as a flat line stream: a bare four-digit line opens a year, a
+`Name (Ph.D.)` line opens a person, and `E-Mail :` and `<degree> thesis :` lines
+attach to whoever is open.
+
+| Notion property | Source |
 | --- | --- |
-| Name and degree | `ChangHyun Chung (Ph.D.)`, the degree in parentheses |
-| Graduation year | the year heading above the group |
-| Email | `E-Mail :` |
-| Thesis | `Ph.D. thesis :` or `M.S. thesis :`, in curly quotes |
+| `Name` | the line before the degree parenthesis |
+| `Degree` | that parenthesis, `(Ph.D.)` or `(M.S.)` |
+| `Role` | derived from `Degree`, so an alumnus keeps a section to return to |
+| `Graduated` | the year heading above the group |
+| `Email` | `E-Mail :`, and `E-Mail:` without the space on one row |
+| `Thesis` | `Ph.D. thesis :` or `M.S. thesis :`, unwrapped from its curly quotes |
 
-Three things to settle before migrating it. The `People` schema has no thesis or
-graduation-year column, and an alumni row needs both. Six labels are wrong at the
-source: `SangPyo Hong (Ph.D.)` and `DongMin Kim (M.S.)` have their degree and their
-thesis label disagreeing, and a couple of emails are malformed, `kyoungmin,cho@`
-with a comma. And `ChangHyun Chung` is on both `/122325403` and the 2026 alumni list,
-a fresh Ph.D. who stayed on as a researcher, so he is one person who needs a rule
-rather than a row: he is `Researcher` / `Current` here, listed once.
+Five things the source got wrong or ambiguous, and what each row does about it:
+
+1. **49 entries, 48 rows.** `ChangHyun Chung` is on both the Students tab and the
+   2026 alumni list, a fresh Ph.D. who stayed on as a researcher. He is one row,
+   `Researcher` / `Current`, and is not repeated under Alumni.
+2. **Two people are listed twice, legitimately.** `Jaeung Lee` and `Sungwook Jang`
+   each took an M.S. and then a Ph.D. here, so each has two entries under two years,
+   sharing an email. Both are kept, because the alumni list is a list of degrees
+   awarded, not of people. Their casing differs between the two entries at the
+   source, `JaeUng`/`Jaeung` and `SungWook`/`Sungwook`, and is left as found.
+3. **Two degree labels contradict their thesis label.** `SangPyo Hong (Ph.D.)` has an
+   `M.S. thesis :`, `DongMin Kim (M.S.)` has a `Ph.D. thesis :`. The parenthesis wins,
+   being the thing the page prints as the person's degree.
+4. **One email has a comma for a dot**, `kyoungmin,cho@kaist.ac.kr`. Corrected.
+5. **One row has no email at all**, `Japhne Ferdinandz`. Left empty.
+
+Thesis titles arrive wrapped in curly quotes that are not consistently paired: some
+close with `”`, some with `“`, some with a straight `"`, several trail a full stop
+outside the quote, and one is never closed. All of it is stripped, and the last row
+also carried a stray `DAIM` from the footer running into the text.
