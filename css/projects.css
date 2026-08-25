@@ -90,10 +90,20 @@
   color: #5b6773;
 }
 
+/* Status is a Notion `status` property: Planned (to-do), In progress, Done.
+   Done is every archived project, so it stays the quiet chip and only the
+   in-progress blue earns colour. Super renders all three as .notion-pill. */
+
 .page__projects .notion-pill.pill-green {
-  border-color: #a9d6c4;
-  background: #dff0e9;
-  color: #1f6b55;
+  border-color: #c6cfd7;
+  background: #ffffff;
+  color: #5b6773;
+}
+
+.page__projects .notion-pill.pill-blue {
+  border-color: #a9c8dd;
+  background: #e3edf3;
+  color: #17516e;
 }
 
 .page__projects .notion-collection-card:hover .notion-collection-card__cover {

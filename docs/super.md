@@ -521,6 +521,13 @@ split card after seeing all three rendered with the real 16 rows.
 | Summary | `property-45774b6f` | hidden |
 | Status | `property-46414376` | lifted onto the cover |
 
+`Status` is a Notion `status` property, not a select: Planned / In progress / Done in
+the to-do / in-progress / complete groups. Super renders it as
+`notion-property__select` all the same, and the property id survived the conversion,
+so nothing in the CSS is keyed differently. All 16 rows are `Done`, which Notion
+colours green; the CSS puts that back to the quiet chip and gives the colour to
+`In progress` instead, so a running project is the thing that stands out.
+
 ### What the card is made of
 
 Worth knowing before writing any rule that changes the card's own layout, because it
@@ -556,9 +563,22 @@ cannot cut text out of a string. `js/projects-date-format.js` rewrites it to
 `2018.03 – 2025.01` and re-runs under a `MutationObserver`, because Super swaps
 `.notion-root` on client-side navigation and the original format comes back otherwise.
 
-The alternative, retyping the period into a text property, was rejected: it would
-lose `SORT BY "Period" DESC` and any later year filter. Two projects have no end date,
-and Notion emits those as a bare start, so they read `2019.01` with no dash.
+Two projects have no end date, and Notion emits those as a bare start, so they read
+`2019.01` with no dash.
+
+Two alternatives were tried first and both lost:
+
+- **A formula property does not render.** `Term`, a formula building the same string
+  from `Period`, computes correctly in Notion and never appears on a Super card. Its
+  `notion-property__formula` class is absent from the served HTML while every other
+  property in the same view renders. Simplifying it to a bare
+  `formatDate(dateStart(prop("Period")), "YYYY.MM")` changed nothing, so this is not
+  the complexity limit Super's `/compatible-blocks` lists under unsupported blocks as
+  *Complex formulas* — Super appears to skip formula properties on collection cards
+  outright. The property is harmless and stays in the database for use inside Notion.
+- **Retyping the period into a text property** keeps sorting, since a zero-padded
+  `YYYY.MM` string sorts the same as the date it came from, but gives up date filters
+  and puts 16 values under manual upkeep.
 
 ### Load More, if it is ever wanted
 
