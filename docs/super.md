@@ -575,7 +575,7 @@ Two alternatives were tried first and both lost:
   `formatDate(dateStart(prop("Period")), "YYYY.MM")` changed nothing, so this is not
   the complexity limit Super's `/compatible-blocks` lists under unsupported blocks as
   *Complex formulas* — Super appears to skip formula properties on collection cards
-  outright. The property is harmless and stays in the database for use inside Notion.
+  outright. The property was deleted once that was settled; do not rebuild it.
 - **Retyping the period into a text property** keeps sorting, since a zero-padded
   `YYYY.MM` string sorts the same as the date it came from, but gives up date filters
   and puts 16 values under manual upkeep.
