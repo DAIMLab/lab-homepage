@@ -1,56 +1,11 @@
-/* People. The page's per-page Code editor, CSS tab. Not site-wide.
-
-   Notion:  Six linked gallery views of `People`, one per Role, each under its own
-              H2. Professor shows Name, Research, Email, LinkedIn; every other
-              section adds Admitted and the four personal links.
-
-   A gallery card is a column by default: cover on top, properties below. Here it
-   becomes a row, square portrait on the left and text on the right, two to a line
-   on desktop and one on a phone. The reference is hcil.snu.ac.kr/people, measured
-   at 1440px: 176px portrait, 24px gutter, 440px row, two columns.
-
-   The card is a `div`, not an anchor. Super overlays a transparent
-   `.notion-collection-card__anchor` at `z-index: 10` and lifts URL properties to
-   20, which is what lets a card be inert while the icons on it still click.
-   Only the professor's card keeps its anchor, because only he has a page behind
-   it. docs/super.md, "People Page".
-
-   Property hooks, needed because four properties share `notion-property__url`:
-   PROP_HOMEPAGE Homepage, PROP_LINKEDIN LinkedIn, PROP_GITHUB GitHub, PROP_CV CV.
-   Those four are placeholders until the page is read off the live site, which is
-   the only place the ids appear; `notion-fetch` prints the schema by name and leaks
-   an id only inside a select option's URL, so a URL property has none to leak. Read
-   them with
-
-     curl -sL https://daim.super.site/team-daim \
-       | grep -oE 'notion-property__url property-[0-9a-f]+'
-
-   and substitute in SHOW order, Homepage, LinkedIn, GitHub, CV. Until then all four
-   share the generic chain-link icon and still work.
-
-   Two more things wait on that same first read of the rendered page. Super has no
-   rule of its own for a plain number, so `.notion-property__number` is inferred from
-   how it names every other type; the Alumni year rides on it. And a Notion number in
-   the default plain format should print `2026` rather than `2,026`. Both are a
-   glance at the page, and both fall back to a Notion click, not a migration.
-
-   `#block-3c711c7b703c81cb96adcf098a8b3d1c` is the Professor view's own block; a
-   block id is the only handle that separates two galleries of the same card size,
-   and the view DSL cannot set card size without also setting a cover property. */
+/* People, /team-daim. The page's per-page Code editor, CSS tab. Not site-wide.
+   Seven linked gallery views of `People`: six member sections turned into rows,
+   and Alumni turned into text. How and why: docs/super.md, "People Page".
+   PROP_HOMEPAGE, PROP_LINKEDIN, PROP_GITHUB and PROP_CV are placeholders for
+   property ids only the rendered page carries; docs/super.md says how to read
+   them. Until then those four share one generic link icon and still work. */
 
 .page__team-daim {
-  /* Two tracks fit down to about 870px, one below it. All three sizes carry the
-     value, so switching a view to Medium or Large in Notion cannot silently drop
-     the layout; the variable is scoped to whichever size class the view lands on.
-
-     `min(420px, 100%)` rather than a bare 420px: Super feeds this straight into
-     `minmax(var(…), 1fr)`, and a bare length narrower than the viewport still wins
-     as the track minimum, so a 390px phone rendered a 420px grid and scrolled
-     sideways. Measured before the fix: `scrollWidth` 420 against a 390 viewport.
-     This is not the percentage trap in super.md, which is about a percentage as
-     `clamp`'s preferred value; `min()` here resolves against a definite container
-     and auto-fill counts it correctly. */
-
   --collection-card-cover-size-small: min(420px, 100%);
   --collection-card-cover-size-medium: min(420px, 100%);
   --collection-card-cover-size-large: min(420px, 100%);
@@ -71,8 +26,6 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-/* The lab's own line, carried over from the legacy Team page. */
-
 .page__team-daim .notion-quote {
   margin-bottom: 8px;
   border-inline-start: 0;
@@ -82,9 +35,6 @@
   line-height: 1.5;
   color: var(--sub);
 }
-
-/* Section labels. The H2 blocks carry them, so the view name Super would print
-   above each gallery is redundant; hiding the wrapper also takes its rule. */
 
 .page__team-daim .notion-heading {
   margin: 46px 0 0;
@@ -105,18 +55,9 @@
   border-top: 0;
 }
 
-/* The `People` database itself sits under this page, so Super prints it as a
-   child-page link at the bottom. It belongs in the Control panel beside the other
-   content databases, and the MCP move tool cannot put it there: every parent in
-   that subtree is a toggle or a column, which cannot hold a database. Drag it
-   across in Notion and this rule becomes dead code worth deleting. */
-
 .page__team-daim a.notion-link.notion-page {
   display: none;
 }
-
-/* One row per person. `overflow: hidden` stays, so a long research list clips at
-   the card rather than pushing into its neighbour. */
 
 .page__team-daim .notion-collection-card {
   display: flex;
@@ -124,15 +65,6 @@
   gap: 20px;
   cursor: default;
 }
-
-/* The cover class sits on the `img` itself, wrapped in a `display: contents`
-   span, so the portrait is a direct flex child. Naming the size class is what
-   beats Super's own `.notion-collection-card__cover.small` height; a page scope
-   alone ties it and loses on order. `aspect-ratio` rather than a height, because
-   a length cannot hold a square across changing column counts.
-
-   Reframing a face is native: drag the cover in Notion and it writes
-   `object-position`, which overrides the value below. */
 
 .page__team-daim .notion-collection-card__cover,
 .page__team-daim .notion-collection-card__cover.small,
@@ -148,11 +80,6 @@
   border: 1px solid var(--rule);
 }
 
-/* A row with no cover gets an unclassed spacer div carrying an inline height,
-   which no variable and no selector can reach, so this one needs `!important`.
-   Nobody is missing a portrait today; the rule is here so the day someone is
-   added without one, the row still lines up. */
-
 .page__team-daim .notion-collection-card > div:not([class]) {
   flex: 0 0 var(--avatar);
   width: var(--avatar);
@@ -161,9 +88,6 @@
   background: #f4f6f7;
   border: 1px solid var(--rule);
 }
-
-/* A wrapping row, not a column: name, research and the date each claim a full
-   line, and the five link icons share the last one. */
 
 .page__team-daim .notion-collection-card__content {
   flex: 1 1 auto;
@@ -188,11 +112,6 @@
   color: var(--ink);
 }
 
-/* Research interests are a multi-select, which Super lays out as a clipped flex
-   row of pills. A column with the pill chrome stripped turns it into the plain
-   one-per-line list the reference sites use, and keeps the option list as the
-   lab's shared vocabulary rather than free text nobody spells the same way. */
-
 .page__team-daim .notion-collection-card__content .notion-property__select {
   order: 2;
   flex-direction: column;
@@ -211,8 +130,6 @@
   color: var(--sub);
 }
 
-/* Admission month. Tabular figures so 2024.09 and 2021.03 line up down a column. */
-
 .page__team-daim .notion-collection-card__content .notion-property__text {
   order: 3;
   width: auto;
@@ -224,12 +141,6 @@
   letter-spacing: 0.02em;
   color: var(--muted);
 }
-
-/* Email and the four personal links, as icons on one line after the date.
-
-   The label would otherwise be the raw URL, and five of those is a wall of text.
-   Text-indent moves it out of a 17px box instead of `display: none`, so the
-   anchor keeps its hit area and a screen reader still reads the href. */
 
 .page__team-daim .notion-collection-card__content .notion-property__email,
 .page__team-daim .notion-collection-card__content .notion-property__url {
@@ -259,10 +170,6 @@
   opacity: 1;
 }
 
-/* Icons per property. Every URL property gets the chain link first, so a property
-   added later and never styled here still reads as a link rather than a blank
-   17px hole; the four rules below then override it by property id. */
-
 .page__team-daim .notion-collection-card__content .notion-property__url a {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.6 13.2a3.6 3.6 0 0 0 5.4.4l2.9-2.9a3.6 3.6 0 0 0-5.1-5.1l-1.7 1.7'/%3E%3Cpath d='M14.4 10.8a3.6 3.6 0 0 0-5.4-.4l-2.9 2.9a3.6 3.6 0 0 0 5.1 5.1l1.7-1.7'/%3E%3C/svg%3E");
 }
@@ -287,16 +194,9 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.4 2.8H6.3v18.4h11.4V7.1z'/%3E%3Cpath d='M13.4 2.8v4.3h4.3'/%3E%3Cpath d='M9 12.4h6M9 15.6h6M9 18.2h3.6'/%3E%3C/svg%3E");
 }
 
-/* Every card but the professor's is inert. Super's own rule already lifts URL
-   properties above the anchor and gives them back their pointer events, so
-   switching the anchor off leaves the icons clickable and takes nothing else. */
-
 .page__team-daim .notion-collection-card__anchor {
   pointer-events: none;
 }
-
-/* The professor. One full-width row, a larger portrait, and the only card on the
-   page that leads somewhere: his own page carries the CV. */
 
 #block-3c711c7b703c81cb96adcf098a8b3d1c {
   --avatar: 178px;
@@ -304,11 +204,6 @@
   .notion-collection-gallery {
     grid-template-columns: 1fr;
   }
-
-  /* A single track is the whole 1100px, and a card stretched across it is mostly
-     empty air to the right of a name. Capping the card keeps it the same shape as
-     a student row, one to a line and a size larger, which is how both reference
-     pages seat a principal investigator. */
 
   .notion-collection-card {
     max-width: 660px;
@@ -346,14 +241,6 @@
   }
 }
 
-/* Alumni. No portraits anywhere in this section, so the row drops its left column
-   and becomes a text block: name, degree and year on one line, thesis under it.
-   48 rows, so it is also the one section where density is worth more than air.
-
-   Every row here hits the no-cover spacer div, the unclassed one carrying an inline
-   height. Elsewhere that gets drawn as a placeholder; here it is hidden, which still
-   needs `!important` because an inline style is what it is fighting. */
-
 #block-3c711c7b703c81d3a55cca93eb2e4ecf {
   --collection-card-gap: 24px 28px;
 
@@ -373,9 +260,6 @@
     width: auto;
     font-size: 15px;
   }
-
-  /* Degree and year read as one stamp after the name, so the year carries the
-     separator rather than a wrapper nobody has. */
 
   .notion-collection-card__content .notion-property__select {
     order: 2;
@@ -404,19 +288,11 @@
     color: var(--muted);
   }
 
-  /* The mail icon rides the end of the name line rather than claiming one of its
-     own. On a card this short a third line is a quarter of its height, and 48 of
-     them is most of a screen. */
-
   .notion-collection-card__content .notion-property__email {
     order: 4;
     margin-top: 0;
     margin-inline-start: 3px;
   }
-
-  /* The thesis is the row's substance and the only long field, so it takes the
-     second line whole. No clamp: a title that wraps to three lines is still the
-     title, and cutting one would leave a graduate's work half-named. */
 
   .notion-collection-card__content .notion-property__text {
     order: 5;
@@ -430,8 +306,6 @@
     color: var(--sub);
   }
 }
-
-/* One column, and a portrait that gives the text room to breathe on a phone. */
 
 @media (max-width: 560px) {
   .page__team-daim {

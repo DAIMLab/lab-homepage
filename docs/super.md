@@ -851,10 +851,27 @@ The portrait needs its size class named. `.notion-collection-card__cover.small` 
 names all three sizes. It sets `aspect-ratio` rather than a height, because a length
 cannot hold a square across a changing column count.
 
-`--collection-card-cover-size-*` carries the same 420px in all three sizes. Every one
+`--collection-card-cover-size-*` carries the same value in all three sizes. Every one
 of those variables is scoped to the card size its view is set to, and the view DSL
 cannot set card size without also setting a cover property, so the size a view lands
 on is whatever Notion defaults to and whatever someone clicks later.
+
+That value is `min(420px, 100%)`, not a bare `420px`, and the difference is a bug that
+shipped for about an hour. Super feeds the variable straight into
+`minmax(var(…), 1fr)`, where a bare length wider than the container still wins as the
+track minimum: a 390px phone rendered a 420px grid and scrolled sideways, measured at
+`scrollWidth` 420 against a 390 viewport. This is not the percentage trap above, which
+is about a percentage as `clamp`'s preferred value. `min()` resolves against a definite
+container and auto-fill counts it correctly: two tracks at 1100px, one at 390px, no
+overflow.
+
+Two smaller things the CSS no longer explains itself, both measured. The professor's
+card is capped at 660px inside its single full-width track, because a card stretched
+across 1100px is mostly empty air to the right of a name, and capping it makes his row
+the same shape as a student's, one to a line and a size larger. And a member row with
+no cover keeps the spacer `div` and draws it as a grey placeholder, so a person added
+without a photo still lines up; only the Alumni section hides it, having no photos at
+all.
 
 ## Hero Video Autoplay
 
