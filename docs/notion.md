@@ -44,12 +44,15 @@ Databases live away from the page that shows them; the page carries a **linked v
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
 a page: Super renders `.notion-dropdown` only when a collection block holds more than
 one view, so a linked block with a single view emits no switcher markup at all.
-Verified: `/projects` has 4 views and a dropdown, `/publications` has 1 and none.
+Verified: `/publications` has 1 view and no dropdown. `/projects` had 4 and a
+dropdown while it still carried the Ascent template's Blog posts view; that block is
+gone and its single `All` view emits no switcher.
 
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
-| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Projects, Publications |
+| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
+| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -59,14 +62,57 @@ Activity / Conference). The gallery shows the first four; `Category` is carried 
 filtered views someone may add later. Card thumbnails come from each post's **page
 cover**, not a files property.
 
+`Projects DB` schema: `Title` (프로젝트명 only), `Partner` (협력 기관), `Period` (date
+range), `Status` (select: Ongoing / Completed), `Summary`. The legacy board wrote the
+partner into the title as a `(LG 전자)` prefix; here it is its own property so a card
+can show it as a separate line. `Period` carries month precision only, so every date
+is the first of its month. Covers are page covers, as in Lab News.
+
+All 16 rows are `Completed`, which is what the legacy board says, so the page carries
+one view and no switcher. The legacy All / 진행중 / 완료 tabs come back as extra views
+the day a project is `Ongoing`; that is what makes Super emit a dropdown.
+
 ### Limits worth not re-deriving
 
-- The view DSL has no directive for the page cover, so `COVER "Page cover"` is
-  rejected. Omit `COVER` and Notion's default card preview already is the page cover.
+- The view DSL cannot set the page cover as the card preview. `COVER` takes a
+  property name, and the page cover is not one: `COVER "Page cover"` comes back
+  `Could not find property with name or id`. Omitting `COVER` does not fall back to
+  it either, measured on Projects 2026-08-25: 16 cards, 0 covers, while Lab News with
+  the setting on renders 60 covers over 63 cards. Every new gallery needs the same
+  click in Notion, `⋯` → Properties → Card preview → Page cover.
 - `notion-update-view` cannot change a view's type, so a table view cannot be turned
   into a gallery. Create the gallery as a linked view instead.
 - The MCP move tool cannot target a toggle, so moving a database into the Control
   panel is a manual drag in Notion.
+
+### Row URLs carry the database slug
+
+A collection row is served at `/<page>/<database>/<row>`, three segments. The
+two-segment form 404s. Verified 2026-08-25 on both collections:
+
+| URL | Status |
+| --- | --- |
+| `/projects/projects-db/acs-운영-효율화-연구` | 200 |
+| `/projects/acs-운영-효율화-연구` | 404 |
+| `/lab-news/lab-news-posts/asmc` | 200 |
+| `/lab-news/asmc` | 404 |
+
+Every card anchor on a rendered page already carries the three-segment form, so
+follow the anchor rather than composing a URL. That is the reliable check: reading
+`.notion-collection-card a[href]` from the live page and requesting exactly that.
+
+Two traps came out of building Projects, both of which cost an afternoon:
+
+1. **The sitemap lags a new database and lists URLs that 404.** For a few hours after
+   `Projects DB` appeared, `sitemap.xml` carried the two-segment form for all 16 rows
+   while the served routes were three-segment. The routes also came alive in stages,
+   the database page first and rows afterwards, so a partial count is not evidence of
+   a broken build. Trust the anchors, not the sitemap.
+2. **The database slug is frozen at creation and ignores a rename.** The database was
+   renamed to `Project Database` and its segment stayed `projects-db`.
+   `/projects/project-database` 404s. Changing it means editing the slug in Super
+   under Settings → Site Pages; nothing in Notion moves it. The segment is not worth
+   chasing, since no visitor ever types it.
 
 ### Keep the source database off the page that shows it
 

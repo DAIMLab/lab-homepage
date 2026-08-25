@@ -205,6 +205,41 @@ exactly the four hidden icons at 16px plus their gaps. The logo is
 Home shows no icon at all, because Home is not one of the navbar items and nothing
 is marked active there. Verified on `/`: five items, none with `active`.
 
+### The mobile drawer takes the white back off
+
+Home's `--navbar-text-color: #fff` reached the mobile drawer, which is a white panel,
+so its links were white on white. Reported 2026-08-25 from a phone; contrast measured
+at 1.0:1 against the panel and 1.14:1 against the active item's `#f0f0f0` pill.
+
+The drawer is a third child of `.super-navbar`, beside `__content` and
+`__viewport-wrapper`, and its links are `.super-navigation-menu__item`, a different
+class from the bar's `.super-navbar__item`. It inherits the colour rather than
+setting one: Super declares `color: var(--navbar-text-color)` on `.super-navbar`
+itself, so the white is already computed by the time it reaches the drawer.
+
+That rules out two obvious fixes. Redefining the variable deeper does nothing,
+because no descendant re-reads it. Setting `color` on `.super-navigation-menu__item`
+does nothing either, because `.notion-link:not(.color-default, …)` wins on
+specificity with `color: inherit`. What works is `color` on a wrapper the links
+inherit through:
+
+```css
+.super-navbar__menu-wrapper {
+  color: #000;
+}
+```
+
+`#000` is Super's own value from `html.theme-light`, so the drawer matches every
+other page. The bar keeps white: `__content` holds the logo and the close button,
+both still over the video.
+
+Verified at 390x844: links and icons `rgb(0, 0, 0)`, 21:1 on the panel and 18.4:1 on
+the pill, with the logo and desktop items still white at 1600px.
+
+One trap for anyone testing this: patching the served HTML does not work for CSS.
+Super's stylesheet text also rides in the React flight payload, so hydration
+restores the original and the edit vanishes. Inject at runtime instead.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on
@@ -335,12 +370,41 @@ drag-and-drop in Notion and the stylesheet never names a host. That costs about 
 declarations over the background-image version. `#14161a` stands in until it loads,
 because the callout's blue would flash first.
 
-`js/footer-inject.js` starts its fetch immediately and defers the DOM work to
-`DOMContentLoaded`, so it is safe in the Head tab where `document.body` does not
-exist yet. It clones with `importNode`, and re-places under a `MutationObserver`
-because Super routes between pages on the client and React swaps `.notion-root` out
-without a reload. If JS is off there is no band; Super's own footer would be the
-fallback and it is switched off, so the page simply ends after its content.
+`js/footer-inject.js` starts its fetch immediately and defers the DOM work until
+after React has hydrated, so it is safe in the Head tab where `document.body` does
+not exist yet. It clones with `importNode`, and re-places under a
+`MutationObserver` because Super routes between pages on the client and React swaps
+`.notion-root` out without a reload. If JS is off there is no band; Super's own
+footer would be the fallback and it is switched off, so the page simply ends after
+its content.
+
+### Why the first placement waits for idle
+
+Appending to `.notion-root` before hydration finishes throws React #418, *hydration
+failed because the server rendered HTML didn't match the client*. Measured on Home,
+2026-08-25: `DOMContentLoaded` 351 ms, `load` 657 ms, hydration done ~785 ms. So
+`load` is too early; appending there still threw. Isolated by serving the page three
+ways under Playwright route interception, with `pageerror` counted per load:
+
+| Head tab contents | Band placed | #418 |
+| --- | --- | --- |
+| script tag present, body a no-op | no | 0 |
+| script runs, `SOURCE` 404s so nothing appends | no | 0 |
+| append on `DOMContentLoaded` | yes | 1, at 785 ms |
+| append on `load` | yes | 1 |
+| append at a fixed 3000 ms or 7000 ms | yes | 0 |
+
+The append is the trigger, not the script tag and not the fetch. A fixed delay fixes
+it but guesses at a number, so the script waits for `load` and then one
+`requestIdleCallback`: React hydrates in MessageChannel tasks, which outrank idle
+callbacks, so the first idle frame after `load` is a signal that hydration has
+drained. The `{ timeout: 2000 }` keeps it bounded on a page that never goes idle,
+and a `setTimeout` covers Safari before 16.4. Band appears at 673-970 ms, #418 gone
+on Home and Lab News.
+
+The error was console-only; the `MutationObserver` re-placed the band and nothing
+was visibly wrong. React may discard a client-side subtree after a mismatch, so it
+was worth removing rather than documenting as noise.
 
 Three things to keep true:
 
@@ -350,6 +414,9 @@ Three things to keep true:
    is the footer's selector in both the CSS and the script.
 3. The clone is appended to `.notion-root`, and Super routes between pages on the
    client, so the script re-places it under a `MutationObserver`.
+4. The Head tab takes HTML, not JS. Paste the file inside `<script>` tags or the
+   browser treats it as a text node: no execution, no error, nothing in the console.
+   Same for `js/home-video-play.js` in the Home Body tab.
 
 The band is absent from the served HTML everywhere except `/footer`, so crawlers
 miss it. Footer links carry little SEO weight and the band sits below the fold, so
@@ -477,12 +544,21 @@ The one on Home comes from the leftover Ascent logo image inside the hidden
 
 ## Open Question: Rows Past 100
 
-Whether Super renders every row of a database past 100 is untested. Notion pages its
-own collection queries at that size, and Super's behaviour is undocumented:
+Whether Super renders every row of a database past 100 is still untested. Notion pages
+its own collection queries at that size, and Super's behaviour is undocumented:
 `/compatible-blocks` and the rest of the docs set no limit, and a rendered gallery
 carries no load-more, cursor, or `hasMore` markup.
 
-It matters for the Lab News post count, a CSS counter over the rendered cards
-(`css/lab-news.css`), which reports the database total only while every row is
-rendered. Check it against Notion now that the 58 legacy posts are migrated. If
-Super truncates, the fallback is a number typed into the Notion page by hand.
+What is settled is the Lab News count that raised the question. The gallery rendered
+57 cards against a write-up that said 58 posts, which looked like truncation. It was
+not: `SELECT COUNT(*)` on the data source returns **57**, so every row renders and the
+CSS counter in `css/lab-news.css` is accurate. The 58 was a wrong figure in
+`legacy.md`, measured 2026-08-25.
+
+The sitemap is not a second opinion here. It lists 58 rows under `/lab-news`, one more
+than the database holds, because a database's page **template** gets a URL of its own
+while never appearing as a card. Count cards or query the data source, not sitemap
+entries.
+
+Both collections are far short of 100, so the original question stands until one
+crosses it.
