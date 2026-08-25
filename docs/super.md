@@ -52,11 +52,13 @@ Confirmed against the docs. Each of these replaced code this repo used to carry:
 | Video autoplay | `super:{{ autoplay }}` at the end of the video block's caption (`/additional-features`) | a Body-tab script |
 | Image eager load | `super:{{ eager }}` in the image caption | none |
 | Image links to a URL | put the URL in the image caption; Super hides the caption | an `<a>` wrapper |
-| Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`) | a Head-tab `<link>` plus a `--primary-font` override |
+| Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`) | a Head-tab `<link>` to Google Fonts and a NanumSquare CDN stylesheet |
 | Palette | Design → Colors, manual or a preset | per-color CSS |
 | Pretty URLs, SEO, redirects, password, hiding a page via 404 | per-page settings (`/site-pages`) | none |
 
-Font upload is included on Personal, so NanumSquare goes in Design → Typography.
+Font upload is included on Personal, so both faces go in Design → Typography and the
+Head tab carries no font code. Measured on the live site: Super serves Montserrat and
+Inter from `assets-v2.super.so/global/fonts/`, and no external font request is made.
 
 Two things that are **not** native, checked so nobody re-checks them:
 

@@ -2,7 +2,8 @@
    Selector reference: https://docs.super.so/super-css-classes */
 
 /* Montserrat for Latin, NanumSquare for Korean: the browser falls through
-   per character, so one stack covers both. Faces load in html/head-fonts.html. */
+   per character, so one stack covers both. Both faces come from Super's own
+   Design > Typography, so nothing loads them here. */
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
   --secondary-font: var(--primary-font);
