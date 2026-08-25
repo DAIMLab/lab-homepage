@@ -1,63 +1,54 @@
-/* Lab News — gallery of posts.
-   Per-page CSS: Super → Lab News → Code → CSS tab. Not site-wide.
+/* Lab News, the gallery of posts.
+   Per-page CSS: Super > Lab News > Code > CSS tab. Not site-wide.
 
-   Markup is a linked gallery view over `Lab News Posts`, showing Title, Date,
-   Location and Summary.
+   A linked gallery view over `Lab News Posts`, showing Title, Date, Location and
+   Summary. Super renders the grid and drives every card dimension from a custom
+   property, so most of this file is a variable block. The column count falls out
+   of Super's own `repeat(auto-fill, …)` from the minimum card width, which is why
+   there are no media queries. The `large` suffix has to match the card size set
+   on the view in Notion; the other sizes' variables are inert. Super's 96px side
+   padding is overridden because the legacy Lab News ran much nearer the edge.
 
-   Super already renders the gallery as a CSS grid and drives every card
-   dimension from a custom property, so most of what this page needs is a
-   variable block rather than rules. The column count comes out of
-   `repeat(auto-fill, …)` in Super's own rule, from the minimum card width
-   set below — which is why there are no media queries here. */
+   The `property-*` classes are Notion property ids, and the only stable handle on
+   a card row. :nth-child() shifts the moment a post leaves a field empty, because
+   Notion drops the element rather than rendering it blank.
+
+     property-4856717d  Date
+     property-6e756d61  Location
+     property-686f7844  Summary
+
+   Cards line up only when every row is a fixed height, so each row is given one
+   and the property list is a flex column, which keeps those heights exact: in
+   block flow the reserved Location row collapses against the summary's top margin
+   and lands 8px short of a real one. Half the posts carry no Location, so the
+   date stands that row in for them.
+
+   Covers are pinned by aspect-ratio rather than by Super's height variable, which
+   takes a length and would letterbox a phone showing one card across. A post with
+   no cover gets an unclassed spacer div carrying an inline height, and only
+   !important reaches past that.
+
+   The post count is a CSS counter over the rendered cards, printed by the
+   gallery's own ::after because counters read in document order.
+
+   Super's variables, the card-size specificity trap, and whether a gallery renders
+   every row past 100: docs/super.md. */
 
 .page__lab-news {
-  /* Super pads pages 96px a side. This page is `full-width`, so that padding
-     is the only thing holding the grid in, and the legacy Lab News ran much
-     nearer the edge. Safe for the footer, whose full-bleed is measured
-     against the viewport rather than against this box. */
   --padding-left: clamp(16px, 3vw, 48px);
   --padding-right: clamp(16px, 3vw, 48px);
 
-  /* Minimum card width, and so the column count: 380px holds three across a
-     desktop, two on a tablet, one on a phone. The `large` suffix must match
-     the card size chosen on the gallery view in Notion — Super scopes this
-     per size, and the small/medium names are inert while the view is Large.
-
-     There is no matching height variable here on purpose; the cover is set
-     by ratio below instead. */
   --collection-card-cover-size-large: 380px;
   --collection-card-gap: 36px 24px;
   --collection-card-content-padding: 14px 0 0;
 
-  /* The legacy design is a bare photo over text, with no card chrome. The
-     rule above the grid is already gone natively: Notion's database title is
-     switched off for this block, which puts `no-border-top` on the gallery. */
   --collection-card-border-radii: 0;
   --collection-card-shadow: none;
   --color-card-bg: transparent;
 
-  /* One line of card metadata: the Date row, and the Location row that a post
-     may not have. Both are set from this so the stand-in below cannot drift
-     away from the row it replaces. */
   --meta-line: 24px;
 }
 
-/* Post count above the grid, the way the legacy page carried "Lab News 58".
-   Neither Notion nor Super publishes a count, so it is counted in CSS.
-
-   The counter has to be printed by the gallery's own ::after, because CSS
-   counters read in document order and nothing earlier in the page can see how
-   many cards follow. `order: -1` then moves that box to the top of the grid,
-   which changes where it paints but not what it counted.
-
-   It counts the cards Super rendered, which equals the database total only
-   while the view returns every row. Scrolling and lazy-loaded images do not
-   come into it: counters read the DOM, and Super server-renders every card
-   into the HTML. What is unverified is Super's behaviour past 100 rows —
-   Notion pages its own queries there. The docs set no limit and a rendered
-   gallery carries no load-more or cursor markup, but this site has never had
-   more than a handful of posts. Check the number against Notion once the
-   back catalogue is in. */
 .page__lab-news .notion-collection-gallery {
   counter-reset: post;
 }
@@ -75,14 +66,6 @@
   color: #8a8a8e;
 }
 
-/* Covers are pinned by ratio rather than by Super's height variable, which
-   takes a length and so only holds the shape at one column count — a phone
-   showing cards one up would letterbox them. A post with no cover gets an
-   unclassed spacer div in place of the image, carrying an inline height, so
-   it is shaped here too; only !important reaches past an inline style. The
-   size class has to appear in the selector, because Super's
-   `.notion-collection-card__cover.large` ties a bare page scope on
-   specificity and wins on order. */
 .page__lab-news .notion-collection-card__cover.large,
 .page__lab-news .notion-collection-card > div:not([class]) {
   height: auto !important;
@@ -90,13 +73,6 @@
   aspect-ratio: 1 / 1;
 }
 
-/* Rows line up across cards only when each row is a fixed number of lines,
-   and neither Notion nor Super expresses that. What follows is here for that
-   reason, or for type the theme variables do not reach.
-
-   Flex column rather than Super's block flow, so the fixed heights below are
-   exact. In block flow the reserved Location row collapses against the
-   summary's own top margin and lands 8px short of a real one. */
 .page__lab-news .notion-collection-card__property-list {
   display: flex;
   flex-direction: column;
@@ -106,10 +82,6 @@
   flex: none;
 }
 
-/* One line, clipped to an ellipsis, in a box half a line taller than the line
-   itself; that slack is the gap down to the date. It was `min-height: 2.0em`
-   over a wrapping title, which let a long name take a second line and push its
-   date 15px below its neighbours'. */
 .page__lab-news .notion-collection-card__property.title {
   overflow: hidden;
   height: 2.0em;
@@ -121,9 +93,6 @@
   text-overflow: ellipsis;
 }
 
-/* Date, then Location: one clipped line each. The classes are Notion property
-   ids, which unlike :nth-child() survive a post that leaves Location empty —
-   Notion drops the element rather than rendering it blank. */
 .page__lab-news .notion-collection-card__property.property-4856717d,
 .page__lab-news .notion-collection-card__property.property-6e756d61 {
   overflow: hidden;
@@ -134,9 +103,6 @@
   text-overflow: ellipsis;
 }
 
-/* Half the posts carry no Location, and a dropped element takes its row with
-   it, so their summary sits a line above their neighbours'. Stand the missing
-   row in on the date above it. */
 .page__lab-news
   .notion-collection-card__property-list:not(:has(.property-6e756d61))
   .notion-collection-card__property.property-4856717d {
