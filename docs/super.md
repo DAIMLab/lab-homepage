@@ -87,6 +87,12 @@ at Montserrat's 174.53px rather than NanumSquare's 157.68px, and
 "대한산업공학회 춘계공동학술대회" renders at NanumSquare's 222.4px rather than
 Montserrat's 224.99px.
 
+Korean has no weight between Regular and Bold in classic NanumSquare, so Super's
+500 and 600 upload slots had nothing to fill them and those weights synthesised.
+`assets/fonts/` now carries four cuts of NanumSquare Neo, instanced from its
+variable font at 400, 500, 600 and 700, with the mapping and the axis trap written
+up in `assets/fonts/README.md`.
+
 The trap: because the override wins, changing Typography no longer changes the
 site's look, but it does change what loads. Drop Montserrat from either slot and
 the stack keeps naming a face the browser can no longer fetch, so Latin silently
