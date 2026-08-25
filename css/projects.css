@@ -5,8 +5,9 @@
 
    property-75626b3b is Partner, property-475c4c48 Period, property-45774b6f
    Summary, property-46414376 Status. The card is already positioned, so the
-   status pill lifts onto the cover, and a flex column reorders the rows the
-   view emits: docs/super.md, "Projects Page". */
+   status pill lifts onto the cover, a flex column reorders the rows the view
+   emits, and no row has a fixed height: a long title just makes its own card
+   taller. docs/super.md, "Projects Page". */
 
 .page__projects {
   --collection-card-gap: 34px 26px;
@@ -15,116 +16,114 @@
   --collection-card-shadow: none;
   --color-card-bg: transparent;
 
-  --card-min: 268px;
-  --figure-line: #dde3e8;
-  --meta: #98a2ad;
   --sub: #66717d;
-}
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-/* Three columns at most. The 30% floor is what caps it: four tracks would need
-   120% of the row, so auto-fill can never place a fourth. Below about 900px the
-   268px floor wins instead and the grid steps down to two, then one. */
+  /* Three columns at most: four tracks would need 120% of the row, so auto-fill
+     can never place a fourth. Under about 900px the 268px floor wins instead and
+     the grid steps down to two, then one. */
 
-.page__projects .notion-collection-gallery {
-  grid-template-columns: repeat(auto-fill, minmax(max(var(--card-min), 30%), 1fr));
-}
+  .notion-collection-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(max(268px, 30%), 1fr));
+  }
 
-.page__projects .notion-collection-card__cover {
-  height: auto !important;
-  min-height: 0;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  border: 1px solid var(--figure-line);
-}
+  .notion-collection-card__cover {
+    height: auto !important;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid #dde3e8;
+  }
 
-.page__projects .notion-collection-card__property-list {
-  display: flex;
-  flex-direction: column;
-}
+  .notion-collection-card__property-list {
+    display: flex;
+    flex-direction: column;
+  }
 
-.page__projects .notion-collection-card__property.title {
-  order: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 2.84em;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.42;
-  color: #212121;
-}
+  .notion-collection-card__property {
+    &.title {
+      order: 1;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.42;
+      color: #212121;
+    }
 
-.page__projects .notion-collection-card__property.property-475c4c48 {
-  order: 2;
-  margin-top: 7px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-variant-numeric: tabular-nums;
-  font-size: 12px;
-  color: var(--meta);
-}
+    &.property-475c4c48 {
+      order: 2;
+      margin-top: 7px;
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: #98a2ad;
+    }
 
-.page__projects .notion-collection-card__property.property-75626b3b {
-  order: 3;
-  margin-top: 2px;
-  font-size: 12.5px;
-  color: var(--sub);
-}
+    &.property-75626b3b {
+      order: 3;
+      margin-top: 2px;
+      font-size: 12.5px;
+      color: var(--sub);
+    }
 
-.page__projects .notion-collection-card__property.property-45774b6f {
-  order: 4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 3em;
-  margin-top: 8px;
-  white-space: normal;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--sub);
-}
+    /* The clamp is a ceiling, never a floor: a one-line excerpt stays one line.
+       Without it the longest summary here runs to four. */
 
-.page__projects .notion-collection-card__property.property-46414376 {
-  position: absolute;
-  z-index: 3;
-  top: 9px;
-  left: 9px;
-}
+    &.property-45774b6f {
+      order: 4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--sub);
+    }
 
-/* Status is a Notion `status` property: Planned (to-do), In progress, Done.
-   Notion's own colour per option arrives as a pill-* class, so each state keeps
-   its meaning: grey waiting, blue running, green finished. The chip sits on the
-   cover, so every state is a solid tint with a border rather than tinted text. */
+    /* Status. The card is position: relative already, so this lands on the
+       cover; the z-index only has to clear Super's own full-card anchor. */
 
-.page__projects .notion-pill {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 4px 8px;
-  border-radius: 2px;
-  border: 1px solid #c6cfd7;
-  background: #eef1f4;
-  color: #5b6773;
-}
+    &.property-46414376 {
+      position: absolute;
+      z-index: 3;
+      top: 9px;
+      left: 9px;
+    }
+  }
 
-.page__projects .notion-pill.pill-blue {
-  border-color: #a9c8dd;
-  background: #e3edf3;
-  color: #17516e;
-}
+  /* Notion's colour per status option arrives as a pill-* class, so each state
+     keeps its meaning: grey waiting, blue running, green finished. */
 
-.page__projects .notion-pill.pill-green {
-  border-color: #a9d6c4;
-  background: #dff0e9;
-  color: #1f6b55;
-}
+  .notion-pill {
+    padding: 4px 8px;
+    border: 1px solid #c6cfd7;
+    border-radius: 2px;
+    background: #eef1f4;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sub);
 
-.page__projects .notion-collection-card:hover .notion-collection-card__cover {
-  border-color: #c6cfd7;
-}
+    &.pill-blue {
+      border-color: #a9c8dd;
+      background: #e3edf3;
+      color: #17516e;
+    }
 
-.page__projects .notion-collection-card:hover .notion-collection-card__property.title {
-  color: #17516e;
+    &.pill-green {
+      border-color: #a9d6c4;
+      background: #dff0e9;
+      color: #1f6b55;
+    }
+  }
+
+  .notion-collection-card:hover {
+    .notion-collection-card__cover {
+      border-color: #c6cfd7;
+    }
+
+    .notion-collection-card__property.title {
+      color: #17516e;
+    }
+  }
 }

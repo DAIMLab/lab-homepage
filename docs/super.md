@@ -518,10 +518,10 @@ split card after seeing all three rendered with the real 16 rows.
 
 | Property | Class | On the card |
 | --- | --- | --- |
-| Title | `.title` | two lines, clamped, fixed at `2.84em` |
+| Title | `.title` | wraps freely, no cap |
 | Partner | `property-75626b3b` | under the date |
 | Period | `property-475c4c48` | monospaced, above the partner |
-| Summary | `property-45774b6f` | two lines, clamped, fixed at `3em` |
+| Summary | `property-45774b6f` | clamped at two lines, no fixed height |
 | Status | `property-46414376` | lifted onto the cover |
 
 `Status` is a Notion `status` property, not a select: Planned / In progress / Done in
@@ -560,10 +560,21 @@ around the cover is `display: contents`. And the card is already `position: rela
 so `position: absolute` on the status property lands on the cover with no extra rule;
 it needs `z-index: 3` only to clear the anchor.
 
-The property list is a flex column here. The view emits Partner before Period and
-`order` puts them back; `.title` also carries a fixed two-line height so the date rows
-line up across a row of cards whatever the title length. Same trick, same reason, as
-the Location row on Lab News.
+The property list is a flex column here, and `order` puts Period back above Partner,
+which is not the order the view emits. Nothing carries a fixed height: an earlier
+version locked the title to two lines so the date rows would align across a row, and
+that left a visible gap under every one-line title. Cards now size to their own
+content and rows no longer line up, which is the trade that was wanted.
+
+The summary keeps a two-line `-webkit-line-clamp`, which is a ceiling and never a
+floor. It is worth keeping: without it the longest excerpt here runs to four lines.
+Chrome reports the clamped element's `display` as `flow-root` rather than
+`-webkit-box`, so that computed value is not evidence the clamp has failed — measure
+the rendered height instead.
+
+Wrapping is a view setting, not CSS. Super marks a property `no-wrap` unless the view
+wraps cells, and that class beat every `white-space: normal` written against it.
+`WRAP CELLS true` on the view removes the class and the CSS override with it.
 
 Covers are `aspect-ratio: 16 / 10` against sources that average 1.87:1, so roughly 7%
 of the figure's height is cropped. The legacy board ran the same figures at a similar
