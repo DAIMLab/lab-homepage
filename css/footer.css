@@ -1,12 +1,16 @@
 /* Footer. Super Code editor > CSS tab (site-wide).
 
-   The whole footer is one Notion synced callout — photo included — so lab
-   members edit every part of it in Notion and all five pages follow. Super's
-   own footer is switched off (Navigation → Footer → Footer Type: None); two
-   stacked footers read as a duplicate, and the legacy design was a single
-   photo band anyway.
+   The whole footer is one Notion callout, photo included, so lab members edit
+   every part of it in Notion. It sits on exactly one page, /footer, and
+   js/footer-inject.js clones it onto the rest at runtime; it used to be a
+   synced reference pasted onto all five pages, which meant remembering to paste
+   it again on every new page. The clone is appended as a direct child of
+   .notion-root, so the selector below matches either copy. Super's own footer
+   is switched off (Navigation → Footer → Footer Type: None); two stacked
+   footers read as a duplicate, and the legacy design was a single photo band
+   anyway.
 
-   Notion structure, synced onto every page:
+   Notion structure, on /footer:
 
      Callout (Blue background, no icon)
        ├─ Image       the background photo

@@ -39,12 +39,12 @@ css/home-hero.css      Home page per-page CSS tab
 css/lab-news.css       Lab News page per-page CSS tab
 html/home-hero.html    Home page per-page Body tab
 html/head-fonts.html   site-wide Head tab
-js/                    scripts for the Head/Body tabs
+js/footer-inject.js    site-wide Head tab, wrapped in <script>
 assets/                images and video referenced by URL
 reference/             vendored third-party CSS, read-only
 ```
 
-One file per Super injection target, named `<scope>-<purpose>`. Anything named for a page belongs in that page's per-page Code editor, not the site-wide one.
+One file per Super injection target, named `<scope>-<purpose>`. Anything named for a page belongs in that page's per-page Code editor, not the site-wide one. The one target holding two files is the site-wide Head tab: paste `html/head-fonts.html`, then `js/footer-inject.js` inside a `<script>` tag.
 
 `css/super-custom.css` is a **mirror, not a source**. Super does not read this repo. After editing it, paste the file into the Super Code editor's CSS tab, and when someone edits CSS in Super directly, pull it back here so the two stay in sync. Re-extract the live version with:
 
@@ -100,6 +100,51 @@ Super mirrors Notion-uploaded images to `images.spr.so` behind Cloudflare Images
 The `src` attribute is a single well-formed URL, so the image itself renders. Nothing in CSS can help — `srcset` is parsed regardless of `display: none`. Expect it to reappear for any raster image uploaded into Notion; images referenced by external URL are not proxied and do not trigger it.
 
 The one on Home comes from the leftover Ascent logo image inside the hidden `🎛 Control panel` toggle. Deleting that image block in Notion removes both 404s.
+
+## Site-Wide Footer
+
+Super's own footer (Navigation → Footer) is real and works on every page, but it
+renders a fixed shape: a logo, menu items, social icons, and a footnote in one of
+three layouts. It cannot express the legacy design, a full-bleed photo band with a
+scrim and two text columns, so it is set to **Footer Type: None** and the band is a
+Notion callout instead. `css/footer.css` styles it.
+
+That callout lives on one page, `/footer`, and `js/footer-inject.js` clones it onto
+every other page at runtime. The earlier arrangement was a synced reference pasted
+onto all five pages; it kept editing in one place but still required remembering to
+paste the block onto each new page.
+
+Why the clone reads from `/footer` and not from Notion: `app.notion.com` sends no
+CORS headers, and the Notion API needs a secret that cannot go in client-side JS.
+Super server-renders every page, so `/footer` is a same-origin document whose HTML
+already contains the band. Confirmed with `curl`: the callout appears as real markup
+carrying block id `1f2896f7d7a7493898f8c777372b600d`, the same id on every page,
+which is how a synced block renders. CSS cannot do this at all; it has no way to
+fetch content.
+
+Measured cost, one extra same-origin request per page:
+
+| Source page | gzip | uncompressed |
+| --- | --- | --- |
+| `/footer` | 29 KB | 213 KB |
+| `/` | 38 KB | 294 KB |
+| `/lab-news` | 50 KB | 402 KB |
+
+`/footer` is the smallest page Super will serve; the floor is the navbar plus the
+Next.js payload every page carries.
+
+Three things to keep true:
+
+1. `/footer` stays published and stays out of the sitemap. The 404 setting would
+   break the fetch.
+2. Ordinary callouts get a colour other than blue. `.notion-callout.bg-blue-light`
+   is the footer's selector in both the CSS and the script.
+3. The clone is appended to `.notion-root`, and Super routes between pages on the
+   client, so the script re-places it under a `MutationObserver`.
+
+The band is absent from the served HTML everywhere except `/footer`, so crawlers
+miss it. Footer links carry little SEO weight and the band sits below the fold, so
+nothing visible shifts.
 
 ## Theming Through CSS Variables
 
@@ -215,6 +260,9 @@ Built on Super's **Ascent** template; several sections still hold template lorem
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
+| Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
+
+`Footer` is not a content page; it exists so the footer band has exactly one home. See **Site-Wide Footer** above. It sits under the Control panel in Notion and is absent from the navbar, but it must stay published, so exclude it from the sitemap under Site Pages rather than hiding it with the 404 setting.
 
 Team DAIM splits into `Professor` (`3c611c7b703c80768b7fd009d6c075ed`), `Students` (`3c611c7b703c80549898c426d40729cc`), and `Alumni` (`3c611c7b703c805d942dca6661c145dc`). Four content databases (case studies, careers, and two unnamed) back the list and gallery views.
 
