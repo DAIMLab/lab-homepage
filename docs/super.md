@@ -544,12 +544,21 @@ The one on Home comes from the leftover Ascent logo image inside the hidden
 
 ## Open Question: Rows Past 100
 
-Whether Super renders every row of a database past 100 is untested. Notion pages its
-own collection queries at that size, and Super's behaviour is undocumented:
+Whether Super renders every row of a database past 100 is still untested. Notion pages
+its own collection queries at that size, and Super's behaviour is undocumented:
 `/compatible-blocks` and the rest of the docs set no limit, and a rendered gallery
 carries no load-more, cursor, or `hasMore` markup.
 
-It matters for the Lab News post count, a CSS counter over the rendered cards
-(`css/lab-news.css`), which reports the database total only while every row is
-rendered. Check it against Notion now that the 58 legacy posts are migrated. If
-Super truncates, the fallback is a number typed into the Notion page by hand.
+What is settled is the Lab News count that raised the question. The gallery rendered
+57 cards against a write-up that said 58 posts, which looked like truncation. It was
+not: `SELECT COUNT(*)` on the data source returns **57**, so every row renders and the
+CSS counter in `css/lab-news.css` is accurate. The 58 was a wrong figure in
+`legacy.md`, measured 2026-08-25.
+
+The sitemap is not a second opinion here. It lists 58 rows under `/lab-news`, one more
+than the database holds, because a database's page **template** gets a URL of its own
+while never appearing as a card. Count cards or query the data source, not sitemap
+entries.
+
+Both collections are far short of 100, so the original question stands until one
+crosses it.

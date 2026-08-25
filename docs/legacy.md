@@ -34,7 +34,9 @@ one typed into the title.
 
 ## Lab News, Migrated
 
-58 posts and 246 photos now live in the `Lab News Posts` database. The photos were
+57 posts and 246 photos now live in the `Lab News Posts` database. This write-up
+first said 58; the data source returns 57, measured 2026-08-25, and one post is
+unaccounted for. The photos were
 downscaled to 1600px at JPEG q82, turning 198 MB of originals into 34 MB. They sit in
 `assets/lab-news/`, named `<legacy-idx>-<n>.jpg` so any one of them traces back to
 its source post, and are served from the `lab-news-assets` tag rather than a branch,
@@ -49,8 +51,8 @@ Field mapping, for whoever migrates the next board:
 | `Location` | the `@Place` suffix |
 | `Summary` | first 180 characters of the body |
 
-32 of the 58 posts carry photos and no text at all, which is why the gallery card CSS
-cannot assume a summary row exists.
+32 posts carry photos and no text at all, which is why the gallery card CSS cannot
+assume a summary row exists.
 
 ## Projects, Migrated
 

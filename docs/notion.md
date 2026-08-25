@@ -85,6 +85,35 @@ the day a project is `Ongoing`; that is what makes Super emit a dropdown.
 - The MCP move tool cannot target a toggle, so moving a database into the Control
   panel is a manual drag in Notion.
 
+### Row URLs carry the database slug
+
+A collection row is served at `/<page>/<database>/<row>`, three segments. The
+two-segment form 404s. Verified 2026-08-25 on both collections:
+
+| URL | Status |
+| --- | --- |
+| `/projects/projects-db/acs-운영-효율화-연구` | 200 |
+| `/projects/acs-운영-효율화-연구` | 404 |
+| `/lab-news/lab-news-posts/asmc` | 200 |
+| `/lab-news/asmc` | 404 |
+
+Every card anchor on a rendered page already carries the three-segment form, so
+follow the anchor rather than composing a URL. That is the reliable check: reading
+`.notion-collection-card a[href]` from the live page and requesting exactly that.
+
+Two traps came out of building Projects, both of which cost an afternoon:
+
+1. **The sitemap lags a new database and lists URLs that 404.** For a few hours after
+   `Projects DB` appeared, `sitemap.xml` carried the two-segment form for all 16 rows
+   while the served routes were three-segment. The routes also came alive in stages,
+   the database page first and rows afterwards, so a partial count is not evidence of
+   a broken build. Trust the anchors, not the sitemap.
+2. **The database slug is frozen at creation and ignores a rename.** The database was
+   renamed to `Project Database` and its segment stayed `projects-db`.
+   `/projects/project-database` 404s. Changing it means editing the slug in Super
+   under Settings → Site Pages; nothing in Notion moves it. The segment is not worth
+   chasing, since no visitor ever types it.
+
 ### Keep the source database off the page that shows it
 
 While `Lab News Posts` still sat under the Lab News page, Super rendered it there as
