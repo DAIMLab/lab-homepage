@@ -135,6 +135,18 @@ page background with white links and the menu would vanish; verified at
 while every other page keeps a pinned navbar. Measured after: Home reports
 `navTop: -900`, Lab News stays at `navTop: 0`.
 
+### Icons on the active item only
+
+Super puts `active` on the current page's link, so
+`.super-navbar__item:not(.active) svg { display: none }` leaves one icon in the bar.
+The item is a flex box with `gap: 4px`, and `display: none` collapses the gap too,
+so nothing is left behind: the item list measured 617px before and 537px after,
+exactly the four hidden icons at 16px plus their gaps. The logo is
+`.super-navbar__logo`, a different element, so it is untouched.
+
+Home shows no icon at all, because Home is not one of the navbar items and nothing
+is marked active there. Verified on `/`: five items, none with `active`.
+
 ## Theming Through CSS Variables
 
 Super defines its whole palette and layout as custom properties on

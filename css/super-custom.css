@@ -3,8 +3,9 @@
 
    One font stack rather than Super's two slots, so the browser falls through per
    character: Montserrat for Latin, NanumSquare for Korean. The navbar is a
-   translucent chip on every page, tinted per page. docs/super.md, "Fonts" and
-   "The navbar chip". A brown-background toggle is the hidden-block convention. */
+   translucent chip on every page, tinted per page, and only the active item keeps
+   its icon. docs/super.md, "Fonts" and "The Navbar Chip". A brown-background
+   toggle is the hidden-block convention. */
 
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
@@ -60,6 +61,10 @@
   .super-navbar__content {
     animation: none;
   }
+}
+
+.super-navbar__item:not(.active) svg {
+  display: none;
 }
 
 .notion-toggle.bg-brown {
