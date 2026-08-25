@@ -335,12 +335,41 @@ drag-and-drop in Notion and the stylesheet never names a host. That costs about 
 declarations over the background-image version. `#14161a` stands in until it loads,
 because the callout's blue would flash first.
 
-`js/footer-inject.js` starts its fetch immediately and defers the DOM work to
-`DOMContentLoaded`, so it is safe in the Head tab where `document.body` does not
-exist yet. It clones with `importNode`, and re-places under a `MutationObserver`
-because Super routes between pages on the client and React swaps `.notion-root` out
-without a reload. If JS is off there is no band; Super's own footer would be the
-fallback and it is switched off, so the page simply ends after its content.
+`js/footer-inject.js` starts its fetch immediately and defers the DOM work until
+after React has hydrated, so it is safe in the Head tab where `document.body` does
+not exist yet. It clones with `importNode`, and re-places under a
+`MutationObserver` because Super routes between pages on the client and React swaps
+`.notion-root` out without a reload. If JS is off there is no band; Super's own
+footer would be the fallback and it is switched off, so the page simply ends after
+its content.
+
+### Why the first placement waits for idle
+
+Appending to `.notion-root` before hydration finishes throws React #418, *hydration
+failed because the server rendered HTML didn't match the client*. Measured on Home,
+2026-08-25: `DOMContentLoaded` 351 ms, `load` 657 ms, hydration done ~785 ms. So
+`load` is too early; appending there still threw. Isolated by serving the page three
+ways under Playwright route interception, with `pageerror` counted per load:
+
+| Head tab contents | Band placed | #418 |
+| --- | --- | --- |
+| script tag present, body a no-op | no | 0 |
+| script runs, `SOURCE` 404s so nothing appends | no | 0 |
+| append on `DOMContentLoaded` | yes | 1, at 785 ms |
+| append on `load` | yes | 1 |
+| append at a fixed 3000 ms or 7000 ms | yes | 0 |
+
+The append is the trigger, not the script tag and not the fetch. A fixed delay fixes
+it but guesses at a number, so the script waits for `load` and then one
+`requestIdleCallback`: React hydrates in MessageChannel tasks, which outrank idle
+callbacks, so the first idle frame after `load` is a signal that hydration has
+drained. The `{ timeout: 2000 }` keeps it bounded on a page that never goes idle,
+and a `setTimeout` covers Safari before 16.4. Band appears at 673-970 ms, #418 gone
+on Home and Lab News.
+
+The error was console-only; the `MutationObserver` re-placed the band and nothing
+was visibly wrong. React may discard a client-side subtree after a mismatch, so it
+was worth removing rather than documenting as noise.
 
 Three things to keep true:
 
@@ -350,6 +379,9 @@ Three things to keep true:
    is the footer's selector in both the CSS and the script.
 3. The clone is appended to `.notion-root`, and Super routes between pages on the
    client, so the script re-places it under a `MutationObserver`.
+4. The Head tab takes HTML, not JS. Paste the file inside `<script>` tags or the
+   browser treats it as a text node: no execution, no error, nothing in the console.
+   Same for `js/home-video-play.js` in the Home Body tab.
 
 The band is absent from the served HTML everywhere except `/footer`, so crawlers
 miss it. Footer links carry little SEO weight and the band sits below the fold, so

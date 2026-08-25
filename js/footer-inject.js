@@ -1,8 +1,8 @@
 /* Footer band injector. Super Code editor > Head tab (site-wide), in <script>.
 
-   Clones the blue callout from /footer, a same-origin page Super server-renders,
-   onto every other page. Notion is unreadable from the browser: no CORS headers,
-   and the API needs a secret. Costs and caveats: docs/super.md. */
+   Clones the blue callout from /footer, a same-origin page Super server-renders;
+   Notion itself is unreadable from the browser. Appending before React hydrates
+   throws #418, so the first placement waits for an idle frame. docs/super.md. */
 
 (() => {
   const SOURCE = '/footer';
@@ -14,12 +14,17 @@
       new DOMParser().parseFromString(html, 'text/html').querySelector(BAND))
     .catch(() => null);
 
-  const ready = (run) =>
-    document.readyState === 'loading'
-      ? document.addEventListener('DOMContentLoaded', run, { once: true })
-      : run();
+  const afterHydration = (run) => {
+    const go = () =>
+      window.requestIdleCallback
+        ? requestIdleCallback(run, { timeout: 2000 })
+        : setTimeout(run, 1200);
+    document.readyState === 'complete'
+      ? go()
+      : window.addEventListener('load', go, { once: true });
+  };
 
-  ready(() =>
+  afterHydration(() =>
     fetched.then((band) => {
       if (!band) return;
 
