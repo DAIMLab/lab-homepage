@@ -7,30 +7,41 @@
               └─ Heading 3  연결하여 제조혁신을 선도합니다.
 
    The top-level gray callout on Home is the hero; give ordinary callouts here
-   another color. Notion's gray renders as `bg-gray-light`, not `bg-gray`.
+   another colour. Notion's gray renders as `bg-gray-light`, not `bg-gray`.
 
    Per-page CSS, so the bare .notion-header / .super-content / .super-navbar
-   rules below only ever reach Home. Do not move this file site-wide.
+   rules below only ever reach Home. Do not move this file site-wide. They pull
+   the hero under the navbar, make the navbar transparent over it, and drop the
+   page title and icon the hero replaces. --navbar-text-color is set rather than
+   a colour rule because super.css reads that variable for links and icons alike,
+   and overflow-x on body answers the sideways scroll the -50vw break-out causes.
+
+   The !important declarations answer Notion and Super rather than a specificity
+   guess: Notion emits its own width attribute on <video>, Super's uploaded face
+   tops out at weight 700, and the heading colours and margins come from theme
+   rules. ::-webkit-media-controls hides player chrome that would flash on first
+   paint, before the Body-tab script strips the attribute. The footage is bright,
+   so ::after lays a gradient scrim under the white text.
 
    Full-width trick is Super's own: https://docs.super.so/code-snippets/full-width-section
-   Uses CSS nesting — if the whole hero renders flat, that is the first thing to check. */
+   Uses CSS nesting; if the hero renders flat, check that first. */
 
 body,
 .super-content {
-  overflow-x: hidden !important;      /* the -50vw break-out would scroll */
+  overflow-x: hidden !important;
 }
 
 .super-content {
-  margin-top: calc(var(--navbar-height) * -1);   /* hero starts under the navbar */
+  margin-top: calc(var(--navbar-height) * -1);
 }
 
 .notion-header {
-  display: none !important;           /* the hero replaces title and icon */
+  display: none !important;
 }
 
 .super-navbar {
   background: transparent !important;
-  --navbar-text-color: #fff;          /* super.css reads this for links and icons */
+  --navbar-text-color: #fff;
 }
 
 .notion-root > .notion-callout.bg-gray-light {
@@ -45,7 +56,6 @@ body,
   overflow: hidden;
   background: #1c1c1e;
 
-  /* Scrim: the footage is bright, so white text needs a floor under it. */
   &::after {
     content: "";
     position: absolute;
@@ -63,13 +73,11 @@ body,
   }
 
   video {
-    width: 100% !important;           /* Notion emits its own width attribute */
+    width: 100% !important;
     height: 100% !important;
     object-fit: cover;
   }
 
-  /* The script strips the controls attribute, but only once the element has
-     been parsed. Without this the player chrome flashes on first paint. */
   video::-webkit-media-controls,
   video::-webkit-media-controls-enclosure {
     display: none !important;
@@ -97,7 +105,7 @@ body,
 
   h1.notion-heading {
     font-size: clamp(2.5rem, 6vw, 5.5rem) !important;
-    font-weight: 700 !important;   /* Super's uploader tops out at 700 */
+    font-weight: 700 !important;
   }
 
   h3.notion-heading {
