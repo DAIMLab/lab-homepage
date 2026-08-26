@@ -1,25 +1,25 @@
 /* The professor card on /people: the gray callout under the Professor
-   heading restyled into a two-column bio (docs/super.md, "People Page").
-   Served by its own pinned <link> in code/people.html, after css/people.css:
-   the shared design tokens (--kaist-blue, --card-*, --photo-radius,
-   --content-w, the text colors) are declared there, on the same
+   heading restyled into a two-column bio (docs/super.md, "People Page"):
+   a full-row white card, portrait plus identity block left, Career and
+   Education right. Served by its own pinned <link> in code/people.html,
+   after css/people.css: the shared design tokens (--kaist-blue, --card-*,
+   --photo-radius, the text colors) are declared there, on the same
    .page__people scope. */
 
 .page__people {
   --prof-photo-w: 220px;
-  --prof-tint: #f5f8fc;
-  --prof-rule: #d9e4f1;
+  --prof-rule: #e4e7ec;
 
   /* Gray, because the other callout colors are taken: the footer band owns
      blue (css/footer.css) and the carousel snippet owns brown */
   .notion-root > .notion-callout.bg-gray-light {
     position: relative;
-    max-width: var(--content-w);
-    margin: 28px auto 0;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 28px 0 0;
     padding: clamp(22px, 3vw, 38px);
-    background: var(--prof-tint);
+    background: #fff;
     border: 1px solid var(--prof-rule);
-    border-top: 3px solid var(--kaist-blue);
     border-radius: var(--card-radius);
     box-shadow: var(--card-shadow);
     transition: box-shadow 0.15s, translate 0.15s;
@@ -42,7 +42,7 @@
 
     .notion-column-list {
       display: flex;
-      gap: 34px;
+      gap: clamp(28px, 4vw, 48px);
       align-items: flex-start;
     }
 
@@ -51,43 +51,52 @@
       margin: 0 !important;
     }
 
-    /* a fixed photo track: a flexible one would make the image's percentage
-       width cyclic and let it fall back to its natural size */
-    .notion-column:first-child {
-      flex: 0 0 var(--prof-photo-w);
-    }
-
-    .notion-image {
-      margin: 0;
-
-      img {
-        width: 100%;
-        height: auto;
-        border-radius: var(--photo-radius);
-      }
-    }
-
     .notion-link {
       color: var(--ink);
       text-decoration: none;
     }
 
-    /* the right column reads by position: name first, then the blue label,
-       the muted department line, and Career/Education entries under their
-       headings; reordering those blocks in Notion breaks the mapping */
-    .notion-column:last-child {
-      flex: 1;
-      min-width: 0;
+    /* the portrait track: a definite basis, because a flexible one would
+       make the image's percentage width cyclic and let it fall back to its
+       natural size. The middle term keeps the track a fixed share of the
+       full-row card */
+    .notion-column:first-child {
+      flex: 0 0 clamp(var(--prof-photo-w), 24%, 320px);
 
-      > .notion-text {
+      .notion-image {
         margin: 0;
+
+        img {
+          width: 100%;
+          height: auto;
+          border-radius: var(--photo-radius);
+        }
       }
 
-      > .notion-text:first-child {
+      /* the identity block under the portrait reads by position: the blue
+         label, the name, the muted department line, then the contact lines;
+         reordering those blocks in Notion breaks the mapping */
+      > .notion-text {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      > .notion-text:nth-of-type(1) {
+        margin-top: 18px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--kaist-blue);
+      }
+
+      > .notion-text:nth-of-type(2) {
         margin-bottom: 2px;
-        font-size: clamp(22px, 2.2vw, 27px);
+        font-size: clamp(22px, 2vw, 26px);
         font-weight: 800;
         line-height: 1.25;
+        color: var(--ink);
 
         /* the name link is the card's click target, stretched over it */
         .notion-link::after {
@@ -97,23 +106,28 @@
         }
       }
 
-      > .notion-text:nth-child(2) {
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        color: var(--kaist-blue);
+      > .notion-text:nth-of-type(3) {
+        margin-bottom: 10px;
       }
+    }
 
-      > .notion-text:nth-child(3) {
-        margin-top: 2px;
-        font-size: 14px;
-        color: var(--muted);
+    /* the right column: Career and Education entries under their headings */
+    .notion-column:last-child {
+      flex: 1;
+      min-width: 0;
+
+      > .notion-text {
+        margin: 0;
       }
 
       .notion-heading {
         margin: 24px 0 10px;
         font-size: 17px;
         font-weight: 700;
+      }
+
+      > .notion-heading:first-of-type {
+        margin-top: 0;
       }
 
       .notion-heading ~ .notion-text {
@@ -134,11 +148,7 @@
 
       .notion-column:first-child {
         flex-basis: auto;
-      }
-
-      .notion-image img {
-        width: var(--prof-photo-w);
-        max-width: 100%;
+        width: min(300px, 100%);
       }
     }
   }
