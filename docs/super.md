@@ -54,6 +54,14 @@ follow the client-side navigation. The flip side: a site-wide script keeps
 running on every page, so it must guard itself by selector — a page-scoped one
 like `.page__team-daim`, or a markup hook that only its target pages emit.
 
+The asymmetry cuts the other way for styles: **per-page CSS cannot leak onto
+the next page.** Super deactivates a page's injected styles on leaving it,
+even though the tags stay in the head. Measured 2026-08-27 twice: Home's bare
+`.notion-header` hide and transparent navbar did not apply to About after a
+navbar hop, and a test style in About's Head hiding the page icon left the
+People icon alone. So per-page CSS may use bare selectors safely; only
+scripts outlive their page and must self-guard.
+
 ## Classes
 
 `notion-*` for rendered Notion blocks, `super-*` for Super's own chrome (navbar,
