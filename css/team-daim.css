@@ -3,7 +3,8 @@
    centered with even spacing; the photo is inset at a fixed width so the card
    can widen without scaling it. Email and the four URL properties are circular
    icon buttons; js/team-daim-icons.html loads Font Awesome and
-   js/team-daim-email-copy.html copies the address on click. docs/super.md. */
+   js/team-daim-cards.html adds email
+   click-to-copy and trims Joined to year-month. docs/super.md. */
 
 .page__team-daim {
   --card-w: 320px;
@@ -44,6 +45,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-evenly;
+      align-items: stretch;
       gap: 44px 0;
       max-width: 1060px;
       margin-inline: auto;
@@ -52,7 +54,12 @@
     }
 
     .notion-collection-card {
+      display: flex;
+      flex-direction: column;
       width: var(--card-w);
+      /* Super sets height: 100%, which blocks the flex stretch; auto restores
+         it, so every card in a row runs to the row's tallest */
+      height: auto;
       max-width: 100%;
       background: #fff;
       border: 1px solid var(--rule);
@@ -90,9 +97,14 @@
       background: #f4f6f7;
     }
 
+    /* Rows: title, research, Joined, icons. The card stretches to its row's
+       tallest sibling and the research track absorbs the slack, so the Joined
+       divider and the icon row sit on the card bottom whatever wrapped above */
     .notion-collection-card__content {
+      flex: 1;
       display: grid;
       grid-template-columns: repeat(5, 34px) 1fr;
+      grid-template-rows: auto 1fr auto auto;
       justify-content: start;
       align-content: start;
       column-gap: 10px;
@@ -216,6 +228,10 @@
       --glyph: '\f0e0'; /* envelope */
       --glyph-font: var(--fa-font-regular);
       cursor: pointer;
+      /* the no-click card turns pointer-events off for the whole property
+         list and only anchors win them back; the email div must opt in
+         itself or it can be neither hovered nor clicked */
+      pointer-events: auto;
 
       &.copied {
         border-color: var(--accent);

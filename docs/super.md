@@ -702,8 +702,10 @@ at once, or the harness's own error is read as the code's.
 
 Three injection targets: `css/team-daim.css` in the page's CSS tab,
 `js/team-daim-icons.html` in its Head tab, which loads Font Awesome from cdnjs with
-the version pinned in the URL, and `js/team-daim-email-copy.html` in its Body tab,
-which makes the email icon copy the address on click. The cards are the five member views styled into
+the version pinned in the URL, and `js/team-daim-cards.html` in its Body tab,
+which makes the email icon copy the address on click and trims Joined to
+year-month (Notion has no such date format; the same trap and pattern as
+`js/projects-date-format.js`). The cards are the five member views styled into
 vertical profile cards; which views and what they show is in
 [`notion.md`](notion.md#collections).
 
@@ -736,12 +738,14 @@ card styling to members and leaves Alumni alone. No per-block selectors needed.
 </div>
 ```
 
-Three traps live in that markup. The cover's `object-fit` and `object-position` are
+Four traps live in that markup. The cover's `object-fit` and `object-position` are
 **inline styles**, so the square-crop override needs `!important`. The email
 property renders as plain text with no anchor, so the property div itself is styled
-into the icon button and the Body-tab script supplies the click. And Super's
-`.notion-pill` is nowrap, so a long research option clips at the card edge without
-`white-space: normal`.
+into the icon button and the Body-tab script supplies the click. On a `no-click`
+card Super turns pointer-events off for the whole property list and only anchors
+win them back, so that email div also needs `pointer-events: auto` or it can be
+neither hovered nor clicked. And Super's `.notion-pill` is nowrap, so a long
+research option clips at the card edge without `white-space: normal`.
 
 ### Layout: three a row, centered
 
@@ -755,6 +759,14 @@ The photo is not an edge-to-edge cover: it sits inset at a fixed `--photo-w`, 26
 centered. That is what lets the card widen for the text without scaling the
 portraits, which are low-resolution ID photos; `object-fit: cover` over a wider
 full-bleed box has no choice but to zoom them.
+
+Cards in a row are equal height by stretch, not by reserving space: Super's own
+`.notion-collection-card { height: 100% }` blocks the flex stretch, and
+`height: auto` restores it. Inside the card the property list is `flex: 1` with
+`grid-template-rows: auto 1fr auto auto`, so the research track absorbs the slack
+and the Joined divider and icon row sit on the card bottom whatever wrapped above.
+The select's `min-height` keeps a one-line research block from pulling shorter
+rows tighter than two lines.
 
 ### The icon row without a wrapper
 
@@ -788,9 +800,10 @@ order:
 | GitHub | `property-5a4c6b3d` |
 | LinkedIn | `property-7956403c` |
 | CV | `property-45444558` |
+| Joined | `property-75566065` |
 
-`Joined` has no hook yet; it first renders after the next Sync, and the generic
-`.notion-property__date` covers it since no other date property is shown.
+The CSS still targets Joined through the generic `.notion-property__date`, which
+is enough while no other date property is shown.
 
 ## Hero Video Autoplay
 
