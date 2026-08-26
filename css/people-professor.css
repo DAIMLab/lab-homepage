@@ -172,10 +172,9 @@
       padding-left: clamp(28px, 4vw, 48px);
 
       .notion-heading,
-      > .notion-text {
+      .notion-bulleted-list {
         position: relative;
         z-index: 1;
-        margin: 0;
       }
 
       .notion-heading {
@@ -188,9 +187,17 @@
         margin-top: 0;
       }
 
-      .notion-heading ~ .notion-text {
+      /* the entries are Notion bullets: the list marker is what says
+         "this is an entry", and the bullet dot restyles into the blue bar */
+      .notion-bulleted-list {
+        margin: 0;
+        padding-inline-start: 0;
+        list-style: none;
+      }
+
+      .notion-list-item {
         margin: 6px 0;
-        padding-left: 12px;
+        padding: 0 0 0 12px;
         border-left: 2px solid var(--kaist-blue);
         font-size: 15px;
         line-height: 1.5;

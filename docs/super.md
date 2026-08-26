@@ -174,7 +174,7 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
   muted department, then three contact
   rows drawn as FA-glyph grids, identified by their own mailto:/tel: links rather than by position, so
-  reordering cannot detach an icon; the right column is the section headings with blue entry bars. The name link's `::after` overlay stretches over the card and every other text block sits
+  reordering cannot detach an icon; the right column is the section headings over Notion-bulleted entries whose dots restyle into the blue bars. The name link's `::after` overlay stretches over the card and every other text block sits
   at `z-index: 1` above it, so text stays selectable and only empty space, or the `pointer-events: none`
   portrait, clicks through to the profile (an overlay at `z-index: -1` instead makes Chrome's hover
   hit-test oscillate and the cursor flicker). Reordering the left column's blocks or removing the name
