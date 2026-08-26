@@ -172,8 +172,8 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   resolve inside a callout) and keeping the photo track on a definite `clamp()` basis (a flexible one goes
   cyclic); the portrait width carries `!important` against Super's `width: 100% !important` on
   `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
-  muted department, then three FA-glyph contact rows; the right column is the section headings with blue
-  entry bars. The name link's `::after` overlay stretches over the card and every other text block sits
+  muted department, then three contact rows whose envelope and phone markers
+  are emoji in the Notion text itself; the right column is the section headings with blue entry bars. The name link's `::after` overlay stretches over the card and every other text block sits
   at `z-index: 1` above it, so text stays selectable and only empty space, or the `pointer-events: none`
   portrait, clicks through to the profile (an overlay at `z-index: -1` instead makes Chrome's hover
   hit-test oscillate and the cursor flicker). Reordering the left column's blocks or removing the name
