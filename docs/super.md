@@ -701,17 +701,21 @@ at once, or the harness's own error is read as the code's.
 ## People Page
 
 One injection target: `js/team-daim-head.html` in the page's Head tab; the CSS
-and Body tabs stay empty. The file is three pinned URLs: Font Awesome (only
-this page uses it, so it left the site-wide Head), `css/team-daim.css` on
-jsDelivr, and `js/team-daim-cards.js` on jsDelivr as a `defer` script: email
-click-to-copy, the `data-email` tooltip mirror, and the Joined year-month trim
-(Notion has no such date format; the same trap and pattern as
-`js/projects-date-format.js`). Swapping the design or the behavior is swapping
-the matching URL for another pinned ref; the ref rules are in
-[`hosting.md`](hosting.md#jsdelivr). A change is therefore two commits: the
-file first, then the head file pointing at the file's new SHA. The script
-observes `documentElement`, not `body`, so it survives head placement, and
-`defer` keeps it off the parser's critical path. The cards are the five member views styled into vertical profile
+and Body tabs stay empty. The file is four pinned URLs: Font Awesome (only
+this page uses it, so it left the site-wide Head), `css/team-daim.css`, and
+two `defer` scripts. `js/email-copy.js` is deliberately generic, no page
+scoping: any database's email property gets click-to-copy and the `data-email`
+tooltip mirror, and another page reuses it by linking the same URL.
+`js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such date
+format; the same trap as `js/projects-date-format.js`) and keeps its
+`.page__team-daim` scope on purpose: Super navigates client-side, a per-page
+head script stays alive on the next page, and unscoped it would eat the day
+off Projects' Period dates before that page's own formatter matches them.
+Swapping design or behavior is swapping the matching URL for another pinned
+ref (rules in [`hosting.md`](hosting.md#jsdelivr)); a change is two commits,
+the file first, then the head file pointing at its new SHA. Both scripts
+observe `documentElement`, not `body`, so they survive head placement, and
+`defer` keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
 cards; which views and what they show is in [`notion.md`](notion.md#collections).
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
