@@ -1,0 +1,145 @@
+/* The professor card on /people: the gray callout under the Professor
+   heading restyled into a two-column bio (docs/super.md, "People Page").
+   Served by its own pinned <link> in code/people.html, after css/people.css:
+   the shared design tokens (--kaist-blue, --card-*, --photo-radius,
+   --content-w, the text colors) are declared there, on the same
+   .page__people scope. */
+
+.page__people {
+  --prof-photo-w: 220px;
+  --prof-tint: #f5f8fc;
+  --prof-rule: #d9e4f1;
+
+  /* Gray, because the other callout colors are taken: the footer band owns
+     blue (css/footer.css) and the carousel snippet owns brown */
+  .notion-root > .notion-callout.bg-gray-light {
+    position: relative;
+    max-width: var(--content-w);
+    margin: 28px auto 0;
+    padding: clamp(22px, 3vw, 38px);
+    background: var(--prof-tint);
+    border: 1px solid var(--prof-rule);
+    border-top: 3px solid var(--kaist-blue);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.15s, translate 0.15s;
+
+    &:hover {
+      box-shadow: var(--card-shadow-hover);
+      translate: 0 -2px;
+    }
+
+    .notion-callout__icon {
+      display: none;
+    }
+
+    /* the card owns its two-column layout: the inline calc() widths Super
+       stamps on the columns depend on --column-spacing, which does not reach
+       inside a callout, so they are neutralized and flex takes over */
+    .notion-callout__content {
+      display: block;
+    }
+
+    .notion-column-list {
+      display: flex;
+      gap: 34px;
+      align-items: flex-start;
+    }
+
+    .notion-column {
+      width: auto !important;
+      margin: 0 !important;
+    }
+
+    /* a fixed photo track: a flexible one would make the image's percentage
+       width cyclic and let it fall back to its natural size */
+    .notion-column:first-child {
+      flex: 0 0 var(--prof-photo-w);
+    }
+
+    .notion-image {
+      margin: 0;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--photo-radius);
+      }
+    }
+
+    .notion-link {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    /* the right column reads by position: name first, then the blue label,
+       the muted department line, and Career/Education entries under their
+       headings; reordering those blocks in Notion breaks the mapping */
+    .notion-column:last-child {
+      flex: 1;
+      min-width: 0;
+
+      > .notion-text {
+        margin: 0;
+      }
+
+      > .notion-text:first-child {
+        margin-bottom: 2px;
+        font-size: clamp(22px, 2.2vw, 27px);
+        font-weight: 800;
+        line-height: 1.25;
+
+        /* the name link is the card's click target, stretched over it */
+        .notion-link::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+        }
+      }
+
+      > .notion-text:nth-child(2) {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--kaist-blue);
+      }
+
+      > .notion-text:nth-child(3) {
+        margin-top: 2px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .notion-heading {
+        margin: 24px 0 10px;
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .notion-heading ~ .notion-text {
+        margin: 6px 0;
+        padding-left: 12px;
+        border-left: 3px solid var(--kaist-blue);
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--sub);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .notion-column-list {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .notion-column:first-child {
+        flex-basis: auto;
+      }
+
+      .notion-image img {
+        width: var(--prof-photo-w);
+        max-width: 100%;
+      }
+    }
+  }
+}

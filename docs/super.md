@@ -730,8 +730,10 @@ at once, or the harness's own error is read as the code's.
 ## People Page
 
 Two injection targets. The page's Head tab is `code/people.html`, links
-only: Font Awesome (only this page uses it) and `css/people.css` pinned to
-a commit SHA; the page's CSS and Body tabs stay empty. The behavior is
+only: Font Awesome (only this page uses it), `css/people.css` and
+`css/people-professor.css`, each pinned to a commit SHA; the page's CSS and
+Body tabs stay empty. The professor stylesheet loads after the page one and
+draws on the design tokens it declares on `.page__people`. The behavior is
 site-wide in `code/global.html`: `js/email-copy.js` is deliberately generic
 with no page scoping, so any database's email property, on any page, gets
 click-to-copy and the `data-email` tooltip mirror, and a `.page__people`
@@ -754,19 +756,22 @@ hidden tab; the snippet itself has no autoplay. Two Notion-side steps stay manua
 Card preview must be clicked to Page cover (the DSL cannot set it), and the
 database waits for a drag into the Control panel.
 
-The professor card under the Professor heading is a `blue_bg` callout
-holding a two-column layout, portrait left, bio right. `css/people.css`
-turns that callout (`.notion-callout.bg-blue-light`) into the card,
-replaces the columns' inline `calc()` widths with its own flex row (their
-`--column-spacing` variable does not resolve inside a callout, which
-otherwise collapses the photo column to zero), and pins the photo track at
-220px — a flexible track would make the image's percentage width cyclic and
-snap it to its natural size. The right column is styled by child position:
-the first text block is the name, the second the KAIST-blue label, the
-third the muted department line, and every text after a heading gets the
-blue entry bar. The name links to the full profile page and an `::after`
-overlay stretches that link over the whole card, so reordering the right
-column's first three blocks, or removing the name link, breaks the card.
+The professor card under the Professor heading is a `gray_bg` callout
+holding a two-column layout, portrait left, bio right — gray because the
+footer band owns blue callouts and the carousel snippet owns brown.
+`css/people-professor.css` turns that callout (`.notion-root >
+.notion-callout.bg-gray-light`) into the card, replaces the columns' inline
+`calc()` widths with its own flex row (their `--column-spacing` variable
+does not resolve inside a callout, which otherwise collapses the photo
+column to zero), and pins the photo track at `--prof-photo-w` — a flexible
+track would make the image's percentage width cyclic and snap it to its
+natural size. The right column is styled by child position: the first text
+block is the name, the second the KAIST-blue label, the third the muted
+department line, and every text after a heading gets the blue entry bar.
+The name links to the full profile page and an `::after` overlay stretches
+that one link over the whole card — links elsewhere in the card stay
+ordinary — so reordering the right column's first three blocks, or removing
+the name link, breaks the card.
 
 The lab motto under the carousel is one Notion quote block with the
 attribution as a **bulleted item nested inside it** — that nesting is what

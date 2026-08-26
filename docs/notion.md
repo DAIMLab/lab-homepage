@@ -29,7 +29,7 @@ Notion rename does not move it; on 2026-08-27 it was moved there by hand from
 into `Professor`, `Students` and `Alumni` sub-pages; all three are in the
 trash. The page now carries five linked views of the `People` database plus
 one view of a separate alumni database, each under its own H1. The Professor
-section is plain blocks: a `blue_bg` callout card (anatomy in
+section is plain blocks: a `gray_bg` callout card (anatomy in
 [`super.md`](super.md#people-page)) whose name link leads to the full profile
 page `Young Jae Jang` (`3c811c7b703c8185bf7dd09096c94e73`), a child of People
 kept inside the collapsed `Subpages` toggle and served at

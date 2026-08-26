@@ -1,10 +1,18 @@
 /* People, /people. Served by the pinned jsDelivr <link> in
-   code/people.html. Five linked views become profile cards; email and URL
-   properties are icon buttons. Anatomy and traps: docs/super.md, "People Page". */
+   code/people.html, alongside css/people-professor.css which draws on the
+   design tokens declared here. Five linked views become profile cards; email
+   and URL properties are icon buttons. Anatomy and traps: docs/super.md,
+   "People Page". */
 
 .page__people {
+  --content-w: 1060px;
   --card-w: 320px;
+  --card-radius: 18px;
+  --card-shadow: 0 10px 28px rgb(16 42 67 / 8%);
+  --card-shadow-hover: 0 16px 36px rgb(16 42 67 / 14%);
   --photo-w: 260px;
+  --photo-radius: 12px;
+  --icon-w: 34px;
   --ink: #212121;
   --sub: #3c454d;
   --muted: #7a858e;
@@ -14,12 +22,14 @@
   --kaist-blue: #004191;
 
   /* The hero carousel: first thing under the navbar, edge to edge. The page
-     icon and title are hidden, as on Home; the carousel is the header */
+     icon and title are hidden, as on Home; the carousel is the header. The
+     !importants below are measured against the snippet's own carousel.css,
+     which styles the same selectors from the site-wide Head */
   .notion-header {
     display: none !important;
   }
 
-  .notion-callout.bg-brown-light {
+  .notion-root > .notion-callout.bg-brown-light {
     position: relative;
     left: 50%;
     width: 100vw;
@@ -41,18 +51,18 @@
       padding: 18px 0 40px !important;
       background: linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / 0.45)) !important;
       text-align: center;
-    }
 
-    .notion-collection-card__content .notion-property__title {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      text-align: center;
-      font-size: clamp(18px, 2.4vw, 28px);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #fff;
-      text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
+      .notion-property__title {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        font-size: clamp(18px, 2.4vw, 28px);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #fff;
+        text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
+      }
     }
   }
 
@@ -60,7 +70,7 @@
      centered under it, and the attribution smaller still. The attribution is
      a single bulleted item nested inside the quote block, marker hidden; the
      Notion text carries no quotation marks, the glyph stands in for them */
-  .notion-quote {
+  .notion-root > .notion-quote {
     margin: 30px 0 0;
     border-inline-start: 0;
     padding-inline-start: 0;
@@ -80,160 +90,28 @@
       line-height: 0.55;
       color: var(--kaist-blue);
     }
-  }
 
-  .notion-quote .notion-bulleted-list {
-    margin: 8px 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .notion-quote .notion-list-item {
-    margin: 0;
-    padding: 0;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--muted);
-
-    &::before { content: '\2014\00a0'; }
-  }
-
-  /* The professor card: a blue callout under the Professor heading holding a
-     two-column bio, photo left, name-label-department and Career/Education
-     right (docs/super.md, "People Page"). The blue tint marks the block in
-     Notion; here it becomes a soft card with a KAIST-blue crown, and the
-     name link stretches over the whole card for the click-through */
-  .notion-callout.bg-blue-light {
-    position: relative;
-    max-width: 1060px;
-    margin: 28px auto 0;
-    padding: clamp(22px, 3vw, 38px);
-    background: #f5f8fc;
-    border: 1px solid #d9e4f1;
-    border-top: 3px solid var(--kaist-blue);
-    border-radius: 18px;
-    box-shadow: 0 10px 28px rgb(16 42 67 / 8%);
-    transition: box-shadow 0.15s, translate 0.15s;
-
-    &:hover {
-      box-shadow: 0 16px 36px rgb(16 42 67 / 14%);
-      translate: 0 -2px;
+    .notion-bulleted-list {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .notion-callout__icon {
-      display: none;
-    }
-
-    /* the card owns its two-column layout: the inline calc() widths Super
-       stamps on the columns depend on --column-spacing, which does not reach
-       inside a callout, so they are neutralized and flex takes over */
-    .notion-callout__content {
-      display: block;
-    }
-
-    .notion-column-list {
-      display: flex;
-      gap: 34px;
-      align-items: flex-start;
-    }
-
-    .notion-column {
-      width: auto !important;
-      margin: 0 !important;
-    }
-
-    /* the photo column is a fixed 220px track; a flexible track would make
-       the image's percentage width cyclic and let it fall back to its
-       596px natural size */
-    .notion-column:first-child {
-      flex: 0 0 220px;
-    }
-
-    .notion-column:last-child {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .notion-image {
+    .notion-list-item {
       margin: 0;
-    }
-
-    .notion-image img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
-
-    @media (max-width: 640px) {
-      .notion-column-list {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .notion-column:first-child {
-        flex-basis: auto;
-      }
-
-      .notion-image img {
-        width: 220px;
-        max-width: 100%;
-      }
-    }
-
-    a.notion-link {
-      color: var(--ink);
-      text-decoration: none;
-
-      /* the whole card is the click target */
-      &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-      }
-    }
-
-    .notion-column > .notion-text:first-child {
-      margin: 0 0 2px;
-      font-size: clamp(22px, 2.2vw, 27px);
-      font-weight: 800;
-      line-height: 1.25;
-    }
-
-    .notion-column > .notion-text:nth-child(2) {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--kaist-blue);
-    }
-
-    .notion-column > .notion-text:nth-child(3) {
-      margin: 2px 0 0;
-      font-size: 14px;
+      padding: 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
       color: var(--muted);
-    }
 
-    .notion-heading {
-      margin: 24px 0 10px;
-      padding-bottom: 0;
-      border-bottom: 0;
-      text-align: left;
-      font-size: 17px;
-      font-weight: 700;
-    }
-
-    .notion-heading ~ .notion-text {
-      margin: 6px 0;
-      padding-left: 12px;
-      border-left: 3px solid var(--kaist-blue);
-      font-size: 15px;
-      line-height: 1.5;
-      color: var(--sub);
+      &::before { content: '\2014\00a0'; }
     }
   }
 
-  .notion-heading {
+  /* Section headings, top-level blocks only; the professor card styles its
+     own headings in css/people-professor.css */
+  .notion-root > .notion-heading {
     margin: 46px 0 0;
     padding-bottom: 9px;
     border-bottom: 1px solid var(--rule);
@@ -255,7 +133,7 @@
       justify-content: space-evenly;
       align-items: stretch;
       gap: 44px 0;
-      max-width: 1060px;
+      max-width: var(--content-w);
       margin-inline: auto;
       padding-top: 28px;
       border-top: 0;
@@ -271,9 +149,9 @@
       max-width: 100%;
       background: #fff;
       border: 1px solid var(--rule);
-      border-radius: 18px;
+      border-radius: var(--card-radius);
       overflow: hidden;
-      box-shadow: 0 10px 28px rgb(16 42 67 / 8%);
+      box-shadow: var(--card-shadow);
     }
 
     .notion-collection-card__anchor {
@@ -285,10 +163,10 @@
     .notion-collection-card__cover,
     .notion-collection-card > div:not([class]) {
       width: min(var(--photo-w), 100%);
-      height: auto !important;
-      min-height: 0 !important;
+      height: auto;
+      min-height: 0;
       margin: 24px auto 0;
-      border-radius: 12px;
+      border-radius: var(--photo-radius);
       aspect-ratio: 1;
     }
 
@@ -298,7 +176,10 @@
       object-position: center 22% !important;
     }
 
+    /* the placeholder carries an inline height, which only !important beats */
     .notion-collection-card > div:not([class]) {
+      height: auto !important;
+      min-height: 0 !important;
       background: #f4f6f7;
     }
 
@@ -308,7 +189,7 @@
     .notion-collection-card__content {
       flex: 1;
       display: grid;
-      grid-template-columns: repeat(5, 34px) 1fr;
+      grid-template-columns: repeat(5, var(--icon-w)) 1fr;
       grid-template-rows: auto 1fr auto auto;
       column-gap: 10px;
       padding: 16px 24px 18px;
@@ -316,7 +197,6 @@
 
     .notion-collection-card__property {
       grid-column: 1 / -1;
-      width: 100%;
       min-height: 0;
 
       &.title {
@@ -329,15 +209,17 @@
       }
     }
 
-    /* min-height reserves two single-line topics (2 x 13px x 1.45 + 4px gap),
-       so one-topic and two-topic cards stay the same height */
+    /* min-height reserves two single-line topics, so one-topic and two-topic
+       cards stay the same height; the pills inherit the type scale set here */
     .notion-property__select {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
-      min-height: 42px;
+      min-height: calc(2lh + 4px);
       margin-bottom: 12px;
+      font-size: 13px;
+      line-height: 1.45;
 
       .notion-pill {
         position: relative;
@@ -345,8 +227,6 @@
         padding: 0 0 0 14px;
         background: none;
         border-radius: 0;
-        font-size: 13px;
-        line-height: 1.45;
         white-space: normal;
         color: var(--sub);
 
@@ -388,16 +268,15 @@
     .notion-property__email,
     .notion-property__url {
       grid-column: auto;
-      width: auto;
       margin-top: 14px;
     }
 
     .notion-property__email,
-    .notion-property__url a.notion-link {
+    .notion-property__url .notion-link {
       position: relative;
       display: block;
-      width: 34px;
-      height: 34px;
+      width: var(--icon-w);
+      height: var(--icon-w);
       border: 1px solid var(--rule);
       border-radius: 50%;
       font-size: 0;
@@ -418,11 +297,11 @@
         transition: color 0.15s;
       }
 
-      &:hover {
+      &:is(:hover, .copied) {
         border-color: var(--accent);
       }
 
-      &:hover::before {
+      &:is(:hover, .copied)::before {
         color: var(--accent-deep);
       }
     }
@@ -440,11 +319,6 @@
         /* check exists only in the solid face of FA Free; regular shows tofu */
         --glyph: '\f00c';
         --glyph-font: var(--fa-font-solid);
-        border-color: var(--accent);
-      }
-
-      &.copied::before {
-        color: var(--accent-deep);
       }
 
       /* Tooltip: the address on hover, Copied! after a click. The Body script
@@ -462,14 +336,12 @@
         white-space: nowrap;
         color: #fff;
         opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.15s;
         pointer-events: none;
       }
 
-      &[data-email]:hover::after {
+      &:hover::after {
         opacity: 1;
-        visibility: visible;
+        transition: opacity 0.15s;
       }
 
       &.copied::after {
@@ -486,11 +358,11 @@
       &.property-7956403c { --glyph: '\f0e1'; --glyph-font: var(--fa-font-brands); } /* LinkedIn */
       &.property-45444558 { --glyph: '\f15c'; --glyph-font: var(--fa-font-regular); } /* CV: file-lines */
     }
-  }
 
-  @media (max-width: 640px) {
-    .collection-2d2152b853b942359c0f0b1a2225fb85 .notion-collection-gallery {
-      gap: 32px 0;
+    @media (max-width: 640px) {
+      .notion-collection-gallery {
+        gap: 32px 0;
+      }
     }
   }
 }
