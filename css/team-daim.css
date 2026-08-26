@@ -12,6 +12,13 @@
   --accent: #00b8ff;
   --accent-deep: #0479b8;
 
+  /* The page header: icon and title centered, as on the legacy site */
+  .notion-header__title-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .notion-quote {
     margin-bottom: 8px;
     border-inline-start: 0;
