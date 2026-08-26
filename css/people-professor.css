@@ -132,29 +132,10 @@
         margin-bottom: 10px;
       }
 
-      /* the contact rows: a Font Awesome glyph (the page loads FA for the
-         member cards) in a fixed icon column, so wrapped text stays aligned
-         after it */
+      /* the contact rows carry their own emoji markers in the Notion text,
+         so no glyph machinery lives here; only their spacing does */
       > .notion-text:nth-of-type(n + 4) {
-        display: grid;
-        grid-template-columns: 16px 1fr;
-        column-gap: 8px;
-        /* baseline, because the glyph's line box is smaller than the text's
-           and top-aligns above it otherwise */
-        align-items: baseline;
-        margin-top: 3px;
-
-        &::before {
-          font: var(--fa-font-solid);
-          font-size: 12px;
-          color: var(--kaist-blue);
-          content: '\f0e0';
-          justify-self: center;
-        }
-      }
-
-      > .notion-text:nth-of-type(6)::before {
-        content: '\f095';
+        margin-top: 6px;
       }
     }
 
