@@ -717,17 +717,19 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Two injection targets. The page's Head tab is `code/team-daim.html`, link
-tags only: Font Awesome (only this page uses it) and `css/team-daim.css` on
-jsDelivr pinned to a commit SHA; the page's CSS and Body tabs stay empty. The
-site-wide Head is `code/site.html`, the two `defer` scripts — per-page
-script tags never run on client-side entry, see the section above.
-`js/email-copy.js` is deliberately generic, no page scoping: any database's
-email property, on any page, gets click-to-copy and the `data-email` tooltip
-mirror. `js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no
-such date format; the same trap as `js/projects-date-format.js`) and its
-`.page__team-daim` scope is what makes it safe site-wide: unscoped it would
-eat the day off Projects' Period dates and Lab News' dates. Swapping design
+Two injection targets. The page's Head tab is `code/team-daim.html`: Font
+Awesome (only this page uses it), `css/team-daim.css` on jsDelivr pinned to a
+commit SHA, and the date-trim script; the page's CSS and Body tabs stay empty.
+The site-wide Head is `code/site.html`, carrying `js/email-copy.js` —
+deliberately generic, no page scoping, so any database's email property, on
+any page, gets click-to-copy and the `data-email` tooltip mirror.
+`js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such
+date format; the same trap as `js/projects-date-format.js`). It sits in the
+page head as an accepted trade-off: per-page script tags never run on
+client-side entry (see the section above), so a visitor arriving through the
+navbar sees full dates until a reload. Its `.page__team-daim` scope still
+guards the dates of Projects and Lab News for a visitor who navigates on
+from this page. Swapping design
 or behavior is swapping the matching URL for another pinned ref (rules in
 [`hosting.md`](hosting.md#jsdelivr)); a change is two commits, the file
 first, then the head file pointing at its new SHA. Both scripts observe
