@@ -173,10 +173,11 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   cyclic); the portrait width carries `!important` against Super's `width: 100% !important` on
   `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
   muted department, then three FA-glyph contact rows; the right column is the section headings with blue
-  entry bars. The name link's `::after` overlay stretches over the card at `z-index: -1` inside the
-  isolated callout, so every text stays selectable and only empty space, or the `pointer-events: none`
-  portrait, clicks through to the profile. Reordering the left column's blocks or removing the name link
-  breaks the card.
+  entry bars. The name link's `::after` overlay stretches over the card and every other text block sits
+  at `z-index: 1` above it, so text stays selectable and only empty space, or the `pointer-events: none`
+  portrait, clicks through to the profile (an overlay at `z-index: -1` instead makes Chrome's hover
+  hit-test oscillate and the cursor flicker). Reordering the left column's blocks or removing the name
+  link breaks the card.
 - Motto: one quote block, its attribution a nested bullet the CSS restyles (`“` glyph, muted line);
   un-nesting it, or adding a second, breaks the design.
 - Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
