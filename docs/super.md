@@ -758,9 +758,10 @@ attribution as a **bulleted item nested inside it** — that nesting is what
 `css/people.css` styles: the blockquote gets a large `“` glyph from
 `::before` (the Notion text itself carries no quotation marks), and the
 bullet loses its marker and shrinks into the muted `— Name` line. Un-nesting
-the attribution, or adding a second bullet, breaks the design; the quote
-carries an explicit `font-style: normal` because an inherited italic slants
-the whole block otherwise.
+the attribution, or adding a second bullet, breaks the design. When testing
+a quote restyle by patching the served HTML, remember the flight-payload
+trap above: the old pinned stylesheet comes back at hydration and wins the
+cascade, which reads as phantom styling that no deployed file contains.
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
 equal-specificity ties resolve by an order nobody controls, and the cards

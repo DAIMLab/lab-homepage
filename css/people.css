@@ -11,6 +11,7 @@
   --rule: #e3e8ec;
   --accent: #00b8ff;
   --accent-deep: #0479b8;
+  --kaist-blue: #004191;
 
   /* The hero carousel: first thing under the navbar, edge to edge. The page
      icon and title are hidden, as on Home; the carousel is the header */
@@ -65,9 +66,6 @@
     padding-inline-start: 0;
     text-align: center;
     font-size: clamp(22px, 2.4vw, 30px);
-    /* normal is load-bearing: an inherited italic slants the whole block
-       otherwise */
-    font-style: normal;
     font-weight: 600;
     line-height: 1.45;
     color: var(--ink);
@@ -80,7 +78,7 @@
       font-size: 64px;
       font-weight: 700;
       line-height: 0.55;
-      color: var(--accent);
+      color: var(--kaist-blue);
     }
   }
 
@@ -94,7 +92,7 @@
     margin: 0;
     padding: 0;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
     color: var(--muted);
 
