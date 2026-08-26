@@ -7,6 +7,14 @@
   --secondary-font: var(--primary-font);
 }
 
+/* The injected footer band (and the full-bleed heroes) break out with 100vw,
+   which includes the vertical scrollbar and overhangs half of it per side.
+   Clipping the root eats that sideways scroll on every page; measured on
+   /lab-news, a body-level overflow-x does not reach the viewport here */
+html {
+  overflow-x: clip;
+}
+
 .super-navbar__item {
   display: flex;
   flex-direction: column;

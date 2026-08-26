@@ -15,9 +15,6 @@
      blue (css/footer.css) and the carousel snippet owns brown */
   .notion-root > .notion-callout.bg-gray-light {
     position: relative;
-    /* its own stacking context, so the card link's z-index: -1 overlay
-       stays above the card background */
-    isolation: isolate;
     box-sizing: border-box;
     width: 100%;
     margin: 28px 0 0;
@@ -90,8 +87,12 @@
          (two emails, one phone); reordering those blocks in Notion breaks
          the mapping */
       /* the identity text shares the centered portrait's side inset, so
-         both start on the same left line */
+         both start on the same left line. Lifted above the card link's
+         overlay to stay selectable (a z-index: -1 overlay instead makes
+         Chrome's hover hit-test oscillate and the cursor flicker) */
       > .notion-text {
+        position: relative;
+        z-index: 1;
         margin: 0 calc((100% - var(--prof-portrait-w)) / 2);
         font-size: 14px;
         line-height: 1.55;
@@ -106,21 +107,24 @@
         color: var(--kaist-blue);
       }
 
+      /* the name stays unlifted: its link carries the card-wide overlay */
       > .notion-text:nth-of-type(2) {
+        position: static;
+        z-index: auto;
         margin-bottom: 2px;
         font-size: clamp(22px, 2vw, 26px);
         font-weight: 800;
         line-height: 1.25;
         color: var(--ink);
 
-        /* the name link is the card's click target, stretched over it but
-           kept under every text block, so all card text stays selectable and
-           only empty space (and the click-through portrait) navigates */
+        /* the name link is the card's click target, stretched over it;
+           every other text block sits at z-index: 1 above it, so all card
+           text stays selectable and only empty space (and the click-through
+           portrait) navigates */
         .notion-link::after {
           content: '';
           position: absolute;
           inset: 0;
-          z-index: -1;
         }
       }
 
@@ -155,14 +159,17 @@
     }
 
     /* the right column: Career and Education entries under their headings,
-       behind a hairline divider */
+       behind a hairline divider; text lifted above the card link's overlay */
     .notion-column:last-child {
       flex: 1;
       min-width: 0;
       border-left: 1px solid var(--prof-rule);
       padding-left: clamp(28px, 4vw, 48px);
 
+      .notion-heading,
       > .notion-text {
+        position: relative;
+        z-index: 1;
         margin: 0;
       }
 
