@@ -81,5 +81,10 @@ Limits: 20 MB per file (GitHub-sourced), well under GitHub's own 100 MB. Video a
 a Notion embed. HTML files are served as
 `text/plain` deliberately, so jsDelivr cannot host a page, only assets.
 
-For CSS, pasting into Super's CSS tab stays the primary route: it applies instantly
-and avoids a render-blocking external request.
+For CSS under iteration, pasting into Super's CSS tab stays the quick route: it
+applies instantly and avoids a render-blocking external request. A settled design
+graduates to a pinned jsDelivr `<link>` instead, which is how `css/team-daim.css`
+ships: the page's Head tab (`js/team-daim-head.html`) names one URL, and swapping
+the design is swapping that URL for another pinned ref. The commit has to be
+pushed before jsDelivr can see it, and merging the branch keeps the SHA reachable
+for good.

@@ -700,19 +700,22 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Three injection targets: `css/team-daim.css` in the page's CSS tab,
-`js/team-daim-icons.html` in its Head tab, which loads Font Awesome from cdnjs with
-the version pinned in the URL, and `js/team-daim-cards.html` in its Body tab,
-which makes the email icon copy the address on click and trims Joined to
-year-month (Notion has no such date format; the same trap and pattern as
-`js/projects-date-format.js`). The cards are the five member views styled into
-vertical profile cards; which views and what they show is in
-[`notion.md`](notion.md#collections).
+One injection target: `js/team-daim-head.html` in the page's Head tab; the CSS
+and Body tabs stay empty. The file carries Font Awesome (only this page uses it,
+so it left the site-wide Head), a `<link>` to `css/team-daim.css` on jsDelivr
+pinned to a commit SHA, and the card script: email click-to-copy, the
+`data-email` tooltip mirror, and the Joined year-month trim (Notion has no such
+date format; the same trap and pattern as `js/projects-date-format.js`).
+Swapping the card design is swapping that stylesheet URL for another pinned
+ref; the ref rules are in [`hosting.md`](hosting.md#jsdelivr). The script
+observes `documentElement`, not `body`, because at head time body does not
+exist yet. The cards are the five member views styled into vertical profile
+cards; which views and what they show is in [`notion.md`](notion.md#collections).
 
-**Replacing the CSS in Super removes the old rules with it.** While the previous
-page CSS is still pasted, its `display: flex` rows and `order` overrides cascade
-against the new file and the cards shatter; that is what a half-updated Code editor
-looks like. Paste the whole file, not a diff.
+**A leftover paste in the CSS tab fights the linked file.** Both apply at once,
+equal-specificity ties resolve by an order nobody controls, and the cards
+shatter; that is what a half-updated Code editor looks like. A design change is
+a URL change, with the tab kept empty.
 
 ### Scoping by collection class
 
