@@ -161,6 +161,55 @@
       > .notion-text:has(.notion-link[href^="tel:"])::before {
         content: '\f095';
       }
+
+      /* the SNS row: the link's domain is the marker, and the anchor text
+         hides inside a member-card-style icon circle (people.css is the
+         model). Add a network by adding a domain and a glyph here */
+      > .notion-text:has(.notion-link[href*="linkedin.com"]),
+      > .notion-text:has(.notion-link[href*="scholar.google"]),
+      > .notion-text:has(.notion-link[href*="facebook.com"]) {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+
+        .notion-link {
+          position: relative;
+          display: block;
+          width: var(--icon-w);
+          height: var(--icon-w);
+          border: 1px solid var(--rule);
+          border-radius: 50%;
+          font-size: 0;
+          color: transparent;
+          transition: border-color 0.15s;
+
+          /* the glyph is its own layer over the whole circle, so the hidden
+             label text node cannot push it off center */
+          &::before {
+            content: var(--glyph);
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font: var(--fa-font-brands);
+            font-size: 15px;
+            color: #5b6670;
+            transition: color 0.15s;
+          }
+
+          &:hover {
+            border-color: var(--accent);
+          }
+
+          &:hover::before {
+            color: var(--accent-deep);
+          }
+        }
+
+        .notion-link[href*="linkedin.com"] { --glyph: '\f0e1'; }
+        .notion-link[href*="scholar.google"] { --glyph: '\e63b'; }
+        .notion-link[href*="facebook.com"] { --glyph: '\f39e'; }
+      }
     }
 
     /* the right column: Career and Education entries under their headings,
