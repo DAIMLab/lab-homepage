@@ -32,8 +32,10 @@ one view of a separate alumni database, each under its own H1. The Professor
 section is plain blocks: a `gray_bg` callout card (anatomy in
 [`super.md`](super.md#people-page)) whose name link leads to the full profile
 page `Young Jae Jang` (`3c811c7b703c8185bf7dd09096c94e73`), a child of People
-kept inside the collapsed `Subpages` toggle and served at
-`/team-daim/young-jae-jang` until its own Super slug is set.
+kept inside the collapsed `Subpages` toggle, served at `/people/professor`
+(scope class `page__people-professor`, Head tab `code/professor.html`). The
+profile page holds the identity columns, bulleted sections mirroring the card,
+and a `### Media` heading over a gallery linked view of `Professor Media`.
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
@@ -64,6 +66,15 @@ gone and its single `All` view emits no switcher.
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
+
+`Professor Media` (`f040a63431724614aaf533f8d6046ff6`, data source
+`df40c248-2fc0-4c66-aaa5-f5bb22623d65`) holds the professor's media
+appearances: one row per item, the cover as the thumbnail (external URLs into
+`assets/professor/media/` at a pinned commit) and `Source URL` as where the
+card clicks through to; the press-photo rows wait for their article URLs. The
+database was created workspace-private (the MCP cannot create inside toggles),
+so it waits for the manual drag into the Control panel, and the gallery view's
+Card preview needs the manual Page cover click.
 
 The alumni records live in their own database, data source
 `ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block

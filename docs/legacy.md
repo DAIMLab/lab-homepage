@@ -211,10 +211,11 @@ should show, it needs a column.
 ## The Professor's Page
 
 `/21` is the only per-person page the legacy site had, and it is server-rendered, so
-`curl` reads it. Its content is now the `Young Jae Jang` row's page body: Career,
-Education, Awards, Teaching and the 2010 book, plus a Contact list rebuilt from the
-page's own obfuscated `yjang (at) kaist (dot) edu`. Its `Media` section was empty and
-was dropped.
+`curl` reads it. Its content is now the `Young Jae Jang` page under People: Career,
+Education, Awards, Teaching and the 2010 book, plus a Contact list. Its `Media`
+section is a lightGallery widget of eleven items, five YouTube videos and six press
+photos; they migrated into the `Professor Media` database (`notion.md`), thumbnails
+in `assets/professor/media/`, with the photos' source-article URLs still unknown.
 
 Every other name on `/Team` links to `/122325403`, one shared page carrying all of
 them, which is why no student has a page of their own to migrate and why the new page

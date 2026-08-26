@@ -1,0 +1,232 @@
+/* The professor's profile page at /people/professor: the People card's
+   full-page counterpart (docs/super.md, "People Page"). The same markers
+   drive it: mailto:/tel: links draw the contact glyphs, link domains the
+   SNS circles, Notion bullets the blue entry bars, and an image's caption
+   URL is what makes a media tile click through to its source. */
+
+.page__people-professor {
+  --photo-radius: 12px;
+  --icon-w: 34px;
+  --ink: #212121;
+  --sub: #3c454d;
+  --muted: #7a858e;
+  --rule: #e3e8ec;
+  --accent: #00b8ff;
+  --accent-deep: #0479b8;
+  --kaist-blue: #004191;
+
+  .notion-link {
+    text-decoration: none;
+  }
+
+  /* ---- the identity columns: portrait left, titles and contacts right ---- */
+
+  .notion-root > .notion-column-list {
+    align-items: center;
+    margin-bottom: 8px;
+
+    .notion-image {
+      margin: 0;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: var(--photo-radius);
+      }
+    }
+
+    .notion-text {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* the bold line is the role label, the italic one the department */
+    .notion-text:has(> strong) {
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      color: var(--kaist-blue);
+    }
+
+    .notion-text:has(> em) {
+      margin-bottom: 12px;
+      color: var(--muted);
+    }
+
+    /* the contact rows, marked by their own mailto:/tel: links */
+    .notion-text:has(.notion-link[href^="mailto:"]),
+    .notion-text:has(.notion-link[href^="tel:"]) {
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      column-gap: 8px;
+      align-items: baseline;
+      margin-top: 4px;
+
+      .notion-link {
+        color: inherit;
+      }
+
+      &::before {
+        font: var(--fa-font-solid);
+        font-size: 12px;
+        color: var(--kaist-blue);
+        content: '\f0e0';
+        justify-self: center;
+      }
+    }
+
+    .notion-text:has(.notion-link[href^="tel:"])::before {
+      content: '\f095';
+    }
+
+    /* the SNS row, marked by its link domains */
+    .notion-text:has(.notion-link[href*="linkedin.com"]),
+    .notion-text:has(.notion-link[href*="scholar.google"]),
+    .notion-text:has(.notion-link[href*="facebook.com"]) {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+
+      .notion-link {
+        position: relative;
+        display: block;
+        width: var(--icon-w);
+        height: var(--icon-w);
+        border: 1px solid var(--rule);
+        border-radius: 50%;
+        font-size: 0;
+        color: transparent;
+        transition: border-color 0.15s;
+
+        &::before {
+          content: var(--glyph);
+          position: absolute;
+          inset: 0;
+          display: grid;
+          place-items: center;
+          font: var(--fa-font-brands);
+          font-size: 15px;
+          color: #5b6670;
+          transition: color 0.15s;
+        }
+
+        &:hover {
+          border-color: var(--accent);
+        }
+
+        &:hover::before {
+          color: var(--accent-deep);
+        }
+      }
+
+      .notion-link[href*="linkedin.com"] { --glyph: '\f0e1'; }
+      .notion-link[href*="scholar.google"] { --glyph: '\e63b'; }
+      .notion-link[href*="facebook.com"] { --glyph: '\f39e'; }
+    }
+  }
+
+  /* ---- the sections: headings over Notion-bulleted entries ---- */
+
+  .notion-root > .notion-heading {
+    margin: 36px 0 12px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .notion-root > .notion-bulleted-list {
+    margin: 0;
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  .notion-list-item {
+    margin: 6px 0;
+    padding: 0 0 0 12px;
+    border-left: 2px solid var(--kaist-blue);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--sub);
+  }
+
+  /* ---- the media gallery: a linked view of the Professor Media database
+     (docs/notion.md). The row's cover is the thumbnail; the Source URL
+     property's anchor stretches over the card, so a click goes to the
+     original article or video, never the row page (a row without a URL
+     goes nowhere until one is filled in). A media-video-* cover filename
+     earns the play badge. Card preview must be clicked to Page cover in
+     Notion; the DSL cannot set it ---- */
+
+  .collection-df40c2482fc04c66aaa5f5bb22623d65 {
+    --collection-card-cover-size-small: 230px;
+    --collection-card-cover-size-medium: 230px;
+    --collection-card-cover-size-large: 230px;
+    --collection-card-gap: 18px;
+
+    .notion-collection__header-wrapper {
+      display: none;
+    }
+
+    .notion-collection-card {
+      position: relative;
+      border-radius: var(--photo-radius);
+      overflow: hidden;
+
+      .notion-collection-card__cover img {
+        aspect-ratio: 16 / 10;
+        /* the cover's object-fit arrives as an inline style */
+        object-fit: cover !important;
+        transition: scale 0.2s;
+      }
+
+      &:hover .notion-collection-card__cover img {
+        scale: 1.04;
+      }
+
+      /* the row page is noise; only the source link navigates */
+      .notion-collection-card__anchor {
+        pointer-events: none;
+      }
+
+      .notion-property__url a {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        font-size: 0;
+      }
+
+      &:has(img[src*="/media-video-"])::after {
+        content: '\f04b';
+        position: absolute;
+        inset: 0 0 auto;
+        aspect-ratio: 16 / 10;
+        display: grid;
+        place-items: center;
+        font: var(--fa-font-solid);
+        font-size: 14px;
+        color: #fff;
+        background: radial-gradient(circle at center, rgb(0 0 0 / 45%) 26px, transparent 27px);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .notion-collection-card__content {
+        padding: 10px 12px 12px;
+      }
+
+      .notion-property__title {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--ink);
+      }
+
+      .notion-property__text {
+        margin-top: 2px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+    }
+  }
+}
