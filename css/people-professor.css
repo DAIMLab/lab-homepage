@@ -71,7 +71,7 @@
         margin: 0;
 
         img {
-          width: 80% !important;
+          width: 90% !important;
           height: auto;
           border-radius: var(--photo-radius);
         }
