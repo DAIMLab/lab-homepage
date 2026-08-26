@@ -197,6 +197,13 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   GitHub `property-5a4c6b3d`, LinkedIn `property-7956403c`, CV `property-45444558`, Joined
   `property-75566065` (via the generic `.notion-property__date`).
 
+The professor's profile page (`/people/professor`, scope `.page__people-professor`) is the card's
+full-page counterpart: Head tab `code/professor.html` links Font Awesome and `css/professor.css`, and
+the same markers drive it (mailto:/tel: glyph rows, SNS domains, bulleted entries). Its Media gallery
+is a linked view whose cards click through to the source: the `Source URL` property's anchor
+stretches over the card at `z-index: 2` while the card's own row-page anchor loses pointer-events,
+and a `media-video-*` cover filename earns the play badge.
+
 ## Known Quirks
 
 - `/fit=scale-down` and `/quality=90` 404s: Super's `srcset` carries unencoded commas, splitting one
