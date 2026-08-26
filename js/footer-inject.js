@@ -1,4 +1,5 @@
-/* Footer band injector. Super Code editor > Head tab (site-wide), in <script>.
+/* Footer band injector. Loaded by code/site.html through a pinned jsDelivr
+   <script src defer>, not pasted.
 
    Clones the blue callout from /footer, a same-origin page Super server-renders;
    Notion itself is unreadable from the browser. Appending before React hydrates
