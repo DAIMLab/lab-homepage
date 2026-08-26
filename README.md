@@ -26,19 +26,22 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | Path | Goes into |
 | --- | --- |
 | `code/site.html` | site-wide Head tab, pasted as-is |
+| `code/home.html` | Home per-page Head tab, pasted as-is |
+| `code/lab-news.html` | Lab News per-page Head tab, pasted as-is |
+| `code/projects.html` | Projects per-page Head tab, pasted as-is |
 | `code/team-daim.html` | People per-page Head tab, pasted as-is |
-| `css/super-custom.css` | site-wide CSS tab |
-| `css/footer.css` | site-wide CSS tab, the footer band |
-| `css/home.css` | Home per-page CSS tab |
-| `css/lab-news.css` | Lab News per-page CSS tab |
-| `css/projects.css` | Projects per-page CSS tab |
+| `css/super-custom.css` | linked from `code/site.html`, pinned jsDelivr URL |
+| `css/footer.css` | linked from `code/site.html`, pinned jsDelivr URL |
+| `css/home.css` | linked from `code/home.html`, pinned jsDelivr URL |
+| `css/lab-news.css` | linked from `code/lab-news.html`, pinned jsDelivr URL |
+| `css/projects.css` | linked from `code/projects.html`, pinned jsDelivr URL |
 | `css/team-daim.css` | linked from `code/team-daim.html`, pinned jsDelivr URL |
 | `js/email-copy.js` | linked from `code/site.html`, pinned jsDelivr URL |
-| `js/team-daim-date-trim.js` | linked from `code/site.html`, pinned jsDelivr URL |
 | `js/footer-inject.js` | linked from `code/site.html`, pinned jsDelivr URL |
-| `js/home-video-play.js` | Home per-page Body tab, wrapped in `<script>` |
-| `js/lab-news-load-more.js` | Lab News per-page Body tab, wrapped in `<script>` |
-| `js/projects-date-format.js` | Projects per-page Body tab, wrapped in `<script>` |
+| `js/lab-news-load-more.js` | linked from `code/site.html`, pinned jsDelivr URL |
+| `js/home-video-play.js` | linked from `code/home.html`, pinned jsDelivr URL |
+| `js/projects-date-format.js` | linked from `code/projects.html`, pinned jsDelivr URL |
+| `js/team-daim-date-trim.js` | linked from `code/team-daim.html`, pinned jsDelivr URL |
 | `assets/` | referenced by public URL, not pasted |
 | `reference/ascent-template.css` | vendored Super template CSS, read-only |
 

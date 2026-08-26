@@ -458,11 +458,9 @@ Three things to keep true:
    is the footer's selector in both the CSS and the script.
 3. The clone is appended to `.notion-root`, and Super routes between pages on the
    client, so the script re-places it under a `MutationObserver`.
-4. The Head tab takes HTML, not JS. The file ships as a pinned
-   `<script src>` line in `code/site.html`; pasting it bare would make the
-   browser treat it as a text node — no execution, no error, nothing in the
-   console. `js/home-video-play.js` in the Home Body tab still needs its
-   `<script>` wrapper for the same reason.
+4. The Head tab takes HTML, not JS. Scripts enter as pinned `<script src>`
+   lines in `code/` files; bare JS pasted into a Head tab becomes a text
+   node — no execution, no error, nothing in the console.
 
 The band is absent from the served HTML everywhere except `/footer`, so crawlers
 miss it. Footer links carry little SEO weight and the band sits below the fold, so
@@ -470,7 +468,7 @@ nothing visible shifts.
 
 ## Home Page
 
-`css/home.css` is the whole Home CSS tab and covers two sections.
+`css/home.css`, linked from `code/home.html`, covers two sections.
 
 The hero is a top-level gray callout (`bg-gray-light`, not `bg-gray`) holding the
 video and two headings, broken full-bleed and pulled up under the navbar. Its bare
@@ -555,8 +553,8 @@ own `::after` because counters read in document order.
 
 ## Projects Page
 
-`css/projects.css` is the whole Projects CSS tab; `js/projects-date-format.js` is its
-Body tab. Three columns of figure-topped cards, chosen over a coverless index and a
+`css/projects.css` and `js/projects-date-format.js` load from
+`code/projects.html` by pinned URL. Three columns of figure-topped cards, chosen over a coverless index and a
 split card after seeing all three rendered with the real 16 rows.
 
 | Property | Class | On the card |
@@ -722,9 +720,9 @@ at once, or the harness's own error is read as the code's.
 Two injection targets. The page's Head tab is `code/team-daim.html`: Font
 Awesome (only this page uses it), `css/team-daim.css` on jsDelivr pinned to a
 commit SHA, and the date-trim script; the page's CSS and Body tabs stay empty.
-The site-wide Head is `code/site.html`, carrying `js/email-copy.js` —
-deliberately generic, no page scoping, so any database's email property, on
-any page, gets click-to-copy and the `data-email` tooltip mirror.
+The site-wide Head is `code/site.html`, one of whose scripts, `js/email-copy.js`, is
+deliberately generic with no page scoping, so any database's email property,
+on any page, gets click-to-copy and the `data-email` tooltip mirror.
 `js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such
 date format; the same trap as `js/projects-date-format.js`). It sits in the
 page head as an accepted trade-off: per-page script tags never run on
@@ -845,7 +843,8 @@ is enough while no other date property is shown.
 
 ## Hero Video Autoplay
 
-`js/home-video-play.js` is the Home Body tab, pasted inside `<script>`. Notion emits `<video controls>` and
+`js/home-video-play.js` loads from `code/home.html` by pinned URL; a
+client-side entry to Home misses it until a reload, the accepted gap. Notion emits `<video controls>` and
 Super adds only `autoPlay`; no browser honours autoplay without `muted`, so the clip
 never starts on its own, and loop and controls are not covered either.
 

@@ -83,9 +83,9 @@ a Notion embed. HTML files are served as
 
 For CSS under iteration, pasting into Super's CSS tab stays the quick route: it
 applies instantly and avoids a render-blocking external request. A settled design
-graduates to a pinned jsDelivr `<link>` instead, which is how `css/team-daim.css`
-and the card scripts ship: the page's Head tab (`code/team-daim.html`) names
-one pinned URL per file, and swapping the design or behavior is swapping that
-URL for another pinned ref. The commit has to be
+graduates to a pinned jsDelivr `<link>` instead, which is how every file in
+`css/` and `js/` now ships: each `code/` Head file names one pinned URL per
+file, and swapping a design or behavior is swapping that URL for another
+pinned ref. The commit has to be
 pushed before jsDelivr can see it, and merging the branch keeps the SHA reachable
 for good.

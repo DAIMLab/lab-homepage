@@ -1,10 +1,8 @@
-<!-- Site-wide Head, the site Code editor's Head tab. Scripts cannot live in a
-     page's own Head: Super re-injects link tags on client-side entry but does
-     not execute script tags, so a per-page script never runs for a visitor
-     who arrives through the navbar (measured 2026-08-27, docs/super.md).
-     Site-wide, each script runs once on whatever page loads first and its
-     listeners follow the client-side navigation; each guards itself by
-     selector. Changing a script is two commits: the file, then this file
-     pointing at its new SHA. -->
-<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@e0701b7c4ff09f99e9c696d11e96dba12f704bb5/js/email-copy.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@5a5449507009541b095d48e0ae385e2344039b1c/js/footer-inject.js" defer></script>
+<!-- Site-wide Head tab; the site CSS and Body tabs stay empty. Scripts live
+     here, not per-page, because Super does not execute per-page script tags
+     on client-side entry (docs/super.md); each guards itself by selector. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b872136d64b6a7dbefd87d4d7f68fbb49f82c993/css/super-custom.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b872136d64b6a7dbefd87d4d7f68fbb49f82c993/css/footer.css">
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b872136d64b6a7dbefd87d4d7f68fbb49f82c993/js/email-copy.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b872136d64b6a7dbefd87d4d7f68fbb49f82c993/js/footer-inject.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b872136d64b6a7dbefd87d4d7f68fbb49f82c993/js/lab-news-load-more.js" defer></script>
