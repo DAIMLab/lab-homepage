@@ -7,7 +7,7 @@
    .page__people scope. */
 
 .page__people {
-  --prof-photo-w: 220px;
+  --prof-photo-w: 242px;
   --prof-rule: #e4e7ec;
 
   /* Gray, because the other callout colors are taken: the footer band owns
@@ -61,7 +61,7 @@
        natural size. The middle term keeps the track a fixed share of the
        full-row card */
     .notion-column:first-child {
-      flex: 0 0 clamp(var(--prof-photo-w), 24%, 320px);
+      flex: 0 0 clamp(var(--prof-photo-w), 26.5%, 352px);
 
       .notion-image {
         margin: 0;
@@ -74,8 +74,9 @@
       }
 
       /* the identity block under the portrait reads by position: the blue
-         label, the name, the muted department line, then the contact lines;
-         reordering those blocks in Notion breaks the mapping */
+         label, the name, the muted department line, then three contact rows
+         (two emails, one phone); reordering those blocks in Notion breaks
+         the mapping */
       > .notion-text {
         margin: 0;
         font-size: 14px;
@@ -108,6 +109,29 @@
 
       > .notion-text:nth-of-type(3) {
         margin-bottom: 10px;
+      }
+
+      /* the contact rows: a Font Awesome glyph (the page loads FA for the
+         member cards) in a fixed icon column, so wrapped text stays aligned
+         after it */
+      > .notion-text:nth-of-type(n + 4) {
+        display: grid;
+        grid-template-columns: 16px 1fr;
+        column-gap: 8px;
+        margin-top: 3px;
+
+        &::before {
+          font: var(--fa-font-solid);
+          font-size: 12px;
+          line-height: inherit;
+          color: var(--kaist-blue);
+          content: '\f0e0';
+          justify-self: center;
+        }
+      }
+
+      > .notion-text:nth-of-type(6)::before {
+        content: '\f095';
       }
     }
 
@@ -148,7 +172,7 @@
 
       .notion-column:first-child {
         flex-basis: auto;
-        width: min(300px, 100%);
+        width: min(330px, 100%);
       }
     }
   }
