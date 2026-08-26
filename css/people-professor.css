@@ -70,7 +70,7 @@
         margin: 0;
 
         img {
-          width: 72%;
+          width: 65%;
           height: auto;
           border-radius: var(--photo-radius);
         }
