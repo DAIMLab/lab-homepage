@@ -200,9 +200,13 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 The professor's profile page (`/people/professor`, scope `.page__people-professor`) is the card's
 full-page counterpart: Head tab `code/professor.html` links Font Awesome and `css/professor.css`, and
 the same markers drive it (mailto:/tel: glyph rows, SNS domains, bulleted entries). Its Media gallery
-is a linked view whose cards click through to the source: the `Source URL` property's anchor
-stretches over the card at `z-index: 2` while the card's own row-page anchor loses pointer-events,
-and a `media-video-*` cover filename earns the play badge.
+is a linked view styled after Super's Gallery PosterGrid snippet (vendored:
+`reference/super-postergrid.css`): the cover fills a fixed-height card, the title rides a bottom
+gradient, and the outlet and date (trimmed to `YYYY.MM` by `js/date-format.js`) slide up on hover. The
+cards click through to the source: the `Source URL` property's anchor stretches over the card while the
+row-page anchor loses pointer-events and doubles as the badge layer; only linked cards animate, a
+`media-video-*` cover filename earns the play badge and other linked cards the corner arrow. The
+coverless header's 140px spacer trims to 40px.
 
 ## Known Quirks
 
