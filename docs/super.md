@@ -768,7 +768,11 @@ everywhere, so the cards in a row end alike; fill Email when adding a member.
 ### Font Awesome instead of inline SVG
 
 Email and each URL property carry `--glyph` and `--glyph-font`; one `::before` rule
-renders them. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
+renders them. The button must not be a grid that centers its own content: the hidden
+address or URL text node is a grid item too, takes a row of its own, and the glyph
+rides ~9px above center. The `::before` is instead an absolute layer over the whole
+circle and centers the glyph with its own grid; measured on a local repro
+2026-08-26, the offset went from (+0.0, -9.1)px to (+0.0, -0.1)px. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
 `\f15c`, calendar `\f133`, envelope `\f0e0`, chain-link `\f0c1` as the fallback
 for a URL property added later. The `--fa-font-*` shorthands come from the FA
 stylesheet itself.

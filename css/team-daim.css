@@ -176,8 +176,8 @@
 
     .notion-property__email,
     .notion-property__url a.notion-link {
-      display: grid;
-      place-items: center;
+      position: relative;
+      display: block;
       width: 34px;
       height: 34px;
       border: 1px solid var(--rule);
@@ -186,8 +186,14 @@
       color: transparent;
       transition: border-color 0.15s;
 
+      /* The glyph is its own layer over the whole circle, so the hidden
+         address or URL text node cannot push it off center */
       &::before {
         content: var(--glyph);
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
         font: var(--glyph-font);
         font-size: 15px;
         color: #5b6670;
