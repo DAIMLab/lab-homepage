@@ -169,13 +169,13 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 - Professor card: a `gray_bg` callout (blue is the footer's, brown the carousel's) that
   `css/people-professor.css` turns into a full-row white card (`width: 100%`, own `box-sizing:
   border-box`), replacing the columns' inline `calc()` widths with flex (`--column-spacing` does not
-  resolve inside a callout) and keeping the photo track on a definite `clamp()` basis (a flexible one
-  makes the image's percentage width cyclic); the portrait width carries `!important` against Super's
-  `width: 100% !important` on `.page-width` images. The left column reads by position under the portrait:
-  blue Professor label, name, muted department, then three FA-glyph contact rows lifted to `z-index: 1`
-  over the card link so the addresses stay selectable; the right column is the section headings with blue
-  entry bars. The name link stretches over the card via `::after`; reordering the left column's blocks or
-  removing that link breaks the card.
+  resolve inside a callout) and keeping the photo track on a definite `clamp()` basis (a flexible one goes
+  cyclic); the portrait width carries `!important` against Super's `width: 100% !important` on
+  `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
+  muted department, then three FA-glyph contact rows lifted to `z-index: 1` over the card link so the
+  addresses stay selectable; the right column is the section headings with blue entry bars. The name link
+  stretches over the card via `::after`; reordering the left column's blocks or removing that link breaks
+  the card.
 - Motto: one quote block, its attribution a nested bullet the CSS restyles (`“` glyph, muted line);
   un-nesting it, or adding a second, breaks the design.
 - Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
