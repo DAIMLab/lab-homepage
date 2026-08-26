@@ -561,8 +561,8 @@ own `::after` because counters read in document order.
 
 ## Projects Page
 
-`css/projects.css` and `js/projects-date-format.js` load from
-`code/projects.html` by pinned URL. Three columns of figure-topped cards, chosen over a coverless index and a
+`css/projects.css` loads from `code/projects.html`; the Period formatting is
+a rule in the site-wide `js/date-format.js`. Three columns of figure-topped cards, chosen over a coverless index and a
 split card after seeing all three rendered with the real 16 rows.
 
 | Property | Class | On the card |
@@ -664,7 +664,7 @@ crop.
 ### The date needs JavaScript
 
 Notion emits `2018/03/01 → 2025/01/01` and offers no year-month date format; CSS
-cannot cut text out of a string. `js/projects-date-format.js` rewrites it to
+cannot cut text out of a string. A rule in `js/date-format.js` rewrites it to
 `2018.03 – 2025.01` and re-runs under a `MutationObserver`, because Super swaps
 `.notion-root` on client-side navigation and the original format comes back otherwise.
 
@@ -693,9 +693,9 @@ are there too.
 
 ### Load More
 
-`js/lab-news-load-more.js`, linked from `code/lab-news.html`, shows 18 of the 57
-cards and adds 18 per click; a client-side entry misses it, and the tail stays
-hidden until a reload, the accepted gap. This is
+`js/lab-news-load-more.js`, site-wide in `code/global.html` and guarded by
+`.page__lab-news`, shows 18 of the 57 cards and adds 18 per click on any entry
+path. This is
 display control, not paging: Super server-renders every card into the initial HTML,
 with no cursor, no `hasMore`, and no load-more markup, so nothing here shrinks the
 document. What it buys is a first screen that ends after six rows, and covers that are
@@ -727,24 +727,18 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Two injection targets. The page's Head tab is `code/team-daim.html`: Font
-Awesome (only this page uses it), `css/team-daim.css` on jsDelivr pinned to a
-commit SHA, and the date-trim script; the page's CSS and Body tabs stay empty.
-The site-wide Head is `code/global.html`, one of whose scripts, `js/email-copy.js`, is
-deliberately generic with no page scoping, so any database's email property,
-on any page, gets click-to-copy and the `data-email` tooltip mirror.
-`js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such
-date format; the same trap as `js/projects-date-format.js`). It sits in the
-page head as an accepted trade-off: per-page script tags never run on
-client-side entry (see the section above), so a visitor arriving through the
-navbar sees full dates until a reload. Its `.page__team-daim` scope still
-guards the dates of Projects and Lab News for a visitor who navigates on
-from this page. Swapping design
-or behavior is swapping the matching URL for another pinned ref (rules in
-[`hosting.md`](hosting.md#jsdelivr)); a change is two commits, the file
-first, then the head file pointing at its new SHA. Both scripts observe
-`documentElement`, not `body`, so they survive head placement, and `defer`
-keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
+Two injection targets. The page's Head tab is `code/team-daim.html`, links
+only: Font Awesome (only this page uses it) and `css/team-daim.css` pinned to
+a commit SHA; the page's CSS and Body tabs stay empty. The behavior is
+site-wide in `code/global.html`: `js/email-copy.js` is deliberately generic
+with no page scoping, so any database's email property, on any page, gets
+click-to-copy and the `data-email` tooltip mirror, and a `.page__team-daim`
+rule in `js/date-format.js` cuts Joined to year-month (Notion has no such
+date format). Swapping design or behavior is swapping the matching URL for
+another pinned ref (rules in [`hosting.md`](hosting.md#jsdelivr)); a change
+is two commits, the file first, then the head file pointing at its new SHA.
+The scripts observe `documentElement`, not `body`, so they survive head
+placement, and `defer` keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
 cards; which views and what they show is in [`notion.md`](notion.md#collections).
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
@@ -853,8 +847,8 @@ is enough while no other date property is shown.
 
 ## Hero Video Autoplay
 
-`js/home-video-play.js` loads from `code/home.html` by pinned URL; a
-client-side entry to Home misses it until a reload, the accepted gap. Notion emits `<video controls>` and
+`js/home-video-play.js` is site-wide in `code/global.html`, guarded by
+`.page__index`, so the hero plays on any entry path. Notion emits `<video controls>` and
 Super adds only `autoPlay`; no browser honours autoplay without `muted`, so the clip
 never starts on its own, and loop and controls are not covered either.
 
