@@ -10,6 +10,7 @@ everything except images:
 | Images (png/jpg/svg/webp) | `https://raw.githubusercontent.com/DAIMLab/lab-homepage/main/assets/…` | `image/png`, works |
 | Video (mp4) | Notion upload, or jsDelivr | raw returns `application/octet-stream`, which `<video>` will not play |
 | CSS / JS files | jsDelivr, or paste into Super's Code editor | raw returns `text/plain`, which `nosniff` blocks for `<link>` and `<script>` |
+| Font Awesome | `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css` | third-party icon font for the People cards, version pinned in the URL |
 
 ## Video Does Not Have to Live Here
 

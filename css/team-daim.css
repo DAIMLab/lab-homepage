@@ -1,0 +1,218 @@
+/* People, /team-daim. The page's per-page Code editor, CSS tab. Not site-wide.
+   Five linked gallery views of `People` become vertical profile cards, max three
+   a row, centered with even spacing. Scoped by collection class, so the Alumni
+   collection (its own database) is untouched. Icons are Font Awesome codepoints;
+   js/team-daim-icons.html loads the font. The four `property-<id>` hooks are
+   Homepage, GitHub, LinkedIn, CV, matched by href off the rendered page, not by
+   SHOW order. Anatomy and rationale: docs/super.md, "People Page". */
+
+.page__team-daim {
+  --card-w: 280px;
+  --ink: #212121;
+  --sub: #3c454d;
+  --muted: #7a858e;
+  --rule: #e3e8ec;
+  --accent: #00b8ff;
+  --accent-deep: #0479b8;
+
+  .notion-quote {
+    margin-bottom: 8px;
+    border-inline-start: 0;
+    padding-inline-start: 0;
+    font-size: 17px;
+    font-style: normal;
+    line-height: 1.5;
+    color: var(--sub);
+  }
+
+  .notion-heading {
+    margin: 46px 0 0;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .notion-collection__header-wrapper {
+    display: none;
+  }
+
+  .collection-2d2152b853b942359c0f0b1a2225fb85 {
+    .notion-collection-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 44px 0;
+      max-width: 1000px;
+      margin-inline: auto;
+      padding-top: 28px;
+      border-top: 0;
+    }
+
+    .notion-collection-card {
+      width: var(--card-w);
+      max-width: 100%;
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgb(16 42 67 / 8%);
+      cursor: default;
+    }
+
+    .notion-collection-card__anchor {
+      pointer-events: none;
+    }
+
+    .notion-collection-card__cover {
+      width: 100%;
+      height: auto !important;
+      min-height: 0;
+      aspect-ratio: 1;
+      object-fit: cover !important;
+      object-position: center 22% !important;
+    }
+
+    .notion-collection-card > div:not([class]) {
+      width: 100%;
+      height: auto !important;
+      min-height: 0 !important;
+      aspect-ratio: 1;
+      background: #f4f6f7;
+    }
+
+    .notion-collection-card__content {
+      display: grid;
+      grid-template-columns: repeat(4, 34px) 1fr;
+      justify-content: start;
+      align-content: start;
+      column-gap: 10px;
+      padding: 16px 20px 18px;
+    }
+
+    .notion-collection-card__property {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-height: 0;
+
+      &.title {
+        margin-bottom: 8px;
+        font-size: 16.5px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--ink);
+      }
+    }
+
+    .notion-property__select {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 10px;
+
+      .notion-pill {
+        position: relative;
+        max-width: 100%;
+        padding: 0 0 0 14px;
+        background: none;
+        border-radius: 0;
+        font-size: 13px;
+        line-height: 1.45;
+        white-space: normal;
+        color: var(--sub);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 7px;
+          left: 0;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: var(--accent);
+        }
+      }
+    }
+
+    /* Joined and Email: muted text lines with a Font Awesome glyph in front */
+    .notion-property__date,
+    .notion-property__email {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--muted);
+
+      &::before {
+        content: var(--glyph);
+        font: var(--fa-font-regular);
+        font-size: 13px;
+      }
+    }
+
+    .notion-property__date {
+      --glyph: '\f133'; /* calendar */
+      margin-bottom: 4px;
+    }
+
+    .notion-property__email {
+      --glyph: '\f0e0'; /* envelope */
+    }
+
+    /* The URL properties: one circular icon button each, on a shared row */
+    .notion-property__url {
+      --glyph: '\f0c1'; /* link, fallback for a URL property added later */
+      --glyph-font: var(--fa-font-solid);
+      grid-column: auto;
+      width: auto;
+      margin-top: 14px;
+
+      &.property-6e4c7e43 { --glyph: '\f015'; }                                    /* Homepage: house */
+      &.property-5a4c6b3d { --glyph: '\f09b'; --glyph-font: var(--fa-font-brands); } /* GitHub */
+      &.property-7956403c { --glyph: '\f0e1'; --glyph-font: var(--fa-font-brands); } /* LinkedIn */
+      &.property-45444558 { --glyph: '\f15c'; --glyph-font: var(--fa-font-regular); } /* CV: file-lines */
+
+      a.notion-link {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid var(--rule);
+        border-radius: 50%;
+        font-size: 0;
+        color: transparent;
+        transition: border-color 0.15s;
+
+        &::before {
+          content: var(--glyph);
+          font: var(--glyph-font);
+          font-size: 15px;
+          color: #5b6670;
+          transition: color 0.15s;
+        }
+
+        &:hover {
+          border-color: var(--accent);
+        }
+
+        &:hover::before {
+          color: var(--accent-deep);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    & {
+      --card-w: min(280px, 100%);
+    }
+
+    .collection-2d2152b853b942359c0f0b1a2225fb85 .notion-collection-gallery {
+      gap: 32px 0;
+    }
+  }
+}

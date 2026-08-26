@@ -26,8 +26,9 @@ Team DAIM is the People page; the navbar labels it `People` while the Notion tit
 and so the `h1`, still reads `Team DAIM`. The slug lives in Super under Site Pages
 and a Notion rename does not move it, so renaming the page is safe but has to be
 done knowing the slug stays `team-daim`. It once split into `Professor`, `Students`
-and `Alumni` sub-pages; all three are in the trash. The page carries no member
-database; that is being rebuilt from scratch.
+and `Alumni` sub-pages; all three are in the trash. The page now carries five linked
+views of the `People` database plus one view of a separate alumni database, each
+under its own H2. The Professor section is still plain blocks, no view.
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
@@ -56,6 +57,12 @@ gone and its single `All` view emits no switcher.
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
+| People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
+
+The alumni records live in their own database, data source
+`ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block
+`3c711c7b703c8182b96cc60edf70784f`. It keeps the migrated `/36` rows and waits for
+its own design pass.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -74,6 +81,29 @@ is the first of its month. Covers are page covers, as in Lab News.
 All 16 rows are `Completed`, which is what the legacy board says, so the page carries
 one view and no switcher. The legacy All / 진행중 / 완료 tabs come back as extra views
 the day a project is `Ongoing`; that is what makes Super emit a dropdown.
+
+`People` schema: `Name`, `Role` (select: PostDoc / Ph.D. Student / M.S. Student /
+Intern / Staff), `Research` (multi-select), `Joined` (date, format `YYYY/MM/DD`),
+`Email`, and four URLs, `Homepage`, `LinkedIn`, `GitHub`, `CV`, plus `Picture`
+(files). Card photos come from `Picture` through the view's `COVER` setting, not
+from page covers; the files were attached in the Notion UI, since MCP still cannot
+write a files property. `Research` options are the lab's own vocabulary from the
+legacy `/122325403` page; add options freely.
+
+Five linked gallery views, one per `Role`, each under its own H2:
+
+| View | Filter | Collection block | View id |
+| --- | --- | --- | --- |
+| PostDoc | `Role = PostDoc` | `3c711c7b703c8187ace6c37fa9346118` | `3c711c7b-703c-8114-b487-000c10a50b41` |
+| Ph.D. Students | `Role = Ph.D. Student` | `3c711c7b703c81aa93fec1c673eeaf6e` | `3c711c7b-703c-81ef-80d2-000ca8e369e5` |
+| M.S. Students | `Role = M.S. Student` | `3c711c7b703c8193980fc3578650f37a` | `3c711c7b-703c-81a4-a484-000cacc0b6a5` |
+| Interns | `Role = Intern` | `3c711c7b703c81538b25fccbbebf29b0` | `3c711c7b-703c-8131-8e0d-000cb250edae` |
+| Staff | `Role = Staff` | `3c711c7b703c81778100de046ebd0847` | `3c711c7b-703c-818d-b03b-000c2ceee7c3` |
+
+Every view shows, in order: `Name`, `Research`, `Joined`, `Email`, `Homepage`,
+`GitHub`, `LinkedIn`, `CV`. SHOW order is the render order on the card, and the
+card CSS depends on it. The student and intern views sort `Joined` ASC; PostDoc
+and Staff keep manual order.
 
 ### Limits worth not re-deriving
 

@@ -698,6 +698,87 @@ own, script or no script, because React restores the stylesheet from the flight
 payload. Inject the script by patching the HTML, and the CSS at runtime — never both
 at once, or the harness's own error is read as the code's.
 
+## People Page
+
+Two injection targets: `css/team-daim.css` in the page's CSS tab, and
+`js/team-daim-icons.html` in its Head tab, which loads Font Awesome from cdnjs with
+the version pinned in the URL. The cards are the five member views styled into
+vertical profile cards; which views and what they show is in
+[`notion.md`](notion.md#collections).
+
+**Replacing the CSS in Super removes the old rules with it.** While the previous
+page CSS is still pasted, its `display: flex` rows and `order` overrides cascade
+against the new file and the cards shatter; that is what a half-updated Code editor
+looks like. Paste the whole file, not a diff.
+
+### Scoping by collection class
+
+Super stamps every collection wrapper with `collection-<data-source-id>`. All five
+member views share `collection-2d2152b853b942359c0f0b1a2225fb85`, the alumni
+database is `collection-ba0889c2963a4d1389e411420c4bf2b0`, so one class scopes the
+card styling to members and leaves Alumni alone. No per-block selectors needed.
+
+### The card Super emits
+
+```html
+<div class="notion-collection-card gallery no-click">
+  <a class="notion-collection-card__anchor" …>Name</a>
+  <span style="display:contents">
+    <img class="notion-collection-card__cover large"
+         style="object-fit:contain;object-position:center 50%">
+  </span>
+  <div class="notion-collection-card__content notion-collection-card__property-list">
+    <div class="notion-property notion-property__title …">Name</div>
+    <div class="notion-property notion-property__select wrap property-61796943 …">…pills…</div>
+    …one div per shown property, in SHOW order…
+  </div>
+</div>
+```
+
+Three traps live in that markup. The cover's `object-fit` and `object-position` are
+**inline styles**, so the square-crop override needs `!important`. The email
+property renders as plain text with no anchor, which is why Email is a text line
+and not an icon button. And Super's `.notion-pill` is nowrap, so a long research
+option clips at the card edge without `white-space: normal`.
+
+### Layout: three a row, centered
+
+`.notion-collection-gallery` becomes `flex` + `space-evenly` with fixed 280px cards
+and `max-width: 1000px; margin-inline: auto`. Four cards cannot fit in 1000px, so
+three is the natural cap; a two-card row spreads wider on its own, which is the
+requested behavior, and a phone gets one centered column. No media query does the
+counting.
+
+### The icon row without a wrapper
+
+The property list is a grid, `repeat(4, 34px) 1fr`. Every property spans `1 / -1`
+except the URL properties, which auto-place into the four 34px tracks and land side
+by side on one row. The `1fr` tail exists because without it the spanning rows
+would be as narrow as the icon tracks.
+
+### Font Awesome instead of inline SVG
+
+Each URL property carries `--glyph` and `--glyph-font`; one `::before` rule renders
+them. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
+`\f15c`, calendar `\f133`, envelope `\f0e0`, chain-link `\f0c1` as the fallback
+for a URL property added later. The `--fa-font-*` shorthands come from the FA
+stylesheet itself.
+
+The `property-<id>` hooks, matched by href off the rendered page, not by SHOW
+order:
+
+| Property | Hook |
+| --- | --- |
+| Research | `property-61796943` |
+| Email | `property-3a50566e` |
+| Homepage | `property-6e4c7e43` |
+| GitHub | `property-5a4c6b3d` |
+| LinkedIn | `property-7956403c` |
+| CV | `property-45444558` |
+
+`Joined` has no hook yet; it first renders after the next Sync, and the generic
+`.notion-property__date` covers it since no other date property is shown.
+
 ## Hero Video Autoplay
 
 `js/home-video-play.js` is the Home Body tab, pasted inside `<script>`. Notion emits `<video controls>` and
