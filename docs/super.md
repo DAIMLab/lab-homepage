@@ -700,9 +700,10 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Two injection targets: `css/team-daim.css` in the page's CSS tab, and
+Three injection targets: `css/team-daim.css` in the page's CSS tab,
 `js/team-daim-icons.html` in its Head tab, which loads Font Awesome from cdnjs with
-the version pinned in the URL. The cards are the five member views styled into
+the version pinned in the URL, and `js/team-daim-email-copy.html` in its Body tab,
+which makes the email icon copy the address on click. The cards are the five member views styled into
 vertical profile cards; which views and what they show is in
 [`notion.md`](notion.md#collections).
 
@@ -737,29 +738,37 @@ card styling to members and leaves Alumni alone. No per-block selectors needed.
 
 Three traps live in that markup. The cover's `object-fit` and `object-position` are
 **inline styles**, so the square-crop override needs `!important`. The email
-property renders as plain text with no anchor, which is why Email is a text line
-and not an icon button. And Super's `.notion-pill` is nowrap, so a long research
-option clips at the card edge without `white-space: normal`.
+property renders as plain text with no anchor, so the property div itself is styled
+into the icon button and the Body-tab script supplies the click. And Super's
+`.notion-pill` is nowrap, so a long research option clips at the card edge without
+`white-space: normal`.
 
 ### Layout: three a row, centered
 
-`.notion-collection-gallery` becomes `flex` + `space-evenly` with fixed 280px cards
-and `max-width: 1000px; margin-inline: auto`. Four cards cannot fit in 1000px, so
-three is the natural cap; a two-card row spreads wider on its own, which is the
-requested behavior, and a phone gets one centered column. No media query does the
-counting.
+`.notion-collection-gallery` becomes `flex` + `space-evenly` with fixed 320px cards
+and `max-width: 1060px; margin-inline: auto`; the page's article is `full-width`, so
+the column runs to `--layout-max-width`, 1100px. Four cards cannot fit, so three is
+the natural cap; a two-card row spreads wider on its own, which is the requested
+behavior, and a phone gets one centered column. No media query does the counting.
+
+The photo is not an edge-to-edge cover: it sits inset at a fixed `--photo-w`, 260px,
+centered. That is what lets the card widen for the text without scaling the
+portraits, which are low-resolution ID photos; `object-fit: cover` over a wider
+full-bleed box has no choice but to zoom them.
 
 ### The icon row without a wrapper
 
-The property list is a grid, `repeat(4, 34px) 1fr`. Every property spans `1 / -1`
-except the URL properties, which auto-place into the four 34px tracks and land side
-by side on one row. The `1fr` tail exists because without it the spanning rows
-would be as narrow as the icon tracks.
+The property list is a grid, `repeat(5, 34px) 1fr`. Every property spans `1 / -1`
+except Email and the URL properties, which auto-place into the five 34px tracks and
+land side by side on one row, Email first because SHOW order is render order. The
+`1fr` tail exists because without it the spanning rows would be as narrow as the
+icon tracks. Email on every card is also what keeps the bottom row present
+everywhere, so the cards in a row end alike; fill Email when adding a member.
 
 ### Font Awesome instead of inline SVG
 
-Each URL property carries `--glyph` and `--glyph-font`; one `::before` rule renders
-them. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
+Email and each URL property carry `--glyph` and `--glyph-font`; one `::before` rule
+renders them. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
 `\f15c`, calendar `\f133`, envelope `\f0e0`, chain-link `\f0c1` as the fallback
 for a URL property added later. The `--fa-font-*` shorthands come from the FA
 stylesheet itself.
