@@ -64,11 +64,13 @@
     .notion-column:first-child {
       flex: 0 0 clamp(var(--prof-photo-w), 33%, 445px);
 
+      /* the portrait fills 80% of the track, so widening the column does
+         not scale the photo one-to-one */
       .notion-image {
         margin: 0;
 
         img {
-          width: 100%;
+          width: 80%;
           height: auto;
           border-radius: var(--photo-radius);
         }
