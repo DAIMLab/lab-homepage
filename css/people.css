@@ -26,7 +26,7 @@
 
     .notion-collection-gallery {
       aspect-ratio: auto !important;
-      height: clamp(340px, 56vh, 640px);
+      height: clamp(408px, 67vh, 768px);
     }
 
     .notion-collection-card__content {
