@@ -104,6 +104,7 @@ Confirmed against the docs. Each of these replaced code this repo used to carry:
 | Fonts | Design → Typography → Primary / Secondary, from Google Fonts or an upload (`/upload-fonts`) | a Head-tab `<link>` to Google Fonts and a NanumSquare CDN stylesheet |
 | Palette | Design → Colors, manual or a preset | per-color CSS |
 | Pretty URLs, SEO, redirects, password, hiding a page via 404 | per-page settings (`/site-pages`) | none |
+| Image carousel | the Gallery Carousel snippet, a gallery database inside a brown callout (`docs.super.so/code-snippets/gallery-carousel`), loaded from `code/global.html` | none |
 
 Font upload is included on Personal, so both faces go in Design → Typography and the
 Head tab carries no font code. Measured on the live site: Super serves Montserrat and
@@ -740,6 +741,15 @@ is two commits, the file first, then the head file pointing at its new SHA.
 The scripts observe `documentElement`, not `body`, so they survive head
 placement, and `defer` keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
 cards; which views and what they show is in [`notion.md`](notion.md#collections).
+
+The hero carousel at the top is Super's own Gallery Carousel snippet at work:
+a gallery linked view of the `Team Photos` database sits inside a brown
+callout, which is exactly the shape the snippet turns into a carousel. One
+row per slide, the page cover as the photo and the title as the caption; the
+snippet is self-guarding and observer-driven, so it is site-wide safe and
+initializes on any entry path. Two Notion-side steps stay manual: the view's
+Card preview must be clicked to Page cover (the DSL cannot set it), and the
+database waits for a drag into the Control panel.
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
 equal-specificity ties resolve by an order nobody controls, and the cards

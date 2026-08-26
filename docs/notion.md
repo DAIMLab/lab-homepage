@@ -58,11 +58,20 @@ gone and its single `All` view emits no switcher.
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
+| Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
 
 The alumni records live in their own database, data source
 `ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block
 `3c711c7b703c8182b96cc60edf70784f`. It keeps the migrated `/36` rows and waits for
 its own design pass.
+
+`Team Photos` holds the People hero carousel: one row per slide, the page
+cover as the photo (external URLs into `assets/carousel/` at a pinned commit)
+and the title as the caption, shown through a gallery linked view inside a
+brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). The database was
+created workspace-private because the MCP cannot create databases inside
+columns or toggles, so moving it into the Control panel is the usual manual
+drag.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
