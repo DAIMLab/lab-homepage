@@ -12,15 +12,13 @@
   --accent: #00b8ff;
   --accent-deep: #0479b8;
 
-  /* The hero carousel: first thing under the navbar, edge to edge. The root
-     turns flex-column so the callout can ride above the page header */
-  .notion-root.full-width {
-    display: flex;
-    flex-direction: column;
+  /* The hero carousel: first thing under the navbar, edge to edge. The page
+     icon and title are hidden, as on Home; the carousel is the header */
+  .notion-header {
+    display: none !important;
   }
 
   .notion-callout.bg-brown-light {
-    order: -1;
     position: relative;
     left: 50%;
     width: 100vw;
@@ -49,13 +47,6 @@
       color: #fff;
       text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
     }
-  }
-
-  /* The page header: icon and title centered, as on the legacy site */
-  .notion-header__title-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
   /* The lab motto: a large centered quote, the attribution paragraph under
