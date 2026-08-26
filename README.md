@@ -30,7 +30,7 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `code/lab-news.html` | Lab News per-page Head tab, pasted as-is |
 | `code/projects.html` | Projects per-page Head tab, pasted as-is |
 | `code/team-daim.html` | People per-page Head tab, pasted as-is |
-| `css/super-custom.css` | linked from `code/site.html`, pinned jsDelivr URL |
+| `css/global.css` | linked from `code/site.html`, pinned jsDelivr URL |
 | `css/footer.css` | linked from `code/site.html`, pinned jsDelivr URL |
 | `css/home.css` | linked from `code/home.html`, pinned jsDelivr URL |
 | `css/lab-news.css` | linked from `code/lab-news.html`, pinned jsDelivr URL |

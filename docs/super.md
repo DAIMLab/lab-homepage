@@ -110,7 +110,7 @@ Two things that are **not** native, checked so nobody re-checks them:
 
 ## Fonts
 
-Design → Typography is the loader, `css/super-custom.css` decides what paints what.
+Design → Typography is the loader, `css/global.css` decides what paints what.
 
 Both faces are uploaded on the Personal plan and named in Typography, currently
 Primary NanumSquare and Secondary Montserrat. That selection is what ships their
@@ -121,7 +121,7 @@ loaded.
 
 Which face paints which character is not Typography's decision here. Super's two
 slots split by role, primary against secondary, and a role cannot know whether a
-run is Latin or Korean. `css/super-custom.css` overrides both variables with one
+run is Latin or Korean. `css/global.css` overrides both variables with one
 stack, `Montserrat, NanumSquare, …`, and lets the browser fall through per
 character. Measured with a canvas: "Lab News Conference" through that stack renders
 at Montserrat's 174.53px rather than NanumSquare's 157.68px, and
@@ -206,7 +206,7 @@ navbar on the root value.
 ### Label weight
 
 Super has no navbar weight variable; `--text-weight` is the site body weight and
-would move every paragraph with it. `css/super-custom.css` sets
+would move every paragraph with it. `css/global.css` sets
 `.super-navbar__item { font-weight: 600 }` instead.
 
 600 rather than 500 or 700 because it has to be a real face, not a synthesised
@@ -221,7 +221,7 @@ weight both faces share if that ever matters.
 Super dims its navbar links: `.super-navbar__item` carries `opacity: 0.7`, lifted
 to 1 by `.super-navbar__item:hover, .super-navbar__item.active`. The colour is a
 true `#fff`, but 0.7 of it over the hero measured as grey 199 rather than 255, which
-is what made the menu look thin. `css/super-custom.css` sets `opacity: 1`.
+is what made the menu look thin. `css/global.css` sets `opacity: 1`.
 
 Composited against the scrim behind the menu, luminance 68:
 
