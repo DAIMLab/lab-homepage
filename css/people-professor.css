@@ -64,13 +64,14 @@
     .notion-column:first-child {
       flex: 0 0 clamp(var(--prof-photo-w), 33%, 445px);
 
-      /* the portrait fills 80% of the track, so widening the column does
-         not scale the photo one-to-one */
+      /* the portrait takes a fraction of the track, so widening the column
+         does not scale the photo one-to-one. !important, because Super's
+         .notion-image.page-width img rule is width: 100% !important */
       .notion-image {
         margin: 0;
 
         img {
-          width: 52%;
+          width: 80% !important;
           height: auto;
           border-radius: var(--photo-radius);
         }
@@ -121,6 +122,10 @@
         display: grid;
         grid-template-columns: 16px 1fr;
         column-gap: 8px;
+        /* lifted over the stretched name link, so the addresses stay
+           selectable for copying */
+        position: relative;
+        z-index: 1;
         /* baseline, because the glyph's line box is smaller than the text's
            and top-aligns above it otherwise */
         align-items: baseline;

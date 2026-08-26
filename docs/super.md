@@ -6,7 +6,7 @@ Measured facts about how Super renders this site (plan: **Personal**). Docs at <
 ## Injection Model
 
 - Super's Code editor has three tabs, **CSS**, **Head**, **Body**, each site-wide and per page.
-- **Notion edits need a Sync** in the Super dashboard. An unsynced page is indistinguishable from
+  **Notion edits need a Sync** in the Super dashboard: an unsynced page is indistinguishable from
   broken CSS, and no cache is involved (it is Super's build), so check sync before devtools.
 - **Per-page `<script>` tags do not run on client-side entry**: Super re-injects a page's `<link>` tags on
   navigation but never executes its scripts. Scripts go site-wide (`code/global.html`), guard themselves
@@ -171,11 +171,13 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   widths with flex (`--column-spacing` does not resolve inside a callout) and keeping the photo track on a
   definite `clamp()` basis (a flexible one makes the image's percentage width cyclic). The left column
   reads by position under the portrait: blue Professor label, name, muted department, then three contact
-  rows (two emails, phone) drawn as FA-glyph grids. The right column is the Career/Education headings
-  with blue entry bars. The name link stretches over the card via `::after`; reordering the left
-  column's blocks or removing that link breaks the card.
-- Motto: one quote block, its attribution a bullet nested inside; the CSS draws the `“` glyph and
-  restyles the bullet, so un-nesting it, or adding a second, breaks the design.
+  rows (two emails, phone) drawn as FA-glyph grids, lifted to `z-index: 1` over the card link so the
+  addresses stay selectable. The right column is the section headings with blue entry bars. The name
+  link stretches over the card via `::after`; the portrait width carries `!important` against Super's
+  `.notion-image.page-width img { width: 100% !important }`. Reordering the left column's blocks, or
+  removing the name link, breaks the card.
+- Motto: one quote block, its attribution a nested bullet the CSS restyles (`“` glyph, muted line);
+  un-nesting it, or adding a second, breaks the design.
 - Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
   the email property renders with no anchor and, on a `no-click` card, needs `pointer-events: auto`;
   `.notion-pill` is nowrap. Layout: the gallery becomes flex `space-evenly` with 320px cards and
@@ -192,9 +194,8 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Known Quirks
 
-- `GET /fit=scale-down 404` and `/quality=90 404`: Super emits `images.spr.so` URLs with unencoded commas
-  in `srcset`, so the browser splits one URL into three candidates. Cosmetic; `src` renders fine. Home's
-  copy is the leftover Ascent logo in the Control panel; deleting that block removes both.
-- Rows past 100 are untested (Notion pages its queries at 100; Super documents no limit and emits no
-  load-more markup). Lab News is settled at **57** rows, all rendered; the sitemap lists one more because
-  a database template page gets its own URL. Count cards or query the data source, not sitemap entries.
+- `/fit=scale-down` and `/quality=90` 404s: Super's `srcset` carries unencoded commas, splitting one
+  `images.spr.so` URL into three. Cosmetic; `src` renders fine; deleting the Ascent logo left in the
+  Control panel removes Home's copy.
+- Rows past 100 are untested (Notion pages its queries at 100; Super emits no load-more markup). Lab
+  News is settled at **57** rows, all rendered; the sitemap's extra entry is the database template page.
