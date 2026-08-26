@@ -685,7 +685,9 @@ are there too.
 
 ### Load More
 
-`js/lab-news-load-more.js` shows 18 of the 57 cards and adds 18 per click. This is
+`js/lab-news-load-more.js`, linked from `code/lab-news.html`, shows 18 of the 57
+cards and adds 18 per click; a client-side entry misses it, and the tail stays
+hidden until a reload, the accepted gap. This is
 display control, not paging: Super server-renders every card into the initial HTML,
 with no cursor, no `hasMore`, and no load-more markup, so nothing here shrinks the
 document. What it buys is a first screen that ends after six rows, and covers that are

@@ -38,7 +38,7 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `css/team-daim.css` | linked from `code/team-daim.html`, pinned jsDelivr URL |
 | `js/email-copy.js` | linked from `code/global.html`, pinned jsDelivr URL |
 | `js/footer-inject.js` | linked from `code/global.html`, pinned jsDelivr URL |
-| `js/lab-news-load-more.js` | linked from `code/global.html`, pinned jsDelivr URL |
+| `js/lab-news-load-more.js` | linked from `code/lab-news.html`, pinned jsDelivr URL |
 | `js/home-video-play.js` | linked from `code/home.html`, pinned jsDelivr URL |
 | `js/projects-date-format.js` | linked from `code/projects.html`, pinned jsDelivr URL |
 | `js/team-daim-date-trim.js` | linked from `code/team-daim.html`, pinned jsDelivr URL |
