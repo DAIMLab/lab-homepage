@@ -114,11 +114,14 @@
       }
     }
 
+    /* min-height reserves two single-line topics (2 x 13px x 1.45 + 4px gap),
+       so one-topic and two-topic cards stay the same height */
     .notion-property__select {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
+      min-height: 42px;
       margin-bottom: 12px;
 
       .notion-pill {
