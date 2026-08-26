@@ -1,13 +1,9 @@
 <!-- People, /team-daim. Paste into the page's Code editor, Head tab, and leave
-     the CSS and Body tabs empty; this one file is the page's whole injection,
-     and everything it names is a pinned URL. Font Awesome feeds the card icons
-     (only this page uses it, so it left the site-wide Head). The design and
-     the two scripts load from jsDelivr pinned to commits: changing a file
-     means pushing its commit, then swapping its URL here (ref rules in
-     docs/hosting.md). email-copy.js is generic and reusable on any page with
-     an email property; the date trim is page-scoped for the reason commented
-     inside it. -->
+     the CSS and Body tabs empty. Link tags only: Super re-injects these on
+     client-side entry, so they hold on every path into the page, while script
+     tags would not execute there and live site-wide instead
+     (js/site-head.html). Font Awesome feeds the card icons; the design loads
+     from jsDelivr pinned to a commit, and swapping the design is swapping
+     that URL (ref rules in docs/hosting.md). -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@f6400e5aec6dd36470d5cb02befb347cd008d9dc/css/team-daim.css">
-<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@e0701b7c4ff09f99e9c696d11e96dba12f704bb5/js/email-copy.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@e0701b7c4ff09f99e9c696d11e96dba12f704bb5/js/team-daim-date-trim.js" defer></script>

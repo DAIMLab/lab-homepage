@@ -1,0 +1,10 @@
+<!-- Site-wide Head, the site Code editor's Head tab. Scripts cannot live in a
+     page's own Head: Super re-injects link tags on client-side entry but does
+     not execute script tags, so a per-page script never runs for a visitor
+     who arrives through the navbar (measured 2026-08-27, docs/super.md).
+     Site-wide, each script runs once on whatever page loads first and its
+     listeners follow the client-side navigation; each guards itself by
+     selector. Changing a script is two commits: the file, then this file
+     pointing at its new SHA. -->
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@e0701b7c4ff09f99e9c696d11e96dba12f704bb5/js/email-copy.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@e0701b7c4ff09f99e9c696d11e96dba12f704bb5/js/team-daim-date-trim.js" defer></script>

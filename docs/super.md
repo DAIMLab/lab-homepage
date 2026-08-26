@@ -37,6 +37,23 @@ for f in notion static super; do curl -sO "https://daim.super.site/styles/$f.css
 That is how the People page CSS was measured, and it caught a `minmax()` overflow
 that would otherwise have shipped.
 
+## Per-Page Scripts Do Not Run on Client-Side Entry
+
+Super navigates client-side (a `window` marker set on one page survives a
+navbar click to the next), and on entry it re-injects a page's custom `<link>`
+tags — duplicated, harmlessly — but does **not** execute its `<script>` tags.
+Measured 2026-08-27 on `/team-daim`: loaded directly, the page's scripts had
+stamped 63 `data-email` attributes and trimmed the dates; entered from Home
+through the navbar, zero attributes and untrimmed dates, with the stylesheet
+link applied both ways.
+
+So per-page injection is for CSS and `<link>` tags only. A script belongs in
+the **site-wide** Head or Body (`js/site-head.html`), where it runs on
+whatever page the visitor lands on first and its listeners and observers
+follow the client-side navigation. The flip side: a site-wide script keeps
+running on every page, so it must guard itself by selector — a page-scoped one
+like `.page__team-daim`, or a markup hook that only its target pages emit.
+
 ## Classes
 
 `notion-*` for rendered Notion blocks, `super-*` for Super's own chrome (navbar,
@@ -700,24 +717,22 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-One injection target: `js/team-daim-head.html` in the page's Head tab; the CSS
-and Body tabs stay empty. The file is four pinned URLs: Font Awesome (only
-this page uses it, so it left the site-wide Head), `css/team-daim.css`, and
-two `defer` scripts. `js/email-copy.js` is deliberately generic, no page
-scoping: any database's email property gets click-to-copy and the `data-email`
-tooltip mirror, and another page reuses it by linking the same URL.
-`js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such date
-format; the same trap as `js/projects-date-format.js`) and keeps its
-`.page__team-daim` scope on purpose: Super navigates client-side (measured
-2026-08-27, a window marker set on `/team-daim` survived a navbar click to
-`/projects`), so a per-page head script stays alive on the next page, and
-unscoped it would eat the day off Projects' Period dates and Lab News' dates.
-Import-only-on-one-page is not a scope on this site.
-Swapping design or behavior is swapping the matching URL for another pinned
-ref (rules in [`hosting.md`](hosting.md#jsdelivr)); a change is two commits,
-the file first, then the head file pointing at its new SHA. Both scripts
-observe `documentElement`, not `body`, so they survive head placement, and
-`defer` keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
+Two injection targets. The page's Head tab is `js/team-daim-head.html`, link
+tags only: Font Awesome (only this page uses it) and `css/team-daim.css` on
+jsDelivr pinned to a commit SHA; the page's CSS and Body tabs stay empty. The
+site-wide Head is `js/site-head.html`, the two `defer` scripts — per-page
+script tags never run on client-side entry, see the section above.
+`js/email-copy.js` is deliberately generic, no page scoping: any database's
+email property, on any page, gets click-to-copy and the `data-email` tooltip
+mirror. `js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no
+such date format; the same trap as `js/projects-date-format.js`) and its
+`.page__team-daim` scope is what makes it safe site-wide: unscoped it would
+eat the day off Projects' Period dates and Lab News' dates. Swapping design
+or behavior is swapping the matching URL for another pinned ref (rules in
+[`hosting.md`](hosting.md#jsdelivr)); a change is two commits, the file
+first, then the head file pointing at its new SHA. Both scripts observe
+`documentElement`, not `body`, so they survive head placement, and `defer`
+keeps them off the parser's critical path. The cards are the five member views styled into vertical profile
 cards; which views and what they show is in [`notion.md`](notion.md#collections).
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
