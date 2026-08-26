@@ -48,10 +48,10 @@ body,
   left: 50%;
   width: 100vw;
   margin: 0 0 0 -50vw;
-  height: clamp(440px, 82vh, 880px);
+  height: clamp(440px, 100vh, 1000px);
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 0 clamp(28px, 5vw, 48px) clamp(28px, 5vw, 48px);
+  border-radius: 0 0 clamp(28px, 10vw, 50px) clamp(28px, 5vw, 48px);
   overflow: hidden;
   background: #1c1c1e;
 
