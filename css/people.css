@@ -55,25 +55,50 @@
     }
   }
 
-  /* The lab motto: a large centered quote, the attribution paragraph under
-     it in small muted text, as on the legacy site */
+  /* The lab motto: an oversized opening mark on its own line, the quote
+     centered under it, and the attribution smaller still. The attribution is
+     a single bulleted item nested inside the quote block, marker hidden; the
+     Notion text carries no quotation marks, the glyph stands in for them */
   .notion-quote {
-    margin: 24px 0 0;
+    margin: 30px 0 0;
     border-inline-start: 0;
     padding-inline-start: 0;
     text-align: center;
-    font-size: clamp(24px, 2.6vw, 32px);
-    font-style: italic;
-    font-weight: 700;
-    line-height: 1.4;
+    font-size: clamp(22px, 2.4vw, 30px);
+    /* normal is load-bearing: an inherited italic slants the whole block
+       otherwise */
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.45;
     color: var(--ink);
+
+    &::before {
+      content: '\201C';
+      display: block;
+      margin-bottom: 12px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 0.55;
+      color: var(--accent);
+    }
   }
 
-  .notion-quote + .notion-text {
-    margin-bottom: 8px;
-    text-align: center;
+  .notion-quote .notion-bulleted-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .notion-quote .notion-list-item {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
     font-size: 14px;
+    line-height: 1.6;
     color: var(--muted);
+
+    &::before { content: '\2014\00a0'; }
   }
 
   .notion-heading {
