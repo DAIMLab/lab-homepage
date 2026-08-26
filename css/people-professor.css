@@ -7,7 +7,7 @@
    .page__people scope. */
 
 .page__people {
-  --prof-photo-w: 266px;
+  --prof-photo-w: 306px;
   --prof-rule: #e4e7ec;
 
   /* Gray, because the other callout colors are taken: the footer band owns
@@ -61,7 +61,7 @@
        natural size. The middle term keeps the track a fixed share of the
        full-row card */
     .notion-column:first-child {
-      flex: 0 0 clamp(var(--prof-photo-w), 29%, 387px);
+      flex: 0 0 clamp(var(--prof-photo-w), 33%, 445px);
 
       .notion-image {
         margin: 0;
@@ -174,7 +174,7 @@
 
       .notion-column:first-child {
         flex-basis: auto;
-        width: min(360px, 100%);
+        width: min(410px, 100%);
       }
     }
   }
