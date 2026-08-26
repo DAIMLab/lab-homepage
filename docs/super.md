@@ -753,6 +753,15 @@ hidden tab; the snippet itself has no autoplay. Two Notion-side steps stay manua
 Card preview must be clicked to Page cover (the DSL cannot set it), and the
 database waits for a drag into the Control panel.
 
+The lab motto under the carousel is one Notion quote block with the
+attribution as a **bulleted item nested inside it** — that nesting is what
+`css/people.css` styles: the blockquote gets a large `“` glyph from
+`::before` (the Notion text itself carries no quotation marks), and the
+bullet loses its marker and shrinks into the muted `— Name` line. Un-nesting
+the attribution, or adding a second bullet, breaks the design; the quote
+carries an explicit `font-style: normal` because an inherited italic slants
+the whole block otherwise.
+
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,
 equal-specificity ties resolve by an order nobody controls, and the cards
 shatter; that is what a half-updated Code editor looks like. A design change is
