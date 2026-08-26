@@ -1,10 +1,9 @@
-/* People, /team-daim. The page's per-page Code editor, CSS tab. Not site-wide.
-   Five linked gallery views of `People` become profile cards, max three a row,
-   centered with even spacing; the photo is inset at a fixed width so the card
-   can widen without scaling it. Email and the four URL properties are circular
-   icon buttons; js/team-daim-icons.html loads Font Awesome and
-   js/team-daim-cards.html adds email
-   click-to-copy and trims Joined to year-month. docs/super.md. */
+/* People, /team-daim. Served through the pinned jsDelivr <link> named in
+   code/team-daim.html, not pasted. Five linked gallery views of `People`
+   become profile cards, max three a row, centered, the photo inset at a fixed
+   width so the card can widen without scaling it. Email and the four URL
+   properties are circular icon buttons (Font Awesome); the behavior lives in
+   js/email-copy.js and js/team-daim-date-trim.js, site-wide. docs/super.md. */
 
 .page__team-daim {
   --card-w: 320px;
