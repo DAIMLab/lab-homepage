@@ -229,12 +229,43 @@
       pointer-events: auto;
 
       &.copied {
+        /* check exists only in the solid face of FA Free; regular shows tofu */
+        --glyph: '\f00c';
+        --glyph-font: var(--fa-font-solid);
         border-color: var(--accent);
       }
 
       &.copied::before {
-        content: '\f00c'; /* check */
         color: var(--accent-deep);
+      }
+
+      /* Tooltip: the address on hover, Copied! after a click. The Body script
+         mirrors the hidden text node into data-email; without it no bubble */
+      &[data-email]::after {
+        content: attr(data-email);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 0;
+        padding: 5px 10px;
+        border-radius: 6px;
+        background: var(--ink);
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: nowrap;
+        color: #fff;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.15s;
+        pointer-events: none;
+      }
+
+      &[data-email]:hover::after {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      &.copied::after {
+        content: 'Copied!';
       }
     }
 

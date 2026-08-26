@@ -3,8 +3,10 @@
      a click copies the address and holds `.copied` for a moment, which
      css/team-daim.css paints as a check mark. Joined renders as YYYY/MM/DD and
      Notion has no year-month format to pick (the Projects trap, see
-     js/projects-date-format.js), so the day is cut here; the observer re-runs
-     it because Super swaps .notion-root on client-side navigation. -->
+     js/projects-date-format.js), so the day is cut here. The address is also
+     mirrored into data-email, which css/team-daim.css shows as the hover
+     tooltip; the observer re-runs both because Super swaps .notion-root on
+     client-side navigation. -->
 <script>
   document.addEventListener('click', (e) => {
     const email = e.target.closest('.page__team-daim .notion-property__email');
@@ -19,12 +21,18 @@
   });
 
   (() => {
-    const run = () =>
+    const run = () => {
       document.querySelectorAll('.page__team-daim .notion-property__date .date')
         .forEach((el) => {
           const next = el.textContent.replace(/(\d{4}\/\d{2})\/\d{2}/, '$1');
           if (next !== el.textContent) el.textContent = next;
         });
+      document.querySelectorAll('.page__team-daim .notion-property__email:not([data-email])')
+        .forEach((el) => {
+          const address = el.textContent.trim();
+          if (address) el.dataset.email = address;
+        });
+    };
 
     run();
     new MutationObserver(run).observe(document.body, { childList: true, subtree: true });

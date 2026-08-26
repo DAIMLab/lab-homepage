@@ -786,8 +786,16 @@ rides ~9px above center. The `::before` is instead an absolute layer over the wh
 circle and centers the glyph with its own grid; measured on a local repro
 2026-08-26, the offset went from (+0.0, -9.1)px to (+0.0, -0.1)px. Codepoints: house `\f015`, GitHub `\f09b`, LinkedIn `\f0e1`, file-lines
 `\f15c`, calendar `\f133`, envelope `\f0e0`, chain-link `\f0c1` as the fallback
-for a URL property added later. The `--fa-font-*` shorthands come from the FA
-stylesheet itself.
+for a URL property added later, and check `\f00c` for the copied state. The
+`--fa-font-*` shorthands come from the FA stylesheet itself. FA Free carries
+most icons only in the solid face: the check does not exist in regular and
+renders as tofu there, which is why `.copied` swaps `--glyph-font` to solid
+instead of only swapping the codepoint.
+
+The email button also carries a CSS tooltip: the Body-tab script mirrors the
+hidden address into `data-email`, an `::after` bubble shows it via `attr()` on
+hover and switches to `Copied!` while `.copied` holds. No attribute, no bubble,
+so the tooltip degrades away if the script is missing.
 
 The `property-<id>` hooks, matched by href off the rendered page, not by SHOW
 order:
