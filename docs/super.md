@@ -708,9 +708,11 @@ scoping: any database's email property gets click-to-copy and the `data-email`
 tooltip mirror, and another page reuses it by linking the same URL.
 `js/team-daim-date-trim.js` cuts Joined to year-month (Notion has no such date
 format; the same trap as `js/projects-date-format.js`) and keeps its
-`.page__team-daim` scope on purpose: Super navigates client-side, a per-page
-head script stays alive on the next page, and unscoped it would eat the day
-off Projects' Period dates before that page's own formatter matches them.
+`.page__team-daim` scope on purpose: Super navigates client-side (measured
+2026-08-27, a window marker set on `/team-daim` survived a navbar click to
+`/projects`), so a per-page head script stays alive on the next page, and
+unscoped it would eat the day off Projects' Period dates and Lab News' dates.
+Import-only-on-one-page is not a scope on this site.
 Swapping design or behavior is swapping the matching URL for another pinned
 ref (rules in [`hosting.md`](hosting.md#jsdelivr)); a change is two commits,
 the file first, then the head file pointing at its new SHA. Both scripts
