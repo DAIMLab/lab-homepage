@@ -1,6 +1,6 @@
 /* Click-to-copy for any .notion-property__email, unscoped on purpose, plus a
    data-email mirror the page CSS shows as a tooltip. Survives hydration and
-   client-side navigation. Loaded by code/site.html; docs/super.md. */
+   client-side navigation. Loaded by code/global.html; docs/super.md. */
 
 document.addEventListener('click', (e) => {
   const email = e.target.closest('.notion-property__email');

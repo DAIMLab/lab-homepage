@@ -1,5 +1,5 @@
 /* Hides the Lab News tail behind a 더 보기 button; CSS makes the first cut
-   until data-total hands it to .is-beyond. Site-wide via code/site.html since
+   until data-total hands it to .is-beyond. Site-wide via code/global.html since
    per-page scripts skip client-side entry. docs/super.md, "Lab News Page". */
 
 (() => {

@@ -1,6 +1,6 @@
 /* Clones the blue footer callout from /footer, a page Super server-renders.
    Appending before React hydrates throws #418, so placement waits for an idle
-   frame. Loaded by code/site.html; docs/super.md, "Site-Wide Footer". */
+   frame. Loaded by code/global.html; docs/super.md, "Site-Wide Footer". */
 
 (() => {
   const SOURCE = '/footer';
