@@ -1,8 +1,8 @@
-/* People, /team-daim. Served by the pinned jsDelivr <link> in
+/* People, /people. Served by the pinned jsDelivr <link> in
    code/people.html. Five linked views become profile cards; email and URL
    properties are icon buttons. Anatomy and traps: docs/super.md, "People Page". */
 
-.page__team-daim {
+.page__people {
   --card-w: 320px;
   --photo-w: 260px;
   --ink: #212121;
@@ -97,6 +97,140 @@
     color: var(--muted);
 
     &::before { content: '\2014\00a0'; }
+  }
+
+  /* The professor card: a blue callout under the Professor heading holding a
+     two-column bio, photo left, name-label-department and Career/Education
+     right (docs/super.md, "People Page"). The blue tint marks the block in
+     Notion; here it becomes a soft card with a KAIST-blue crown, and the
+     name link stretches over the whole card for the click-through */
+  .notion-callout.bg-blue-light {
+    position: relative;
+    max-width: 1060px;
+    margin: 28px auto 0;
+    padding: clamp(22px, 3vw, 38px);
+    background: #f5f8fc;
+    border: 1px solid #d9e4f1;
+    border-top: 3px solid var(--kaist-blue);
+    border-radius: 18px;
+    box-shadow: 0 10px 28px rgb(16 42 67 / 8%);
+    transition: box-shadow 0.15s, translate 0.15s;
+
+    &:hover {
+      box-shadow: 0 16px 36px rgb(16 42 67 / 14%);
+      translate: 0 -2px;
+    }
+
+    .notion-callout__icon {
+      display: none;
+    }
+
+    /* the card owns its two-column layout: the inline calc() widths Super
+       stamps on the columns depend on --column-spacing, which does not reach
+       inside a callout, so they are neutralized and flex takes over */
+    .notion-callout__content {
+      display: block;
+    }
+
+    .notion-column-list {
+      display: flex;
+      gap: 34px;
+      align-items: flex-start;
+    }
+
+    .notion-column {
+      width: auto !important;
+      margin: 0 !important;
+    }
+
+    /* the photo column is a fixed 220px track; a flexible track would make
+       the image's percentage width cyclic and let it fall back to its
+       596px natural size */
+    .notion-column:first-child {
+      flex: 0 0 220px;
+    }
+
+    .notion-column:last-child {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notion-image {
+      margin: 0;
+    }
+
+    .notion-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .notion-column-list {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .notion-column:first-child {
+        flex-basis: auto;
+      }
+
+      .notion-image img {
+        width: 220px;
+        max-width: 100%;
+      }
+    }
+
+    a.notion-link {
+      color: var(--ink);
+      text-decoration: none;
+
+      /* the whole card is the click target */
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+      }
+    }
+
+    .notion-column > .notion-text:first-child {
+      margin: 0 0 2px;
+      font-size: clamp(22px, 2.2vw, 27px);
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .notion-column > .notion-text:nth-child(2) {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--kaist-blue);
+    }
+
+    .notion-column > .notion-text:nth-child(3) {
+      margin: 2px 0 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .notion-heading {
+      margin: 24px 0 10px;
+      padding-bottom: 0;
+      border-bottom: 0;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .notion-heading ~ .notion-text {
+      margin: 6px 0;
+      padding-left: 12px;
+      border-left: 3px solid var(--kaist-blue);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--sub);
+    }
   }
 
   .notion-heading {

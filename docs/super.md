@@ -52,7 +52,7 @@ the **site-wide** Head or Body (`code/global.html`), where it runs on
 whatever page the visitor lands on first and its listeners and observers
 follow the client-side navigation. The flip side: a site-wide script keeps
 running on every page, so it must guard itself by selector — a page-scoped one
-like `.page__team-daim`, or a markup hook that only its target pages emit.
+like `.page__people`, or a markup hook that only its target pages emit.
 
 The asymmetry cuts the other way for styles: **per-page CSS cannot leak onto
 the next page.** Super deactivates a page's injected styles on leaving it,
@@ -84,6 +84,7 @@ content pages:
 | --- | --- |
 | Home | `super-content page__index` |
 | About DAIM | `super-content page__about-daim parent-page__index` |
+| People | `super-content page__people parent-page__index` |
 | Publications | `super-content page__publications parent-page__index` |
 | Projects | `super-content page__projects parent-page__index` |
 | Lab News | `super-content page__lab-news parent-page__index` |
@@ -733,7 +734,7 @@ only: Font Awesome (only this page uses it) and `css/people.css` pinned to
 a commit SHA; the page's CSS and Body tabs stay empty. The behavior is
 site-wide in `code/global.html`: `js/email-copy.js` is deliberately generic
 with no page scoping, so any database's email property, on any page, gets
-click-to-copy and the `data-email` tooltip mirror, and a `.page__team-daim`
+click-to-copy and the `data-email` tooltip mirror, and a `.page__people`
 rule in `js/date-format.js` cuts Joined to year-month (Notion has no such
 date format). Swapping design or behavior is swapping the matching URL for
 another pinned ref (rules in [`hosting.md`](hosting.md#jsdelivr)); a change
@@ -752,6 +753,20 @@ clicks the next arrow every five seconds, pausing under the pointer and in a
 hidden tab; the snippet itself has no autoplay. Two Notion-side steps stay manual: the view's
 Card preview must be clicked to Page cover (the DSL cannot set it), and the
 database waits for a drag into the Control panel.
+
+The professor card under the Professor heading is a `blue_bg` callout
+holding a two-column layout, portrait left, bio right. `css/people.css`
+turns that callout (`.notion-callout.bg-blue-light`) into the card,
+replaces the columns' inline `calc()` widths with its own flex row (their
+`--column-spacing` variable does not resolve inside a callout, which
+otherwise collapses the photo column to zero), and pins the photo track at
+220px — a flexible track would make the image's percentage width cyclic and
+snap it to its natural size. The right column is styled by child position:
+the first text block is the name, the second the KAIST-blue label, the
+third the muted department line, and every text after a heading gets the
+blue entry bar. The name links to the full profile page and an `::after`
+overlay stretches that link over the whole card, so reordering the right
+column's first three blocks, or removing the name link, breaks the card.
 
 The lab motto under the carousel is one Notion quote block with the
 attribution as a **bulleted item nested inside it** — that nesting is what

@@ -5,7 +5,7 @@
 (() => {
   const RULES = [
     /* People: Joined 2022/03/01 -> 2022/03 */
-    { sel: '.page__team-daim .notion-property__date .date',
+    { sel: '.page__people .notion-property__date .date',
       fix: (t) => t.replace(/(\d{4}\/\d{2})\/\d{2}/, '$1') },
     /* Projects: Period 2018/03/01 → 2025/01/01 -> 2018.03 – 2025.01 */
     { sel: '.page__projects .property-475c4c48 .date',

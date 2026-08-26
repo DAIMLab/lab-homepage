@@ -15,20 +15,25 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | --- | --- | --- |
 | Home | `/` | `3c611c7b703c809fb685f773804f1684` |
 | About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
-| Team DAIM | `/team-daim` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
+| Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
-Team DAIM is the People page; the navbar labels it `People` while the Notion title,
-and so the `h1`, still reads `Team DAIM`. The slug lives in Super under Site Pages
-and a Notion rename does not move it, so renaming the page is safe but has to be
-done knowing the slug stays `team-daim`. It once split into `Professor`, `Students`
-and `Alumni` sub-pages; all three are in the trash. The page now carries five linked
-views of the `People` database plus one view of a separate alumni database, each
-under its own H2. The Professor section is still plain blocks, no view.
+Team DAIM is the People page. The slug lives in Super under Site Pages and a
+Notion rename does not move it; on 2026-08-27 it was moved there by hand from
+`team-daim` to `people`, and `css/people.css` plus `js/date-format.js` scope by
+`.page__people` accordingly (the old path still answers 200). It once split
+into `Professor`, `Students` and `Alumni` sub-pages; all three are in the
+trash. The page now carries five linked views of the `People` database plus
+one view of a separate alumni database, each under its own H1. The Professor
+section is plain blocks: a `blue_bg` callout card (anatomy in
+[`super.md`](super.md#people-page)) whose name link leads to the full profile
+page `Young Jae Jang` (`3c811c7b703c8185bf7dd09096c94e73`), a child of People
+kept inside the collapsed `Subpages` toggle and served at
+`/team-daim/young-jae-jang` until its own Super slug is set.
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
