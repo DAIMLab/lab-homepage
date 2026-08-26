@@ -1,5 +1,6 @@
-/* Home. Served through the pinned jsDelivr <link> named in code/home.html,
-   not pasted. Two sections, hero then the Lab News strip.
+/* Home. Served by the pinned jsDelivr <link> in code/home.html. Bare
+   selectors are Home-only. The hero scrim darkens the top strip for the white
+   menu; the mobile drawer takes the white back off. docs/super.md, "Home Page".
 
    Notion:  Callout (gray background)          the hero
               ├─ Video block
@@ -8,11 +9,7 @@
             Heading 2  Lab News
             Linked gallery view of `Lab News Posts`, sorted Date DESC,
               showing Title and Date only
-            Link  모든 소식 보기 →
-
-   Bare selectors below are Home-only; do not move this site-wide. The hero scrim
-   darkens its top strip so the white menu reads over the video, and the mobile
-   drawer takes that white back off. docs/super.md, "Home Page". */
+            Link  모든 소식 보기 → */
 
 body,
 .super-content {

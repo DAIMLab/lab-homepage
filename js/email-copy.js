@@ -1,10 +1,6 @@
-/* Generic: any .notion-property__email on any page, no page scoping on
-   purpose. Notion renders the property as plain text with no anchor; a click
-   copies the address, and `copied` is held for a moment for the page's CSS to
-   style. The observer mirrors the address into data-email so CSS can show it
-   (a tooltip via attr()); it survives Super's hydration and client-side
-   navigation. Reuse on another page by linking this same pinned URL from that
-   page's Head tab. */
+/* Click-to-copy for any .notion-property__email, unscoped on purpose, plus a
+   data-email mirror the page CSS shows as a tooltip. Survives hydration and
+   client-side navigation. Loaded by code/site.html; docs/super.md. */
 
 document.addEventListener('click', (e) => {
   const email = e.target.closest('.notion-property__email');

@@ -1,12 +1,10 @@
-/* Footer. Super Code editor > CSS tab (site-wide).
+/* Footer. Site-wide CSS tab. A top-level blue callout IS the band, so ordinary
+   callouts get another colour; js/footer-inject.js clones it onto every page.
+   Layering and !important ranks: docs/super.md, "Site-Wide Footer".
 
    Notion, on /footer:  Callout (Blue background, no icon)
                           ├─ Image       the background photo
-                          └─ 2 columns   Contact & Info + copyright (60) | greeting (40)
-
-   A top-level blue callout IS the band; give ordinary callouts another colour.
-   js/footer-inject.js clones it onto every other page. Layering, and what each
-   !important outranks: docs/super.md, "Site-Wide Footer". */
+                          └─ 2 columns   Contact & Info + copyright (60) | greeting (40) */
 
 .notion-root {
   padding-bottom: 0 !important;

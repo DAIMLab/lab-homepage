@@ -1,14 +1,14 @@
-/* Projects. Served through the pinned jsDelivr <link> named in
-   code/projects.html, not pasted.
+/* Projects. Served by the pinned jsDelivr <link> in code/projects.html. A
+   wrapping flex row reorders the emitted rows and seats the status chip after
+   the date; no fixed row heights. docs/super.md, "Projects Page".
 
    Notion:  Linked gallery view of `Projects Database`
               showing Title, Partner, Period, Summary, Status
 
-   property-75626b3b is Partner, property-475c4c48 Period, property-45774b6f
-   Summary, property-46414376 Status. A wrapping flex row reorders the rows the
-   view emits and seats the status chip after the date; no row has a fixed
-   height, so a long title just makes its own card taller.
-   docs/super.md, "Projects Page". */
+   property-75626b3b  Partner
+   property-475c4c48  Period
+   property-45774b6f  Summary
+   property-46414376  Status */
 
 .page__projects {
   --collection-card-gap: 34px 26px;

@@ -1,12 +1,6 @@
-/* DAIM homepage, site-wide CSS. Super Code editor > CSS tab.
-   Selector reference: https://docs.super.so/super-css-classes
-
-   One font stack rather than Super's two slots, so the browser falls through per
-   character: Montserrat for Latin, NanumSquare for Korean. The navbar is a
-   Navbar labels are full opacity, semibold only on the active item, and show an
-   icon only when active or hovered.
-   docs/super.md, "Fonts" and "The Navbar Over the Hero". A brown-background
-   toggle is the hidden-block convention. */
+/* DAIM homepage, site-wide CSS tab. One font stack splits Montserrat and
+   NanumSquare per character; brown-background toggles stay hidden. docs/super.md,
+   "Fonts" and "The Navbar Over the Hero"; classes: docs.super.so/super-css-classes */
 
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;

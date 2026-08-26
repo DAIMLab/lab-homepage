@@ -1,9 +1,6 @@
-/* People, /team-daim. Served through the pinned jsDelivr <link> named in
-   code/team-daim.html, not pasted. Five linked gallery views of `People`
-   become profile cards, max three a row, centered, the photo inset at a fixed
-   width so the card can widen without scaling it. Email and the four URL
-   properties are circular icon buttons (Font Awesome); the behavior lives in
-   js/email-copy.js and js/team-daim-date-trim.js, site-wide. docs/super.md. */
+/* People, /team-daim. Served by the pinned jsDelivr <link> in
+   code/team-daim.html. Five linked views become profile cards; email and URL
+   properties are icon buttons. Anatomy and traps: docs/super.md, "People Page". */
 
 .page__team-daim {
   --card-w: 320px;

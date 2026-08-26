@@ -1,9 +1,6 @@
-/* Footer band injector. Loaded by code/site.html through a pinned jsDelivr
-   <script src defer>, not pasted.
-
-   Clones the blue callout from /footer, a same-origin page Super server-renders;
-   Notion itself is unreadable from the browser. Appending before React hydrates
-   throws #418, so the first placement waits for an idle frame. docs/super.md. */
+/* Clones the blue footer callout from /footer, a page Super server-renders.
+   Appending before React hydrates throws #418, so placement waits for an idle
+   frame. Loaded by code/site.html; docs/super.md, "Site-Wide Footer". */
 
 (() => {
   const SOURCE = '/footer';

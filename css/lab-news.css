@@ -1,12 +1,13 @@
-/* Lab News. Served through the pinned jsDelivr <link> named in
-   code/lab-news.html, not pasted.
+/* Lab News. Served by the pinned jsDelivr <link> in code/lab-news.html. The
+   property ids are the only handle that survives an empty field; every row is
+   a fixed height on a flex column. docs/super.md, "Lab News Page".
 
    Notion:  Linked gallery view of `Lab News Posts`
               showing Title, Date, Location, Summary
 
-   property-4856717d is Date, property-6e756d61 Location, property-686f7844
-   Summary; those ids are the only handle that survives an empty field. Every row
-   is a fixed height on a flex column: docs/super.md, "Lab News Page". */
+   property-4856717d  Date
+   property-6e756d61  Location
+   property-686f7844  Summary */
 
 .page__lab-news {
   --padding-left: clamp(16px, 3vw, 48px);

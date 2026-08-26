@@ -1,10 +1,6 @@
-/* Home hero video. Loaded by code/home.html through a pinned jsDelivr
-   <script src defer>, not pasted. Scoped to .page__index because a head
-   script keeps running after client-side navigation (docs/super.md).
-
-   Notion emits <video controls> and Super adds only autoPlay, which no browser
-   honours without muted. Playback is re-asserted on every mutation tick because
-   hydration reloads the source. Detail: docs/super.md, "Hero Video Autoplay". */
+/* Hero video autoplay: no browser honours it without muted, and hydration
+   reloads the source, so playback is re-asserted on every mutation tick.
+   Scoped .page__index; loaded by code/home.html. docs/super.md. */
 
 (function () {
   var HERO = '.page__index .notion-root > .notion-callout.bg-gray-light';

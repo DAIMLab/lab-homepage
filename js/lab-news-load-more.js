@@ -1,18 +1,6 @@
-/* Lab News load more. Loaded by code/site.html through a pinned jsDelivr
-   <script src defer>, not pasted. Site-wide on purpose: a per-page script
-   never runs on client-side entry (docs/super.md), and without it a visitor
-   arriving through the navbar could never reveal the hidden tail. The
-   .page__lab-news scope keeps it inert elsewhere.
-
-   Super renders all 57 cards into the HTML, so this hides the tail rather than
-   paging it in. What it buys is a shorter first screen and no cover fetched for
-   a hidden card, the covers being loading="lazy".
-
-   CSS makes the first cut, keyed on the grid having no data-total yet, so the
-   page paints capped and this script mutates nothing until React has hydrated.
-   Setting data-total hands the cut over to .is-beyond and reveals the button; it
-   also carries the real count, because a display:none card stops incrementing
-   the CSS counter that prints it. docs/super.md, "Lab News Page". */
+/* Hides the Lab News tail behind a 더 보기 button; CSS makes the first cut
+   until data-total hands it to .is-beyond. Site-wide via code/site.html since
+   per-page scripts skip client-side entry. docs/super.md, "Lab News Page". */
 
 (() => {
   const STEP = 18;

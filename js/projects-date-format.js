@@ -1,11 +1,6 @@
-/* Projects date shortener. Loaded by code/projects.html through a pinned
-   jsDelivr <script src defer>, not pasted; the observer hangs off
-   documentElement so head placement is safe.
-
-   Notion emits the Period range as 2018/03/01 → 2025/01/01 and has no year-month
-   format to pick; CSS cannot cut text, so this rewrites it to 2018.03 – 2025.01.
-   Re-runs under an observer because Super swaps .notion-root on client-side
-   navigation. Why not a formula or a text property: docs/super.md. */
+/* Rewrites Period, 2018/03/01 → 2025/01/01, into 2018.03 – 2025.01: Notion
+   has no year-month format and CSS cannot cut text. Head-safe observer.
+   Loaded by code/projects.html; why not a formula: docs/super.md. */
 
 (() => {
   const shorten = (text) =>
