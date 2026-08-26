@@ -118,12 +118,14 @@
         display: grid;
         grid-template-columns: 16px 1fr;
         column-gap: 8px;
+        /* baseline, because the glyph's line box is smaller than the text's
+           and top-aligns above it otherwise */
+        align-items: baseline;
         margin-top: 3px;
 
         &::before {
           font: var(--fa-font-solid);
           font-size: 12px;
-          line-height: inherit;
           color: var(--kaist-blue);
           content: '\f0e0';
           justify-self: center;
