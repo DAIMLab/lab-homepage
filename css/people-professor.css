@@ -8,6 +8,7 @@
 
 .page__people {
   --prof-photo-w: 306px;
+  --prof-portrait-w: 90%;
   --prof-rule: #e4e7ec;
 
   /* Gray, because the other callout colors are taken: the footer band owns
@@ -72,7 +73,7 @@
 
         img {
           display: block;
-          width: 90% !important;
+          width: var(--prof-portrait-w) !important;
           height: auto;
           margin-inline: auto;
           border-radius: var(--photo-radius);
@@ -83,8 +84,10 @@
          label, the name, the muted department line, then three contact rows
          (two emails, one phone); reordering those blocks in Notion breaks
          the mapping */
+      /* the identity text shares the centered portrait's side inset, so
+         both start on the same left line */
       > .notion-text {
-        margin: 0;
+        margin: 0 calc((100% - var(--prof-portrait-w)) / 2);
         font-size: 14px;
         line-height: 1.55;
         color: var(--muted);
