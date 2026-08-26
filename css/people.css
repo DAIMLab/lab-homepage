@@ -24,6 +24,12 @@
     width: 100vw;
     margin: 0 0 0 -50vw;
 
+    /* a slide is not a link: the card anchor lets go, and the clicks fall
+       through to the snippet's swipe handlers on the gallery */
+    .notion-collection-card__anchor {
+      pointer-events: none;
+    }
+
     .notion-collection-gallery {
       aspect-ratio: auto !important;
       height: clamp(449px, 74vh, 845px);
