@@ -172,10 +172,11 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   resolve inside a callout) and keeping the photo track on a definite `clamp()` basis (a flexible one goes
   cyclic); the portrait width carries `!important` against Super's `width: 100% !important` on
   `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
-  muted department, then three FA-glyph contact rows lifted to `z-index: 1` over the card link so the
-  addresses stay selectable; the right column is the section headings with blue entry bars. The name link
-  stretches over the card via `::after`; reordering the left column's blocks or removing that link breaks
-  the card.
+  muted department, then three FA-glyph contact rows; the right column is the section headings with blue
+  entry bars. The name link's `::after` overlay stretches over the card at `z-index: -1` inside the
+  isolated callout, so every text stays selectable and only empty space, or the `pointer-events: none`
+  portrait, clicks through to the profile. Reordering the left column's blocks or removing the name link
+  breaks the card.
 - Motto: one quote block, its attribution a nested bullet the CSS restyles (`“` glyph, muted line);
   un-nesting it, or adding a second, breaks the design.
 - Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);

@@ -7,7 +7,7 @@
    .page__people scope. */
 
 .page__people {
-  --prof-photo-w: 306px;
+  --prof-photo-w: 260px;
   --prof-portrait-w: 90%;
   --prof-rule: #e4e7ec;
 
@@ -15,6 +15,9 @@
      blue (css/footer.css) and the carousel snippet owns brown */
   .notion-root > .notion-callout.bg-gray-light {
     position: relative;
+    /* its own stacking context, so the card link's z-index: -1 overlay
+       stays above the card background */
+    isolation: isolate;
     box-sizing: border-box;
     width: 100%;
     margin: 28px 0 0;
@@ -67,9 +70,11 @@
 
       /* the portrait takes a fraction of the track, so widening the column
          does not scale the photo one-to-one. !important, because Super's
-         .notion-image.page-width img rule is width: 100% !important */
+         .notion-image.page-width img rule is width: 100% !important.
+         Clicks pass through the photo to the card link underneath */
       .notion-image {
         margin: 0;
+        pointer-events: none;
 
         img {
           display: block;
@@ -108,11 +113,14 @@
         line-height: 1.25;
         color: var(--ink);
 
-        /* the name link is the card's click target, stretched over it */
+        /* the name link is the card's click target, stretched over it but
+           kept under every text block, so all card text stays selectable and
+           only empty space (and the click-through portrait) navigates */
         .notion-link::after {
           content: '';
           position: absolute;
           inset: 0;
+          z-index: -1;
         }
       }
 
@@ -127,10 +135,6 @@
         display: grid;
         grid-template-columns: 16px 1fr;
         column-gap: 8px;
-        /* lifted over the stretched name link, so the addresses stay
-           selectable for copying */
-        position: relative;
-        z-index: 1;
         /* baseline, because the glyph's line box is smaller than the text's
            and top-aligns above it otherwise */
         align-items: baseline;
@@ -182,7 +186,10 @@
       }
     }
 
-    @media (max-width: 640px) {
+    /* the stacked layout: portrait and identity above, sections below.
+       The widths carry !important to outrank the width: auto !important
+       that neutralizes Super's inline column widths above */
+    @media (max-width: 900px) {
       .notion-column-list {
         flex-direction: column;
         align-items: center;
@@ -190,10 +197,11 @@
 
       .notion-column:first-child {
         flex-basis: auto;
-        width: min(410px, 100%);
+        width: min(410px, 100%) !important;
       }
 
       .notion-column:last-child {
+        width: 100% !important;
         border-left: 0;
         padding-left: 0;
       }
