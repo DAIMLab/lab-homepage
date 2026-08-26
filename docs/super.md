@@ -701,15 +701,17 @@ at once, or the harness's own error is read as the code's.
 ## People Page
 
 One injection target: `js/team-daim-head.html` in the page's Head tab; the CSS
-and Body tabs stay empty. The file carries Font Awesome (only this page uses it,
-so it left the site-wide Head), a `<link>` to `css/team-daim.css` on jsDelivr
-pinned to a commit SHA, and the card script: email click-to-copy, the
-`data-email` tooltip mirror, and the Joined year-month trim (Notion has no such
-date format; the same trap and pattern as `js/projects-date-format.js`).
-Swapping the card design is swapping that stylesheet URL for another pinned
-ref; the ref rules are in [`hosting.md`](hosting.md#jsdelivr). The script
-observes `documentElement`, not `body`, because at head time body does not
-exist yet. The cards are the five member views styled into vertical profile
+and Body tabs stay empty. The file is three pinned URLs: Font Awesome (only
+this page uses it, so it left the site-wide Head), `css/team-daim.css` on
+jsDelivr, and `js/team-daim-cards.js` on jsDelivr as a `defer` script: email
+click-to-copy, the `data-email` tooltip mirror, and the Joined year-month trim
+(Notion has no such date format; the same trap and pattern as
+`js/projects-date-format.js`). Swapping the design or the behavior is swapping
+the matching URL for another pinned ref; the ref rules are in
+[`hosting.md`](hosting.md#jsdelivr). A change is therefore two commits: the
+file first, then the head file pointing at the file's new SHA. The script
+observes `documentElement`, not `body`, so it survives head placement, and
+`defer` keeps it off the parser's critical path. The cards are the five member views styled into vertical profile
 cards; which views and what they show is in [`notion.md`](notion.md#collections).
 
 **A leftover paste in the CSS tab fights the linked file.** Both apply at once,

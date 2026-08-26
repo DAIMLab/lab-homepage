@@ -1,43 +1,11 @@
 <!-- People, /team-daim. Paste into the page's Code editor, Head tab, and leave
-     the CSS and Body tabs empty; this one file is the page's whole injection.
-     Font Awesome feeds the card icons (only this page uses it, so it left the
-     site-wide Head). The card design loads from jsDelivr pinned to a commit:
-     swapping the design is swapping that URL, and the ref rules are in
-     docs/hosting.md. The script adds email click-to-copy, mirrors the address
-     into data-email for the CSS tooltip, and cuts Joined to year-month (Notion
-     has no such format, the Projects trap). It is head-safe: body does not
-     exist yet, so the observer hangs off documentElement and the initial
-     sweeps simply find nothing. -->
+     the CSS and Body tabs empty; this one file is the page's whole injection,
+     and everything it names is a pinned URL. Font Awesome feeds the card icons
+     (only this page uses it, so it left the site-wide Head). The design and
+     the card script load from jsDelivr pinned to commits: changing either
+     means pushing the commit, then swapping its URL here (ref rules in
+     docs/hosting.md). What the script does and why it is head- and defer-safe
+     is commented in js/team-daim-cards.js. -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@f6400e5aec6dd36470d5cb02befb347cd008d9dc/css/team-daim.css">
-<script>
-  document.addEventListener('click', (e) => {
-    const email = e.target.closest('.page__team-daim .notion-property__email');
-    if (!email) return;
-    const address = email.textContent.trim();
-    if (!address) return;
-    navigator.clipboard.writeText(address).then(() => {
-      email.classList.add('copied');
-      clearTimeout(email._copiedTimer);
-      email._copiedTimer = setTimeout(() => email.classList.remove('copied'), 1400);
-    });
-  });
-
-  (() => {
-    const run = () => {
-      document.querySelectorAll('.page__team-daim .notion-property__date .date')
-        .forEach((el) => {
-          const next = el.textContent.replace(/(\d{4}\/\d{2})\/\d{2}/, '$1');
-          if (next !== el.textContent) el.textContent = next;
-        });
-      document.querySelectorAll('.page__team-daim .notion-property__email:not([data-email])')
-        .forEach((el) => {
-          const address = el.textContent.trim();
-          if (address) el.dataset.email = address;
-        });
-    };
-
-    run();
-    new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
-  })();
-</script>
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@8df24704eeb6132b2a3792849b0351b2d3f82671/js/team-daim-cards.js" defer></script>
