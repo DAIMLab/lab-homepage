@@ -25,14 +25,17 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 
 | Path | Goes into |
 | --- | --- |
+| `code/site.html` | site-wide Head tab, pasted as-is |
+| `code/team-daim.html` | People per-page Head tab, pasted as-is |
 | `css/super-custom.css` | site-wide CSS tab |
 | `css/footer.css` | site-wide CSS tab, the footer band |
 | `css/home.css` | Home per-page CSS tab |
 | `css/lab-news.css` | Lab News per-page CSS tab |
 | `css/projects.css` | Projects per-page CSS tab |
-| `css/team-daim.css` | People per-page CSS tab |
+| `css/team-daim.css` | linked from `code/team-daim.html`, pinned jsDelivr URL |
+| `js/email-copy.js` | linked from `code/site.html`, pinned jsDelivr URL |
+| `js/team-daim-date-trim.js` | linked from `code/site.html`, pinned jsDelivr URL |
 | `js/footer-inject.js` | site-wide Head tab, wrapped in `<script>` |
-| `js/team-daim-icons.html` | People per-page Head tab, pasted as-is |
 | `js/home-video-play.js` | Home per-page Body tab, wrapped in `<script>` |
 | `js/lab-news-load-more.js` | Lab News per-page Body tab, wrapped in `<script>` |
 | `js/projects-date-format.js` | Projects per-page Body tab, wrapped in `<script>` |

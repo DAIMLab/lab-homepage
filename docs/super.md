@@ -48,7 +48,7 @@ through the navbar, zero attributes and untrimmed dates, with the stylesheet
 link applied both ways.
 
 So per-page injection is for CSS and `<link>` tags only. A script belongs in
-the **site-wide** Head or Body (`js/site-head.html`), where it runs on
+the **site-wide** Head or Body (`code/site.html`), where it runs on
 whatever page the visitor lands on first and its listeners and observers
 follow the client-side navigation. The flip side: a site-wide script keeps
 running on every page, so it must guard itself by selector — a page-scoped one
@@ -717,10 +717,10 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Two injection targets. The page's Head tab is `js/team-daim-head.html`, link
+Two injection targets. The page's Head tab is `code/team-daim.html`, link
 tags only: Font Awesome (only this page uses it) and `css/team-daim.css` on
 jsDelivr pinned to a commit SHA; the page's CSS and Body tabs stay empty. The
-site-wide Head is `js/site-head.html`, the two `defer` scripts — per-page
+site-wide Head is `code/site.html`, the two `defer` scripts — per-page
 script tags never run on client-side entry, see the section above.
 `js/email-copy.js` is deliberately generic, no page scoping: any database's
 email property, on any page, gets click-to-copy and the `data-email` tooltip

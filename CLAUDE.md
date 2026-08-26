@@ -27,8 +27,12 @@ guessing, and update it in the same commit that makes it stale.
 ## Repository Rules
 
 ```
-css/        one file per CSS tab, site-wide or per-page
-js/         Head- and Body-tab scripts, pasted inside <script>
+code/       what gets pasted into a Head tab, one file per injection target:
+            <page>.html per page, site.html site-wide
+css/        stylesheet sources: linked from code/ by pinned URL, or pasted
+            into a CSS tab
+js/         script sources: linked from code/ by pinned URL, or pasted into a
+            Body tab inside <script>
 assets/     images and video referenced by URL
 docs/       the reference above
 reference/  vendored third-party CSS, read-only
@@ -36,12 +40,13 @@ reference/  vendored third-party CSS, read-only
 
 - No build, lint, or test step. Do not add `npm` scaffolding unless asked; a
   preprocessor breaks the paste-into-Super workflow.
-- One file per Super injection target, named `<scope>-<action>.<ext>`: a page name
-  for per-page code (`home-video-play.js`), a feature name site-wide
-  (`footer-inject.js`). A file named for a page belongs in that page's Code editor.
-- Every file here is a **mirror, not a source**. Super does not read this repo. After
-  editing, paste into Super; when someone edits in Super, pull it back so the two
-  stay in sync.
+- One file per Super injection target. Head-tab paste files live in `code/`,
+  named for the page (`code/team-daim.html`, `code/site.html`). Pasted CSS and
+  Body scripts keep `<scope>-<action>.<ext>` names in `css/` and `js/`.
+- A **pasted** file is a mirror, not a source: Super does not read this repo, so
+  paste after editing, and pull back edits made in Super. A **linked** file is
+  the source itself: the live site fetches it from jsDelivr at a pinned SHA, so
+  a change is a commit, a push, and a URL bump in `code/`.
 
 Re-extract the live site-wide CSS with:
 
