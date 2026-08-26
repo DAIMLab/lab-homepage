@@ -1,5 +1,5 @@
-/* Home. The page's per-page Code editor, CSS tab. Two sections, hero then the
-   Lab News strip.
+/* Home. Served through the pinned jsDelivr <link> named in code/home.html,
+   not pasted. Two sections, hero then the Lab News strip.
 
    Notion:  Callout (gray background)          the hero
               ├─ Video block

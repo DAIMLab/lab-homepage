@@ -1,4 +1,8 @@
-/* Lab News load more. Super Code editor > Body tab (Lab News page), in <script>.
+/* Lab News load more. Loaded by code/site.html through a pinned jsDelivr
+   <script src defer>, not pasted. Site-wide on purpose: a per-page script
+   never runs on client-side entry (docs/super.md), and without it a visitor
+   arriving through the navbar could never reveal the hidden tail. The
+   .page__lab-news scope keeps it inert elsewhere.
 
    Super renders all 57 cards into the HTML, so this hides the tail rather than
    paging it in. What it buys is a shorter first screen and no cover fetched for

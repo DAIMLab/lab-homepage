@@ -1,4 +1,6 @@
-/* Projects date shortener. Super Code editor > Body tab (Projects page), in <script>.
+/* Projects date shortener. Loaded by code/projects.html through a pinned
+   jsDelivr <script src defer>, not pasted; the observer hangs off
+   documentElement so head placement is safe.
 
    Notion emits the Period range as 2018/03/01 → 2025/01/01 and has no year-month
    format to pick; CSS cannot cut text, so this rewrites it to 2018.03 – 2025.01.
@@ -19,5 +21,5 @@
       });
 
   run();
-  new MutationObserver(run).observe(document.body, { childList: true, subtree: true });
+  new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
 })();

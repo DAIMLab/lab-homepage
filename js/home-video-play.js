@@ -1,11 +1,13 @@
-/* Home hero video. Home page's per-page Code editor, Body tab, in <script>.
+/* Home hero video. Loaded by code/home.html through a pinned jsDelivr
+   <script src defer>, not pasted. Scoped to .page__index because a head
+   script keeps running after client-side navigation (docs/super.md).
 
    Notion emits <video controls> and Super adds only autoPlay, which no browser
    honours without muted. Playback is re-asserted on every mutation tick because
    hydration reloads the source. Detail: docs/super.md, "Hero Video Autoplay". */
 
 (function () {
-  var HERO = '.notion-root > .notion-callout.bg-gray-light';
+  var HERO = '.page__index .notion-root > .notion-callout.bg-gray-light';
 
   function play(video) {
     if (!video.paused) return;
