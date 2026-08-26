@@ -458,9 +458,11 @@ Three things to keep true:
    is the footer's selector in both the CSS and the script.
 3. The clone is appended to `.notion-root`, and Super routes between pages on the
    client, so the script re-places it under a `MutationObserver`.
-4. The Head tab takes HTML, not JS. Paste the file inside `<script>` tags or the
-   browser treats it as a text node: no execution, no error, nothing in the console.
-   Same for `js/home-video-play.js` in the Home Body tab.
+4. The Head tab takes HTML, not JS. The file ships as a pinned
+   `<script src>` line in `code/site.html`; pasting it bare would make the
+   browser treat it as a text node — no execution, no error, nothing in the
+   console. `js/home-video-play.js` in the Home Body tab still needs its
+   `<script>` wrapper for the same reason.
 
 The band is absent from the served HTML everywhere except `/footer`, so crawlers
 miss it. Footer links carry little SEO weight and the band sits below the fold, so

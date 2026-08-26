@@ -35,7 +35,7 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `css/team-daim.css` | linked from `code/team-daim.html`, pinned jsDelivr URL |
 | `js/email-copy.js` | linked from `code/site.html`, pinned jsDelivr URL |
 | `js/team-daim-date-trim.js` | linked from `code/site.html`, pinned jsDelivr URL |
-| `js/footer-inject.js` | site-wide Head tab, wrapped in `<script>` |
+| `js/footer-inject.js` | linked from `code/site.html`, pinned jsDelivr URL |
 | `js/home-video-play.js` | Home per-page Body tab, wrapped in `<script>` |
 | `js/lab-news-load-more.js` | Lab News per-page Body tab, wrapped in `<script>` |
 | `js/projects-date-format.js` | Projects per-page Body tab, wrapped in `<script>` |
