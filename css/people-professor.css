@@ -40,10 +40,11 @@
       display: block;
     }
 
+    /* stretch (the default) keeps both columns card-height, so the
+       divider on the right column runs the full card */
     .notion-column-list {
       display: flex;
       gap: clamp(28px, 4vw, 48px);
-      align-items: flex-start;
     }
 
     .notion-column {
@@ -137,10 +138,13 @@
       }
     }
 
-    /* the right column: Career and Education entries under their headings */
+    /* the right column: Career and Education entries under their headings,
+       behind a hairline divider */
     .notion-column:last-child {
       flex: 1;
       min-width: 0;
+      border-left: 1px solid var(--prof-rule);
+      padding-left: clamp(28px, 4vw, 48px);
 
       > .notion-text {
         margin: 0;
@@ -175,6 +179,11 @@
       .notion-column:first-child {
         flex-basis: auto;
         width: min(410px, 100%);
+      }
+
+      .notion-column:last-child {
+        border-left: 0;
+        padding-left: 0;
       }
     }
   }
