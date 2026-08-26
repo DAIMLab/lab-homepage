@@ -1,6 +1,6 @@
 /* Hides the Lab News tail behind a 더 보기 button; CSS makes the first cut
-   until data-total hands it to .is-beyond. Loaded by code/lab-news.html; on a
-   client-side entry it never runs, so the tail stays hidden until a reload. */
+   until data-total hands it to .is-beyond. Scoped .page__lab-news; site-wide
+   via code/global.html, so it runs whatever page loaded first. */
 
 (() => {
   const STEP = 18;

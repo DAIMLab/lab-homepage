@@ -1,6 +1,6 @@
 /* Hero video autoplay: no browser honours it without muted, and hydration
    reloads the source, so playback is re-asserted on every mutation tick.
-   Scoped .page__index; loaded by code/home.html. docs/super.md. */
+   Scoped .page__index; site-wide via code/global.html. docs/super.md. */
 
 (function () {
   var HERO = '.page__index .notion-root > .notion-callout.bg-gray-light';
