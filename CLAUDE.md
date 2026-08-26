@@ -41,7 +41,7 @@ reference/  vendored third-party CSS, read-only
 - No build, lint, or test step. Do not add `npm` scaffolding unless asked; a
   preprocessor breaks the paste-into-Super workflow.
 - One file per Super injection target. Head-tab paste files live in `code/`,
-  named for the page (`code/team-daim.html`, `code/global.html`). Pasted CSS and
+  named for the page (`code/people.html`, `code/global.html`). Pasted CSS and
   Body scripts keep `<scope>-<action>.<ext>` names in `css/` and `js/`.
 - A **pasted** file is a mirror, not a source: Super does not read this repo, so
   paste after editing, and pull back edits made in Super. A **linked** file is

@@ -727,8 +727,8 @@ at once, or the harness's own error is read as the code's.
 
 ## People Page
 
-Two injection targets. The page's Head tab is `code/team-daim.html`, links
-only: Font Awesome (only this page uses it) and `css/team-daim.css` pinned to
+Two injection targets. The page's Head tab is `code/people.html`, links
+only: Font Awesome (only this page uses it) and `css/people.css` pinned to
 a commit SHA; the page's CSS and Body tabs stay empty. The behavior is
 site-wide in `code/global.html`: `js/email-copy.js` is deliberately generic
 with no page scoping, so any database's email property, on any page, gets
