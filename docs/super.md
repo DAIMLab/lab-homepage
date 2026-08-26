@@ -747,7 +747,9 @@ a gallery linked view of the `Team Photos` database sits inside a brown
 callout, which is exactly the shape the snippet turns into a carousel. One
 row per slide, the page cover as the photo and the title as the caption; the
 snippet is self-guarding and observer-driven, so it is site-wide safe and
-initializes on any entry path. Two Notion-side steps stay manual: the view's
+initializes on any entry path. `js/carousel-autoplay.js` rides next to it and
+clicks the next arrow every five seconds, pausing under the pointer and in a
+hidden tab; the snippet itself has no autoplay. Two Notion-side steps stay manual: the view's
 Card preview must be clicked to Page cover (the DSL cannot set it), and the
 database waits for a drag into the Control panel.
 
