@@ -299,6 +299,81 @@
   display: block;
 }
 
+/* ---- the right-hand icon column ---------------------------------------
+
+   DOI and PDF ride at the row's right edge, one under the other, and each
+   appears only where its property is filled: Super emits no element for an
+   empty one. They pin to the row rather than sitting in the text flow, so
+   the second drops by its own height instead of a measured offset, and any
+   of the four combinations lands right. The z-index puts them back over the
+   row anchor, which the rule above deliberately lowered. ----------------- */
+
+.page__publications .notion-collection-list__item {
+  padding-right: 76px;
+}
+
+.page__publications .notion-collection-list__item-content
+  :is(.notion-property__url, .notion-property__file) {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
+}
+
+.page__publications
+  .notion-collection-list__item-content:has(.notion-property__url)
+  .notion-property__file {
+  transform: translateY(calc(100% + 6px));
+}
+
+/* both badges wear the same chip; the DOI one replaces the raw URL text */
+.page__publications .notion-collection-list__item-content
+  :is(.notion-property__url a, .notion-property__file a,
+      .notion-property__file > div) {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 24px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--pub-sub);
+  font-size: 0;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.page__publications .notion-collection-list__item-content
+  :is(.notion-property__url a, .notion-property__file a,
+      .notion-property__file > div):hover {
+  border-color: var(--kaist-blue);
+  color: var(--kaist-blue);
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__url a::before {
+  content: 'DOI';
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* the file property renders a thumbnail; the chip carries the word instead */
+.page__publications .notion-collection-list__item-content
+  .notion-property__file img {
+  display: none;
+}
+
+.page__publications .notion-collection-list__item-content
+  :is(.notion-property__file a, .notion-property__file > div)::before {
+  content: 'PDF';
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
 /* ---- the authors read as a citation line, not as chips ----------------- */
 
 .page__publications .notion-collection-list__item-property.notion-property__select {
