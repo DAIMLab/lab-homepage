@@ -193,6 +193,13 @@ Eight properties remain: `Title`, `Authors`, `Year`, `Type`, `Scope`, `Venue`,
 `DOI`, `PDF`. Dropping `Venue` as a select also drops the abbreviation badge
 column the al-folio reference supplied, so the page design loses that hook.
 
+`Papers` (`90abcc7cae564e3bb1bca8c2f24f89e6`, data source
+`7f3f7a41-1143-4ea4-99f9-0c451af98b69`) and `Patents`
+(`8df6b73555b7455495ab3e50bed1816c`, data source
+`e92c829b-0b7e-463c-b9a5-c9697e0a6c84`) back the two tabs on Publications.
+Migrated from the legacy `/38` board on 2026-08-28: 136 papers and 15 patents,
+the whole accomplishment page. See [`legacy.md`](legacy.md#academic-accomplishments-migrated).
+
 `Professor Media` (`f040a63431724614aaf533f8d6046ff6`, data source
 `df40c248-2fc0-4c66-aaa5-f5bb22623d65`) holds the professor's media
 appearances: one row per item, the cover as the thumbnail (external URLs into

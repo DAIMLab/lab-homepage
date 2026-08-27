@@ -39,7 +39,7 @@ the nav are still unidentified.
 | `/30` | About DAIM | slide deck, see below |
 | `/36` | Alumni, by graduation year | migrated, see below |
 | `/37` | Accomplishment | tab bar only, no content of its own |
-| `/38` | Accomplishment › Academic | open. A board under four tabs: International Journals, International Conferences, Domestic Conferences, Patents |
+| `/38` | Accomplishment › Academic | migrated, see below |
 | `/Team` | Team DAIM, the roster with photos | migrated, see below |
 | `/122325403` | Students, the roster with contact details | migrated, see below |
 
@@ -261,3 +261,58 @@ Thesis titles arrive wrapped in curly quotes that are not consistently paired: s
 close with `”`, some with `“`, some with a straight `"`, several trail a full stop
 outside the quote, and one is never closed. All of it is stripped, and the last row
 also carried a stray `DAIM` from the footer running into the text.
+
+## Academic Accomplishments, Migrated
+
+136 papers now live in `Papers` and 15 patents in `Patents`. `/38` is not a board
+like `/29` and `/22`: it is one page-builder page holding a four-row accordion,
+and every citation is an `<li>` inside `div.board_contents`, server-rendered. One
+`curl` reads the whole thing, no paging and no `idx` walk.
+
+```bash
+curl -sL https://daim.kaist.ac.kr/38   # 4 acd_row blocks, 151 <li> between them
+```
+
+The four accordion rows are International Journals (35), International
+Conferences (54), Domestic Conferences (47) and Patents (15). The citations are
+free text typed by hand, in three shapes: `Authors "Title." Venue, vol, year,
+pages` for journals, `Authors "Title." Venue, date, place` for conferences, and
+`저자. "제목." 저널 vol.issue (year): pages` for the Korean ones. Splitting on the
+first quoted span carries all three.
+
+| Notion property | Source |
+| --- | --- |
+| `Title` | the quoted span, trailing period stripped |
+| `Venue` | everything after the closing quote |
+| `Year` | the last four-digit year in the citation |
+| `Type` | `Journal` / `Conference` from the tab, overridden to `Preprint` for the one arXiv entry and to `Workshop` where the venue says so |
+| `Scope` | `International` / `Domestic` from the tab |
+| `Authors` | lab members only, matched against the People and Alumni rosters |
+| page content | the citation, verbatim |
+
+Three things the tab names get wrong, all corrected on the way in:
+
+1. **Ten of the 47 "Domestic Conferences" are journal articles**, in `ie 매거진`,
+   `대한산업공학회지`, `정보시스템연구`, `한국통신학회지` and `한국 CDE 학회 논문집`. They
+   carry `Type = Journal`, `Scope = Domestic`. `Type` and `Scope` being separate
+   properties is what lets the tab be wrong without the data being wrong.
+2. **The board is hand-typed and the names drift.** `Hyeseo Youn` for
+   `Hyeseo Yoon`, `Soyeong Bang` for `Soyoung Bang`, `Shin, Donhwi` for
+   `DongHwi Shin`. The `Authors` values follow the People and Alumni spelling,
+   not the board's; the body keeps the citation as typed.
+3. **`et al.` hides the lab.** Seven journal entries lead with an external author
+   and truncate, so no lab member is taggable and `Authors` is empty. The
+   citation in the body still names who is there.
+
+Author matching is by token containment against the 67 roster names, then a
+contiguity check: every part of a roster name must appear, and some ordering of
+those parts must appear unbroken. Containment alone matched `Sungwook Jang` to a
+citation whose authors were `Shin Woong Sung, Young Jae Jang, and Sung Wook Lee`,
+which the contiguity check rejects. External co-authors are deliberately not
+tagged: `Young Dae Ko`, `Hark Hwang`, `Eun Suk Suh`, `Dongsuk Kum` and the rest
+appear only in the body.
+
+Patents carry `Title`, `특허번호` and `Date`; the inventor line goes in the body,
+since the schema has no inventor property. Fourteen are registrations and one,
+`10-2025-0029226`, is an application, which the body says and the number shows.
+`특허권자` and `Link` are unfilled: the board names neither.
