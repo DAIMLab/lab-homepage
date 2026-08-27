@@ -2,9 +2,9 @@
    heading restyled into a two-column bio (docs/super.md, "People Page"):
    a full-row white card, portrait plus identity block left, Career and
    Education right. Served by its own pinned <link> in code/people.html,
-   after css/people.css: the shared design tokens (--kaist-blue, --card-*,
-   --photo-radius, the text colors) are declared there, on the same
-   .page__people scope. */
+   after css/people.css (the --card-* tokens) and css/people-identity.css
+   (the contact rows, SNS circles, and blue entry bars shared with the
+   profile page); the palette comes from css/global.css. */
 
 .page__people {
   --prof-photo-w: 260px;
@@ -82,10 +82,9 @@
         }
       }
 
-      /* the identity block under the portrait reads by position: the blue
-         label, the name, the muted department line, then three contact rows
-         (two emails, one phone); reordering those blocks in Notion breaks
-         the mapping */
+      /* the identity block under the portrait: the first text is the blue
+         label, bold marks the name, italics the department; only the label
+         must stay first in Notion, the rest read by marker */
       /* the identity text shares the centered portrait's side inset, so
          both start on the same left line. Lifted above the card link's
          overlay to stay selectable (a z-index: -1 overlay instead makes
@@ -99,7 +98,7 @@
         color: var(--muted);
       }
 
-      > .notion-text:nth-of-type(1) {
+      > .notion-text:first-of-type {
         margin-top: 18px;
         font-size: 15px;
         font-weight: 700;
@@ -108,7 +107,7 @@
       }
 
       /* the name stays unlifted: its link carries the card-wide overlay */
-      > .notion-text:nth-of-type(2) {
+      > .notion-text:has(strong) {
         position: static;
         z-index: auto;
         margin-bottom: 2px;
@@ -128,88 +127,10 @@
         }
       }
 
-      > .notion-text:nth-of-type(3) {
+      > .notion-text:has(em) {
         margin-bottom: 10px;
       }
 
-      /* the contact rows identify themselves: the mailto:/tel: link is the
-         marker CSS keys on, so reordering blocks in Notion cannot detach an
-         icon from its row */
-      > .notion-text:has(.notion-link[href^="mailto:"]),
-      > .notion-text:has(.notion-link[href^="tel:"]) {
-        display: grid;
-        grid-template-columns: 16px 1fr;
-        column-gap: 8px;
-        /* baseline, because the glyph's line box is smaller than the text's
-           and top-aligns above it otherwise */
-        align-items: baseline;
-        margin-top: 6px;
-
-        .notion-link {
-          color: inherit;
-        }
-
-        &::before {
-          font: var(--fa-font-solid);
-          font-size: 12px;
-          color: var(--kaist-blue);
-          content: '\f0e0';
-          justify-self: center;
-        }
-      }
-
-      > .notion-text:has(.notion-link[href^="tel:"])::before {
-        content: '\f095';
-      }
-
-      /* the SNS row: the link's domain is the marker, and the anchor text
-         hides inside a member-card-style icon circle (people.css is the
-         model). Add a network by adding a domain and a glyph here */
-      > .notion-text:has(.notion-link[href*="linkedin.com"]),
-      > .notion-text:has(.notion-link[href*="scholar.google"]),
-      > .notion-text:has(.notion-link[href*="facebook.com"]) {
-        display: flex;
-        gap: 10px;
-        margin-top: 16px;
-
-        .notion-link {
-          position: relative;
-          display: block;
-          width: var(--icon-w);
-          height: var(--icon-w);
-          border: 1px solid var(--rule);
-          border-radius: 50%;
-          font-size: 0;
-          color: transparent;
-          transition: border-color 0.15s;
-
-          /* the glyph is its own layer over the whole circle, so the hidden
-             label text node cannot push it off center */
-          &::before {
-            content: var(--glyph);
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            font: var(--fa-font-brands);
-            font-size: 15px;
-            color: #5b6670;
-            transition: color 0.15s;
-          }
-
-          &:hover {
-            border-color: var(--accent);
-          }
-
-          &:hover::before {
-            color: var(--accent-deep);
-          }
-        }
-
-        .notion-link[href*="linkedin.com"] { --glyph: '\f0e1'; }
-        .notion-link[href*="scholar.google"] { --glyph: '\e63b'; }
-        .notion-link[href*="facebook.com"] { --glyph: '\f39e'; }
-      }
     }
 
     /* the right column: Career and Education entries under their headings,
@@ -236,22 +157,6 @@
         margin-top: 0;
       }
 
-      /* the entries are Notion bullets: the list marker is what says
-         "this is an entry", and the bullet dot restyles into the blue bar */
-      .notion-bulleted-list {
-        margin: 0;
-        padding-inline-start: 0;
-        list-style: none;
-      }
-
-      .notion-list-item {
-        margin: 6px 0;
-        padding: 0 0 0 12px;
-        border-left: 2px solid var(--kaist-blue);
-        font-size: 15px;
-        line-height: 1.5;
-        color: var(--sub);
-      }
     }
 
     /* the stacked layout: portrait and identity above, sections below.

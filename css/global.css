@@ -5,6 +5,18 @@
 :root {
   --primary-font: Montserrat, NanumSquare, Inter, -apple-system, sans-serif;
   --secondary-font: var(--primary-font);
+
+  /* the shared palette and identity metrics (docs/super.md, "Design
+     Tokens"); a page overrides locally where its design departs */
+  --ink: #212121;
+  --sub: #3c454d;
+  --muted: #7a858e;
+  --rule: #e3e8ec;
+  --accent: #00b8ff;
+  --accent-deep: #0479b8;
+  --kaist-blue: #004191;
+  --icon-w: 34px;
+  --photo-radius: 12px;
 }
 
 /* The injected footer band (and the full-bleed heroes) break out with 100vw,

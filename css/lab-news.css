@@ -1,13 +1,14 @@
-/* Lab News. Served by the pinned jsDelivr <link> in code/lab-news.html. The
-   property ids are the only handle that survives an empty field; every row is
-   a fixed height on a flex column. docs/super.md, "Lab News Page".
+/* Lab News. Served by the pinned jsDelivr <link> in code/lab-news.html,
+   alongside css/news-card.css, which owns the card look (title, meta, and
+   summary type, the square covers) shared with Home's strip. This file keeps
+   the page frame: the post counter, the Load More cut, and the fixed row
+   grid that survives an empty field. docs/super.md, "Lab News Page".
 
    Notion:  Linked gallery view of `Lab News Posts`
               showing Title, Date, Location, Summary
 
    property-4856717d  Date
-   property-6e756d61  Location
-   property-686f7844  Summary */
+   property-6e756d61  Location */
 
 .page__lab-news {
   --padding-left: clamp(16px, 3vw, 48px);
@@ -15,13 +16,6 @@
 
   --collection-card-cover-size-large: 380px;
   --collection-card-gap: 36px 24px;
-  --collection-card-content-padding: 14px 0 0;
-
-  --collection-card-border-radii: 0;
-  --collection-card-shadow: none;
-  --color-card-bg: transparent;
-
-  --meta-line: 24px;
 }
 
 .page__lab-news .notion-collection-gallery {
@@ -79,13 +73,6 @@
   background: #f4f6f7;
 }
 
-.page__lab-news .notion-collection-card__cover.large,
-.page__lab-news .notion-collection-card > div:not([class]) {
-  height: auto !important;
-  min-height: 0;
-  aspect-ratio: 1 / 1;
-}
-
 .page__lab-news .notion-collection-card__property-list {
   display: flex;
   flex-direction: column;
@@ -95,40 +82,8 @@
   flex: none;
 }
 
-.page__lab-news .notion-collection-card__property.title {
-  overflow: hidden;
-  height: 2.0em;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.45;
-  color: #212121;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.page__lab-news .notion-collection-card__property.property-4856717d,
-.page__lab-news .notion-collection-card__property.property-6e756d61 {
-  overflow: hidden;
-  height: var(--meta-line);
-  font-size: 13px;
-  color: #8a8a8e;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
 .page__lab-news
   .notion-collection-card__property-list:not(:has(.property-6e756d61))
   .notion-collection-card__property.property-4856717d {
   margin-bottom: var(--meta-line);
-}
-
-.page__lab-news .notion-collection-card__property.property-686f7844 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 2.9em;
-  margin-top: 8px;
-  font-size: 14px;
-  color: #4a4a4f;
 }

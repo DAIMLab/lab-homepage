@@ -1,0 +1,114 @@
+/* The identity blocks shared by the professor card on /people and the
+   profile page at /people/professor: the same Notion markers drive both
+   (mailto:/tel: links draw the contact glyphs, link domains the SNS
+   circles, Notion bullets the blue entry bars), so the rules live once
+   and each page's own file keeps only what differs. Served by pinned
+   jsDelivr <link>s in code/people.html and code/professor.html, after
+   the token declarations in css/global.css. */
+
+/* ---- the contact rows and the SNS circles, inside the identity column ---- */
+
+:is(.page__people .notion-root > .notion-callout.bg-gray-light .notion-column:first-child,
+    .page__people-professor .notion-root > .notion-column-list) {
+
+  /* the contact rows identify themselves: the mailto:/tel: link is the
+     marker CSS keys on, so reordering blocks in Notion cannot detach an
+     icon from its row */
+  .notion-text:has(.notion-link[href^="mailto:"]),
+  .notion-text:has(.notion-link[href^="tel:"]) {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    column-gap: 8px;
+    /* baseline, because the glyph's line box is smaller than the text's
+       and top-aligns above it otherwise */
+    align-items: baseline;
+    margin-top: 6px;
+
+    .notion-link {
+      color: inherit;
+    }
+
+    &::before {
+      font: var(--fa-font-solid);
+      font-size: 12px;
+      color: var(--kaist-blue);
+      content: '\f0e0';
+      justify-self: center;
+    }
+  }
+
+  .notion-text:has(.notion-link[href^="tel:"])::before {
+    content: '\f095';
+  }
+
+  /* the SNS row: the link's domain is the marker, and the anchor text
+     hides inside an icon circle. Add a network by adding a domain and a
+     glyph here */
+  .notion-text:has(.notion-link[href*="linkedin.com"]),
+  .notion-text:has(.notion-link[href*="scholar.google"]),
+  .notion-text:has(.notion-link[href*="facebook.com"]) {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+
+    .notion-link {
+      position: relative;
+      display: block;
+      width: var(--icon-w);
+      height: var(--icon-w);
+      border: 1px solid var(--rule);
+      border-radius: 50%;
+      font-size: 0;
+      color: transparent;
+      transition: border-color 0.15s;
+
+      /* the glyph is its own layer over the whole circle, so the hidden
+         label text node cannot push it off center */
+      &::before {
+        content: var(--glyph);
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font: var(--fa-font-brands);
+        font-size: 15px;
+        color: #5b6670;
+        transition: color 0.15s;
+      }
+
+      &:hover {
+        border-color: var(--accent);
+      }
+
+      &:hover::before {
+        color: var(--accent-deep);
+      }
+    }
+
+    .notion-link[href*="linkedin.com"] { --glyph: '\f0e1'; }
+    .notion-link[href*="scholar.google"] { --glyph: '\e63b'; }
+    .notion-link[href*="facebook.com"] { --glyph: '\f39e'; }
+  }
+}
+
+/* ---- the Career / Education / Lecture entries: Notion bullets, the
+   list marker restyled into the blue bar ---- */
+
+:is(.page__people .notion-root > .notion-callout.bg-gray-light .notion-column:last-child,
+    .page__people-professor .notion-root) {
+
+  .notion-bulleted-list {
+    margin: 0;
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  .notion-list-item {
+    margin: 6px 0;
+    padding: 0 0 0 12px;
+    border-left: 2px solid var(--kaist-blue);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--sub);
+  }
+}

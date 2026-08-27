@@ -1,5 +1,8 @@
-/* Home. Served by the pinned jsDelivr <link> in code/home.html. Bare
-   selectors are Home-only. The hero scrim darkens the top strip for the white
+/* Home. Served by the pinned jsDelivr <link> in code/home.html. Every rule
+   guards itself with .page__index (the navbar ones via :has, the navbar being
+   a sibling of the page container), because an injected head outlives its
+   page across client-side navigation; the news cards themselves live in
+   css/news-card.css. The hero scrim darkens the top strip for the white
    menu; the mobile drawer takes the white back off. docs/super.md, "Home Page".
 
    Notion:  Callout (gray background)          the hero
@@ -11,43 +14,42 @@
               showing Title and Date only
             Link  모든 소식 보기 → */
 
-body,
-.super-content {
+body:has(.page__index),
+.page__index {
   overflow-x: hidden !important;
 }
 
-.super-content {
+.page__index {
   margin-top: calc(var(--navbar-height) * -1);
 }
 
-.notion-header {
+.page__index .notion-header {
   display: none !important;
 }
 
-.super-navbar {
+.super-root:has(.page__index) .super-navbar {
   background: transparent !important;
   --navbar-text-color: #fff;
   position: static !important;
 }
 
-.super-navbar__item,
-.super-navbar__logo {
+.super-root:has(.page__index) :is(.super-navbar__item, .super-navbar__logo) {
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 0 14px rgb(0 0 0 / 0.40);
 }
 
-.super-navbar__item svg {
+.super-root:has(.page__index) .super-navbar__item svg {
   filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.60));
 }
 
-.super-navbar__menu-wrapper {
+.super-root:has(.page__index) .super-navbar__menu-wrapper {
   color: #000;
 }
 
-.notion-root > .notion-callout.bg-gray-light {
+.page__index .notion-root > .notion-callout.bg-gray-light {
   position: relative;
-  left: 50%;
   width: 100vw;
-  margin: 0 0 0 -50vw;
+  margin: 0;
+  margin-inline: calc(50% - 50vw);
   height: clamp(440px, 100vh, 1000px);
   padding: 0 !important;
   border: 0 !important;
@@ -120,11 +122,6 @@ body,
   --collection-card-cover-size-medium: 240px;
   --collection-card-cover-size-large: 240px;
   --collection-card-gap: 24px;
-
-  --collection-card-border-radii: 0;
-  --collection-card-shadow: none;
-  --collection-card-content-padding: 14px 0 0;
-  --color-card-bg: transparent;
 }
 
 .page__index .notion-root > h1.notion-heading {
@@ -142,42 +139,4 @@ body,
 
 .page__index .notion-collection-card:nth-child(n + 4) {
   display: none;
-}
-
-.page__index .notion-collection-card .notion-collection-card__cover,
-.page__index .notion-collection-card > div:not([class]) {
-  height: auto !important;
-  min-height: 0;
-  aspect-ratio: 1 / 1;
-}
-
-.page__index .notion-collection-card__property.title {
-  overflow: hidden;
-  height: 2.0em;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.45;
-  color: #212121;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.page__index .notion-collection-card__property:not(.title) {
-  overflow: hidden;
-  height: 24px;
-  font-size: 13px;
-  color: #8a8a8e;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.page__index .notion-collection-card__property.property-686f7844 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  height: 2.9em;
-  margin-top: 4px;
-  font-size: 14px;
-  color: #4a4a4f;
-  white-space: normal;
 }

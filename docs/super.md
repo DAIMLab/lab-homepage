@@ -75,6 +75,9 @@ cover shapes with `aspect-ratio`, not a height.
 
 From the live IMweb site; match unless overridden. Accent `#00B8FF`/`#05b2f5`, ink `#212121`/`#1c1c1e`,
 surface `#ffffff`/`#f8f8f8`, rule `#dadada`/`#e5e5e5`, Montserrat for Latin, NanumSquare for Korean.
+The working palette (`--ink --sub --muted --rule --accent --accent-deep --kaist-blue`) and the identity
+metrics (`--icon-w --photo-radius`) sit on `:root` in `css/global.css`; a page overrides locally where
+its design departs (Projects keeps its own `--sub`).
 Ascent's accent is Notion green; retint via `--green-h/-s/-l` rather than editing blocks. Site identity:
 title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.imweb.me/upload/S20240718af4b4371a8c5a/e847603f005eb.png`.
 
@@ -111,12 +114,17 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Home Page
 
-- `css/home.css`, per-page. Hero: a top-level `bg-gray-light` callout with the video, broken full-bleed
-  under the navbar; `--navbar-text-color: #fff` is set as a variable so super.css recolors links and
-  icons alike, and `overflow-x` on body answers the -50vw break-out scroll.
-- Latest strip: a second linked view of Lab News Posts. `auto-fit` replaces Super's `auto-fill` so empty
-  tracks collapse and three cards fill the row; the cap is `:nth-child(n + 4)` because the view DSL has no
-  LIMIT. All three cover-size variables are set alike. The heading centers via
+- `css/home.css`, per-page, but every rule still guards itself with `.page__index` (navbar rules via
+  `.super-root:has(.page__index)`, the navbar being a sibling of the page container): an injected head
+  outlives its page across client-side navigation, and Home's bare hero selector would otherwise restyle
+  the professor card, another `bg-gray-light` callout, on /people. Hero: a top-level `bg-gray-light`
+  callout with the video, broken full-bleed under the navbar; `--navbar-text-color: #fff` is set as a
+  variable so super.css recolors links and icons alike, and `overflow-x` answers the break-out scroll.
+- Latest strip: a second linked view of Lab News Posts, wearing the card look from `css/news-card.css`
+  (shared with /lab-news, scope `:is(.page__index, .page__lab-news)`; both views render the same database,
+  so the property ids match). `auto-fit` replaces Super's `auto-fill` so empty tracks collapse and three
+  cards fill the row; the cap is `:nth-child(n + 4)` because the view DSL has no LIMIT. All three
+  cover-size variables are set alike. The heading centers via
   `.notion-root > h1.notion-heading` (the hero's H1 is nested, unaffected).
 - A view created by `notion-create-view` starts with Card preview: None; setting Page cover is a manual
   Notion click on every new view (the DSL cannot: the page cover is not a property).
@@ -126,11 +134,12 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Lab News Page
 
-- `css/lab-news.css` is mostly a variable block; the `large` suffix must match the view's card size.
-  Hooks: Date `property-4856717d`, Location `property-6e756d61`, Summary `property-686f7844` (`:nth-child`
-  shifts when a field is empty; Notion drops the element). Cards align by fixed per-row heights in a
-  flex-column property list; the date stands in for a missing Location via `:not(:has(…))`. Covers hold an
-  `aspect-ratio`; the post count is a CSS counter printed by the gallery's `::after`.
+- The card look (title, meta, and summary type, the square covers) lives in `css/news-card.css`, shared
+  with Home's strip; `css/lab-news.css` keeps the page frame. Hooks: Date `property-4856717d`, Location
+  `property-6e756d61`, Summary `property-686f7844` (`:nth-child` shifts when a field is empty; Notion
+  drops the element). Cards align by fixed per-row heights in a flex-column property list; the date
+  stands in for a missing Location via `:not(:has(…))`; the post count is a CSS counter printed by the
+  gallery's `::after`.
 - Load More (`js/lab-news-load-more.js`, site-wide, guarded `.page__lab-news`): shows 18 cards, +18 per
   click. Display control, not paging: every card is in the served HTML; the win is lazy covers. CSS makes
   the first cut, keyed on the grid lacking `data-total`; the script stamps `data-total` after hydration
@@ -157,8 +166,10 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## People Page
 
-- Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-professor.css`,
-  each pinned to a SHA); the CSS and Body tabs stay empty. Behavior is site-wide: `js/email-copy.js`
+- Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
+  `css/people-professor.css`, each pinned to a SHA); the CSS and Body tabs stay empty. The identity file
+  holds what the card shares with the profile page: the mailto:/tel: contact rows, the domain-marked SNS
+  circles, and the blue entry bars, scoped `:is()` over both pages' exact containers. Behavior is site-wide: `js/email-copy.js`
   (deliberately unscoped, any email property on any page gets click-to-copy) and a `.page__people` rule in
   `js/date-format.js` cutting Joined to year-month. A change is two commits: the file, then the head file
   repinned to its new SHA ([`hosting.md`](hosting.md#jsdelivr)).
@@ -171,8 +182,8 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   border-box`), replacing the columns' inline `calc()` widths with flex (`--column-spacing` does not
   resolve inside a callout) and keeping the photo track on a definite `clamp()` basis (a flexible one goes
   cyclic); the portrait width carries `!important` against Super's `width: 100% !important` on
-  `.page-width` images. The left column reads by position under the portrait: blue Professor label, name,
-  muted department, then three contact
+  `.page-width` images. The left column reads by marker under the portrait: the first text is the blue
+  label, bold marks the name, italics the department, then three contact
   rows drawn as FA-glyph grids, identified by their own mailto:/tel: links rather than by position, so
   reordering cannot detach an icon, plus an SNS row of member-card-style
   icon circles keyed the same way on link domains (linkedin.com / scholar.google / facebook.com); the
@@ -198,8 +209,9 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   `property-75566065` (via the generic `.notion-property__date`).
 
 The professor's profile page (`/people/professor`, scope `.page__people-professor`) is the card's
-full-page counterpart: Head tab `code/professor.html` links Font Awesome and `css/professor.css`, and
-the same markers drive it (mailto:/tel: glyph rows, SNS domains, bulleted entries). Its Media gallery
+full-page counterpart: Head tab `code/professor.html` links Font Awesome, `css/people-identity.css`
+(the shared contact rows, SNS circles, and entry bars), and `css/professor.css`, and the same markers
+drive it (mailto:/tel: glyph rows, SNS domains, bulleted entries). Its Media gallery
 is a linked view styled after ascent.super.site's team gallery: the card rests as a clean cover
 photo, and hover slides a translucent bottom bar in carrying the title over a date-and-outlet line
 (date trimmed to `YYYY.MM` by `js/date-format.js`; the bar stays out on touch devices, where hover

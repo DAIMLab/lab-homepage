@@ -1,8 +1,9 @@
 /* People, /people. Served by the pinned jsDelivr <link> in
-   code/people.html, alongside css/people-professor.css which draws on the
-   design tokens declared here. Five linked views become profile cards; email
-   and URL properties are icon buttons. Anatomy and traps: docs/super.md,
-   "People Page". */
+   code/people.html, alongside css/people-identity.css and
+   css/people-professor.css, which draw on the --card-* tokens declared here
+   and the palette in css/global.css. Five linked views become profile cards;
+   email and URL properties are icon buttons. Anatomy and traps:
+   docs/super.md, "People Page". */
 
 .page__people {
   --content-w: 1060px;
@@ -11,15 +12,6 @@
   --card-shadow: 0 10px 28px rgb(16 42 67 / 8%);
   --card-shadow-hover: 0 16px 36px rgb(16 42 67 / 14%);
   --photo-w: 260px;
-  --photo-radius: 12px;
-  --icon-w: 34px;
-  --ink: #212121;
-  --sub: #3c454d;
-  --muted: #7a858e;
-  --rule: #e3e8ec;
-  --accent: #00b8ff;
-  --accent-deep: #0479b8;
-  --kaist-blue: #004191;
 
   /* The hero carousel: first thing under the navbar, edge to edge. The page
      icon and title are hidden, as on Home; the carousel is the header. The
@@ -31,9 +23,9 @@
 
   .notion-root > .notion-callout.bg-brown-light {
     position: relative;
-    left: 50%;
     width: 100vw;
-    margin: 0 0 0 -50vw;
+    margin: 0;
+    margin-inline: calc(50% - 50vw);
 
     /* a slide is not a link: the card anchor lets go, and the clicks fall
        through to the snippet's swipe handlers on the gallery */

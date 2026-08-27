@@ -1,0 +1,59 @@
+/* The news card, shared by Home's Lab News strip and the Lab News page:
+   both render linked gallery views of the same `Lab News Posts` database,
+   so the property ids match and one look serves the two scopes. Served by
+   pinned jsDelivr <link>s in code/home.html and code/lab-news.html; each
+   page keeps its own column count and gap in its own file.
+
+   property-4856717d  Date
+   property-6e756d61  Location
+   property-686f7844  Summary */
+
+:is(.page__index, .page__lab-news) {
+  --meta-line: 24px;
+
+  --collection-card-border-radii: 0;
+  --collection-card-shadow: none;
+  --collection-card-content-padding: 14px 0 0;
+  --color-card-bg: transparent;
+
+  /* square covers; the bare div is the no-cover placeholder, whose inline
+     height only !important reaches */
+  .notion-collection-card .notion-collection-card__cover,
+  .notion-collection-card > div:not([class]) {
+    height: auto !important;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+  }
+
+  .notion-collection-card__property.title {
+    overflow: hidden;
+    height: 2.0em;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--ink);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .notion-collection-card__property.property-4856717d,
+  .notion-collection-card__property.property-6e756d61 {
+    overflow: hidden;
+    height: var(--meta-line);
+    font-size: 13px;
+    color: #8a8a8e;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .notion-collection-card__property.property-686f7844 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.9em;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #4a4a4f;
+  }
+}
