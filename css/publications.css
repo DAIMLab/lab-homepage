@@ -1,10 +1,28 @@
 /* Publications, /publications. Served by the pinned jsDelivr <link> in
    code/publications.html.
 
+   The list follows cvlab.postech.ac.kr/page/publication: a year in the left
+   margin, a rail with a dot beside it, and one stacked entry per paper,
+   title over authors over venue. Its metrics are kept (24px year in a 65px
+   column, 50px rail offset, 17px title, 14px sub-line) and its orange dot
+   becomes --kaist-blue.
+
+   Notion:  Linked list views of `Papers` and `Patents`, grouped by `Year`,
+              showing Authors, Venue, Title
+
+   property-6d5a7b51  Authors
+   property-5f567753  Venue
+
    The page keeps its 📜 icon in Notion and hides it on the site. Super draws
    the icon absolutely and reserves its height on the title instead, so the
    margin has to go with it or the title floats 84px down an empty band
    (both rules read from /styles/super.css). */
+
+.page__publications {
+  --pub-year: 65px;
+  --pub-rail: 50px;
+  --pub-sub: #666;
+}
 
 .page__publications .notion-header__icon-wrapper {
   display: none;
@@ -13,4 +31,168 @@
 .page__publications .notion-header__content.no-cover.has-icon
   .notion-header__title-wrapper {
   margin-top: 0;
+}
+
+/* ---- the year rail: the group header becomes a left margin column and the
+   list beside it carries the rule and the dot ---------------------------- */
+
+.page__publications .notion-collection-group__section {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.page__publications .notion-collection-group__section-header {
+  flex: 0 0 var(--pub-year);
+  padding: 0;
+  border-top: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pub-sub);
+}
+
+/* the year labels the group; the arrow that collapses it is noise */
+.page__publications .notion-collection-group__section-toggle {
+  display: none;
+}
+
+.page__publications .notion-collection-list {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  margin-left: var(--pub-rail);
+  padding: 0 0 0 var(--pub-rail);
+  border-top: 0;
+  border-left: 3px solid var(--rule);
+}
+
+.page__publications .notion-collection-list::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: -6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--kaist-blue);
+}
+
+/* ---- one entry: title, authors, venue, each on its own line ------------ */
+
+.page__publications .notion-collection-list__item {
+  display: block;
+  gap: 0;
+  margin: 0 0 15px;
+  padding: 0 0 15px;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+}
+
+.page__publications .notion-collection-list__item:hover {
+  background: none;
+}
+
+.page__publications .notion-collection-list__item:last-child {
+  margin-bottom: 0;
+}
+
+/* the row anchor sits under the properties by default, so only the title
+   answers a click; dropping their stacking context hands it the whole row */
+.page__publications .notion-collection-list__item-property {
+  z-index: auto;
+  padding: 0;
+  white-space: normal;
+}
+
+.page__publications .notion-collection-list__item .notion-property__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  overflow: visible;
+  margin-bottom: 8px;
+}
+
+.page__publications .notion-collection-list__item .notion-property__title
+  .notion-property__title__icon-wrapper {
+  display: none;
+}
+
+/* Super clamps a list title to one ellipsised line and underlines it; a
+   paper title runs long and reads as a heading, so both go */
+.page__publications .notion-collection-list__item .notion-property__title
+  .notion-semantic-string {
+  display: block;
+  margin-inline: 0;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.page__publications .notion-collection-list__item
+  .notion-property.notion-property__title .notion-semantic-string > span {
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  border-bottom: 0;
+}
+
+.page__publications .notion-collection-list__item-content {
+  display: block;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--pub-sub);
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__text {
+  max-width: none;
+  font-size: 14px;
+}
+
+/* ---- the authors read as a citation line, not as chips ----------------- */
+
+.page__publications .notion-collection-list__item-property.notion-property__select {
+  display: block;
+}
+
+.page__publications .notion-collection-list__item-property.notion-property__select
+  .notion-pill {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font-size: 14px;
+  line-height: inherit;
+  white-space: normal;
+}
+
+.page__publications .notion-collection-list__item-property.notion-property__select
+  .notion-pill:not(:last-child)::after {
+  content: ', ';
+}
+
+@media (max-width: 768px) {
+  .page__publications {
+    --pub-year: 50px;
+    --pub-rail: 20px;
+  }
+
+  .page__publications .notion-collection-group__section-header {
+    font-size: 18px;
+  }
+
+  .page__publications .notion-collection-list {
+    margin-left: 10px;
+  }
+
+  .page__publications .notion-collection-list__item .notion-property__title
+    .notion-semantic-string {
+    font-size: 16px;
+  }
 }
