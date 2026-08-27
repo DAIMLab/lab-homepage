@@ -193,6 +193,17 @@ Eight properties remain: `Title`, `Authors`, `Year`, `Type`, `Scope`, `Venue`,
 `DOI`, `PDF`. Dropping `Venue` as a select also drops the abbreviation badge
 column the al-folio reference supplied, so the page design loses that hook.
 
+`Papers` schema: `Title`, `Authors` (multi-select, 49 lab members), `Year` (text,
+the grouping key), `Type` (select: Journal / Conference / Workshop / Preprint),
+`Scope` (select: International / Domestic), `Venue`, `DOI`, `PDF`. `Type` and
+`Scope` are separate so a domestic journal article does not have to pretend to be a
+conference paper, which is what the legacy tabs did to ten of them.
+
+Publications carries four linked views over it, all `list`, all grouped by `Year`,
+all showing `Authors`, `Venue`, `Title`: `All`, plus `International Journal`,
+`International Conference` and `Domestic Conference`, each filtered on the
+`Scope` + `Type` pair. `Patents` is the second tab and its own database.
+
 `Papers` (`90abcc7cae564e3bb1bca8c2f24f89e6`, data source
 `7f3f7a41-1143-4ea4-99f9-0c451af98b69`) and `Patents`
 (`8df6b73555b7455495ab3e50bed1816c`, data source
@@ -285,6 +296,21 @@ and Staff keep manual order.
   the files property was dropped from the schema rather than left dead.
 - `notion-update-view` cannot change a view's type, so a table view cannot be turned
   into a gallery. Create the gallery as a linked view instead.
+- **A number property groups by range, and the range is what the header shows.**
+  Grouping `Papers` by a numeric `Year` labelled every group `2026 to 2027`, whatever
+  the Group Every size. There is no setting that trims it to the first number; the
+  header is one text node, so no CSS reaches inside it either. The fix is to group by
+  a **text** property, where the label is the value: `Year` is `text` for that reason
+  and four-digit strings sort exactly as the numbers did.
+- **`number` to `text` keeps every value**, measured on a throwaway column and then on
+  all 136 `Papers` rows: `2026` came back `"2026"`, no thousands separator, no blanks.
+  That is the opposite of the `select` to `status` conversion above, which discards.
+- **A formula property cannot be a group key.** `GROUP BY "Year label"` on a formula
+  returns success and silently drops `groupBy` from the view, leaving it ungrouped.
+  Nothing in the response says so; read the returned view JSON back.
+- **`GROUP BY` has no direction.** The DSL takes `SORT BY "X" DESC` for rows but only
+  `GROUP BY "X"` for groups, which always lands ascending. Reversing the group order
+  is a click on the view's Group setting in Notion.
 - **Replacing a multi-select's whole option list with `ALTER COLUMN … SET MULTI_SELECT(…)`
   keeps the values whose option names survive and drops the rest.** Measured on one
   row: a name present in both lists kept its option id, the four that did not appear
