@@ -83,9 +83,23 @@ currently shows; neither is on a page yet, so nothing on the site has changed.
 
 `Papers` splits the four-quadrant taxonomy across two select properties, `Scope`
 (International/Domestic) and `Type` (Journal/Conference/Workshop/Preprint), and
-carries five list views over that split: `Preprint`, `International Journal`,
+carries four list views over that split: `International Journal`,
 `International Conference`, `Domestic Journal`, `Domestic Conference`. Every view
-groups by `Year` and sorts by `Published` descending inside the group.
+groups by `Year` and orders rows manually inside the group; there is no date
+property to sort on, so drag decides the order within a year.
+
+`Type` keeps `Workshop` and `Preprint` as options with no view behind them, so a
+row set to either shows up in no tab. Drop the two options or add tabs for them
+before using either. Two views also survive that the site must not inherit: the
+`Default view` table Notion creates with every database, and a `Preprint` list
+left over from the first pass. The Notion API has no delete-view call, so both
+need a right-click in the UI; neither reaches the site, because the linked view on
+`/publications` carries its own views.
+
+`Authors` is a multi-select seeded with the twenty names in the `People` database
+plus the professor. Notion keeps per-row option order as entered, so author order
+survives, and the option list makes filtering by a lab member possible. Every
+external co-author becomes a new option, so the list grows with the paper count.
 
 `Year` is a **select**, not a number, and that is deliberate. Notion groups a
 number property into ranges, not values: it needs a Group Range and a Group Every
