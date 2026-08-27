@@ -16,8 +16,12 @@
   .notion-root > .notion-callout.bg-gray-light {
     position: relative;
     box-sizing: border-box;
+    /* the page is full-width in Notion, so .notion-root carries no
+       max-width and a 100% card grows with the viewport. The member
+       galleries are already held at --content-w; the card joins them */
     width: 100%;
-    margin: 28px 0 0;
+    max-width: var(--content-w);
+    margin: 28px auto 0;
     padding: clamp(22px, 3vw, 38px);
     background: #fff;
     border: 1px solid var(--prof-rule);
