@@ -17,6 +17,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
+| Patents | `/publications/patents` | `3c911c7b703c814fa6e9dcc4177c3b09` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
@@ -63,30 +64,49 @@ Databases live away from the page that shows them; the page carries a **linked v
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
 a page: Super renders `.notion-dropdown` only when a collection block holds more than
 one view, so a linked block with a single view emits no switcher markup at all.
-Verified: `/publications` has 1 view and no dropdown. `/projects` had 4 and a
-dropdown while it still carried the Ascent template's Blog posts view; that block is
-gone and its single `All` view emits no switcher.
+Verified: `/projects` had 4 and a dropdown while it still carried the Ascent
+template's Blog posts view; that block is gone and its single `All` view emits no
+switcher. `/publications` now runs the other way on purpose: its linked block
+(`3c911c7b703c81d5b489ccde0143ff7c`) carries three views so the switcher appears and
+`css/publications.css` can dress it as tabs. `/publications/patents` keeps one view
+and stays switcher-free.
 
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
-| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
-| Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | nowhere yet |
-| Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | nowhere yet |
+| Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | nowhere |
+| Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | Publications |
+| Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | Publications/Patents |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
 
 `Papers` and `Patents` are the Publications rebuild, created 2026-08-27 and still
-empty. They replace the Ascent leftover `Blog posts database` that `/publications`
-currently shows; neither is on a page yet, so nothing on the site has changed.
+empty. What they replaced on `/publications` was not the `Blog posts database` this
+file used to name but a linked view titled `View of Case studies database`, over
+the Ascent data source `79c11c7b-703c-8282-bfc0-87761a3b6b96`; that block and the
+lorem ipsum column above it were deleted on 2026-08-28. The source database still
+exists elsewhere in the template, and the deleted blocks are in Notion's trash.
+
+The two live on separate pages, not one. A single Super view switcher spans one
+data source, so `Papers` and `Patents` cannot share a tab bar without merging into
+one database, which was considered and declined on 2026-08-28. Instead `Patents` is
+a child page at `/publications/patents`, and both pages open with the same pair of
+link-to-page blocks acting as a section nav.
 
 `Papers` splits the four-quadrant taxonomy across two select properties, `Scope`
-(International/Domestic) and `Type` (Journal/Conference/Workshop/Preprint), and
-carries four list views over that split: `International Journal`,
-`International Conference`, `Domestic Journal`, `Domestic Conference`. Every view
-groups by `Year` and orders rows manually inside the group; there is no date
-property to sort on, so drag decides the order within a year.
+(International/Domestic) and `Type` (Journal/Conference/Workshop/Preprint). Three
+list views cover the quadrants in use: `International Journal`,
+`International Conference`, `Domestic Conference`. A `Domestic Journal` view existed
+and was deleted on 2026-08-28; rows filed as Domestic + Journal now appear in no tab
+until it comes back. Every view groups by `Year` and orders rows manually inside the
+group; there is no date property to sort on, so drag decides the order within a year.
+
+The views exist twice over. The source database carries a set for editing, and the
+linked block on `/publications` carries its own, because a linked view never
+inherits the source's tabs. A tab added in one place has to be added in the other,
+and a new view starts at Notion's default number range, so it needs the range set by
+hand like the rest.
 
 `Type` keeps `Workshop` and `Preprint` as options with no view behind them, so a
 row set to either shows up in no tab. Drop the two options or add tabs for them
@@ -145,10 +165,12 @@ the hook `css/publications.css` will use for the POSTECH-style year rail. Notion
 sets `hideEmptyGroups` on every one of these views, so a year with no papers in
 that quadrant does not render.
 
-`Patents` mirrors the same `Year` number so both halves of the page group alike,
-and inherits the same range problem. It keeps `Status` (출원/공개/등록/거절) and
-`Country` (KR/US/PCT/EP/JP/CN) apart so a pending filing never reads as a granted
-one, and one `All` view groups by `Year` sorted on `Filed`.
+`Patents` went its own way on 2026-08-28. The schema was cut back by hand to five
+properties, `Title`, `특허권자`, `특허번호`, `Date` and `Link`, so `Year`, `Status`
+and `Country` are gone and none of the range setup above applies to it. Filings stay
+few enough that a year rail would be noise, so its single `All` view carries no
+grouping at all, sorts on `Date` descending, and `css/publications.css` reflows the
+rows as cards.
 
 The Papers schema was trimmed further in Notion on 2026-08-28: `Code`, `Topic` and
 `Venue Full` are gone, `Venue` is now free text carrying the full citation rather

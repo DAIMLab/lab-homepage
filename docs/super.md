@@ -164,6 +164,34 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   not rebuild the deleted `Term` formula), so `js/date-format.js` rewrites the Period under a
   `MutationObserver`.
 
+## Publications Pages
+
+- Two pages, one stylesheet: `code/publications.html` and `code/publications-patents.html`
+  both link `css/publications.css` at the same pinned SHA. Scope classes are
+  `page__publications` and `page__publications-patents`; every rule names one of them,
+  even though per-page CSS cannot leak, so the two designs stay legible apart.
+- Section nav: the two link-to-page blocks at the top of each page. Super renders a
+  link-to-page as `a.notion-page` wrapping `.notion-page__icon` and
+  `.notion-page__title` (an `alias` block renders its referenced block, so this is the
+  page block itself), and they are the only `.notion-page` children of `.notion-root`.
+  Which entry is current comes from the page scope class crossed with an
+  `[href$="/patents"]` test, so no script reads the URL.
+- Tabs: the three views on the linked block make Super emit `.notion-dropdown`, which
+  is a button plus an absolutely positioned menu that JS keeps inert through
+  `.initial-state` and `.animate-out`. The conversion to a row of buttons is Ascent's
+  own (`reference/ascent-template.css:386`): hide the button, neutralise the inert
+  classes, and flex `.notion-dropdown__option-list`. The options keep their handlers.
+  `.notion-dropdown__option.active` is the current tab.
+- Year rail: each group is a `.notion-collection-group__section` holding its header and
+  the rows, so the section becomes a two-column grid. The rule is a `border-left` on the
+  non-header child and the node dot is that child's `::before`; neither is an element.
+  The header is a collapse toggle by default, so the caret is hidden and
+  `pointer-events` are dropped. Measured against POSTECH CVLab, whose rail is the same
+  shape: 65px year column, 2.4px rule, 9px dot.
+- Patents skip the rail. One ungrouped view, `.notion-collection-list` turned into an
+  `auto-fill` card grid. Ascent rules `.notion-collection-list__item` with `!important`
+  on border, radius, margin and padding, so the card rules match that weight.
+
 ## People Page
 
 - Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
