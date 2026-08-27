@@ -57,7 +57,10 @@
   display: none;
 }
 
-.page__publications .notion-collection-list {
+/* the rail belongs to a grouped list; Patents is ungrouped, and there the
+   left margin would push the rows past the container and strand the dot
+   beside an empty year column */
+.page__publications .notion-collection-group__section > .notion-collection-list {
   flex: 1 1 auto;
   min-width: 0;
   position: relative;
@@ -65,9 +68,10 @@
   padding: 0 0 0 var(--pub-rail);
   border-top: 0;
   border-left: 3px solid var(--rule);
+  overflow: visible;
 }
 
-.page__publications .notion-collection-list::before {
+.page__publications .notion-collection-group__section > .notion-collection-list::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -105,25 +109,15 @@
   white-space: normal;
 }
 
+/* the title text is a bare node on .notion-property__title itself, which
+   also carries .notion-semantic-string; the descendant selectors Super
+   writes for it match nothing here, and neither would ours */
 .page__publications .notion-collection-list__item .notion-property__title {
+  display: block;
   flex: 1 1 auto;
   min-width: 0;
   max-width: none;
-  overflow: visible;
-  margin-bottom: 8px;
-}
-
-.page__publications .notion-collection-list__item .notion-property__title
-  .notion-property__title__icon-wrapper {
-  display: none;
-}
-
-/* Super clamps a list title to one ellipsised line and underlines it; a
-   paper title runs long and reads as a heading, so both go */
-.page__publications .notion-collection-list__item .notion-property__title
-  .notion-semantic-string {
-  display: block;
-  margin-inline: 0;
+  margin: 0 0 8px;
   overflow: visible;
   white-space: normal;
   text-overflow: clip;
@@ -133,12 +127,20 @@
   color: var(--ink);
 }
 
+.page__publications .notion-collection-list__item .notion-property__title
+  .notion-property__title__icon-wrapper {
+  display: none;
+}
+
+/* a title carrying inline formatting arrives wrapped in spans, which Super
+   clamps to one ellipsised line and underlines */
 .page__publications .notion-collection-list__item
-  .notion-property.notion-property__title .notion-semantic-string > span {
+  .notion-property.notion-property__title > span {
   overflow: visible;
   white-space: normal;
   text-overflow: clip;
   border-bottom: 0;
+  font-weight: inherit;
 }
 
 .page__publications .notion-collection-list__item-content {
@@ -174,7 +176,7 @@
 
 .page__publications .notion-collection-list__item-property.notion-property__select
   .notion-pill:not(:last-child)::after {
-  content: ', ';
+  content: ',\00a0';
 }
 
 @media (max-width: 768px) {
