@@ -298,8 +298,16 @@ before it and the place after, which survives a venue whose own name holds
 commas, `대한산업공학회, 한국경영과학회, 한국시뮬레이션학회 2025 춘계공동학술대회`, and a
 citation that trails its date instead of centring it, `INFORMS Annual Meeting
 2019, Seattle, USA, 2019`. All 49 distinct conference strings split cleanly;
-15 rows name no place and 73 do. Journal venues are left whole: their `vol. 85,
-2026, pp. 513-530` is the citation, not a date and a city.
+15 rows name no place and 73 do.
+
+A journal citation has no place to give, but it repeats the year the group
+header already shows, so that goes too: `vol. 85, 2026, pp. 513-530` becomes
+`vol. 85, pp. 513-530`, dropping the part that is *only* a year. The ten Korean
+journal rows are written the other way round, `ie 매거진 25.2 (2018): 26-30`,
+where the colon exists to follow the parenthetical; there `(YYYY): ` becomes a
+comma, `ie 매거진 25.2, 26-30`, which also leaves a non-year parenthetical alone,
+`한국통신학회지 (정보와통신) 29.11, 30-35`. Measured after: 136 rows, none holding a
+bare or parenthesised year.
 
 Three things the tab names get wrong, all corrected on the way in:
 
