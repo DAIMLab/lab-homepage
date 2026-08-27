@@ -203,6 +203,12 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   only the title answered a click.
 - Authors arrive as `.notion-pill` chips. Stripping the chip and joining them with
   a `::after` comma needs `\00a0`, since a trailing space in `content` collapses.
+  The last one joins with `and` through `:nth-last-child(2)`, and
+  `:first-child:nth-last-child(2)` drops the comma where there are only two.
+- **A hex escape eats up to six digits, so `\00a0and` is one escape, not two
+  tokens.** CSS reads `\00a0a`, prints U+0A0A (`ਊ`) and leaves `nd` behind. The
+  space that terminates the escape is consumed, not printed: write `'\00a0 and'`.
+  `\00a0\00b7\00a0` needs no space, because the backslash ends the digits itself.
 - The navbar entry stays a flat link to `/publications`. A dropdown would have held
   Papers and Patents as children, but its markup does not take the icon-over-label
   rules `global.css` puts on `.super-navbar__item`, so the site avoids dropdowns.

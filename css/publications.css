@@ -322,16 +322,18 @@
   content: ',\00a0';
 }
 
-/* the last author joins with "and": an Oxford comma over three or more,
-   a bare "and" over exactly two */
+/* the last author joins with "and": an Oxford comma over three or more, a
+   bare "and" over exactly two. A hex escape eats up to six digits, so the
+   space after each \00a0 is the terminator, not a character: without it CSS
+   reads \00a0a and prints one undefined glyph followed by "nd" */
 .page__publications .notion-collection-list__item-property.notion-property__select
   .notion-pill:nth-last-child(2)::after {
-  content: ',\00a0and\00a0';
+  content: ',\00a0 and\00a0 ';
 }
 
 .page__publications .notion-collection-list__item-property.notion-property__select
   .notion-pill:first-child:nth-last-child(2)::after {
-  content: '\00a0and\00a0';
+  content: '\00a0 and\00a0 ';
 }
 
 @media (max-width: 768px) {
