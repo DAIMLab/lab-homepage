@@ -90,11 +90,10 @@ property to sort on, so drag decides the order within a year.
 
 `Type` keeps `Workshop` and `Preprint` as options with no view behind them, so a
 row set to either shows up in no tab. Drop the two options or add tabs for them
-before using either. Two views also survive that the site must not inherit: the
-`Default view` table Notion creates with every database, and a `Preprint` list
-left over from the first pass. The Notion API has no delete-view call, so both
-need a right-click in the UI; neither reaches the site, because the linked view on
-`/publications` carries its own views.
+before using either. A fifth view, the `All` table, is the editing surface and
+stays ungrouped; it never reaches the site, because the linked view on
+`/publications` carries its own views. The Notion API has no delete-view call, so
+a view that outlives its purpose needs a right-click in the UI.
 
 `Authors` is a multi-select seeded with the twenty names in the `People` database
 plus the professor. Notion keeps per-row option order as entered, so author order
