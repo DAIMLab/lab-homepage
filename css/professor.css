@@ -226,6 +226,7 @@
         grid-template-columns: max-content 1fr;
         column-gap: 6px;
         align-content: start;
+        align-items: baseline;
         box-sizing: border-box;
         height: var(--media-bar-h);
         overflow: visible;
@@ -256,9 +257,12 @@
       }
 
       /* the second bar line reads date, then outlet, on one row; a long
-         outlet trims to an ellipsis instead of wrapping the bar taller */
+         outlet trims to an ellipsis instead of wrapping the bar taller.
+         Block display unwinds Super's centered flex on these cells, so
+         the separator dot hugs the date and both texts share a baseline */
       .notion-property__text,
       .notion-property__date {
+        display: block;
         margin: 4px 0 0;
         font-size: 11.5px;
         line-height: 1.3;
