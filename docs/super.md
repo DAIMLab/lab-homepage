@@ -164,40 +164,36 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   not rebuild the deleted `Term` formula), so `js/date-format.js` rewrites the Period under a
   `MutationObserver`.
 
-## Publications Pages
+## Publications Page
 
-- Three pages, one stylesheet: `code/publications.html`, `code/publications-papers.html`
-  and `code/publications-patents.html` all link `css/publications.css` at the same
-  pinned SHA. Scope classes are `page__publications`, `page__publications-papers` and
-  `page__publications-patents`; every rule names one of them, even though per-page CSS
-  cannot leak, so the designs stay legible apart.
-- The navbar entry points at `/publications/papers`, not at `/publications`. A Super
-  navbar dropdown would be the obvious way to hold two children, but its markup does
-  not take the icon-over-label rules `global.css` puts on `.super-navbar__item`, so
-  the item breaks and the site avoids dropdowns. `/publications` stays published,
-  carries only the nav, and is excluded from the sitemap.
-- Section nav: the two link-to-page blocks at the top of each page. Super renders a
-  link-to-page as `a.notion-page` wrapping `.notion-page__icon` and
-  `.notion-page__title` (an `alias` block renders its referenced block, so this is the
-  page block itself), and they are the only `.notion-page` children of `.notion-root`.
-  Which entry is current comes from the page scope class crossed with a test on the
-  last path segment (`[href$="/papers"]`, `[href$="/patents"]`), so no script reads
-  the URL. On the landing page neither matches, which is the intent.
-- Tabs: the three views on the linked block make Super emit `.notion-dropdown`, which
-  is a button plus an absolutely positioned menu that JS keeps inert through
-  `.initial-state` and `.animate-out`. The conversion to a row of buttons is Ascent's
-  own (`reference/ascent-template.css:386`): hide the button, neutralise the inert
-  classes, and flex `.notion-dropdown__option-list`. The options keep their handlers.
-  `.notion-dropdown__option.active` is the current tab.
-- Year rail: each group is a `.notion-collection-group__section` holding its header and
-  the rows, so the section becomes a two-column grid. The rule is a `border-left` on the
-  non-header child and the node dot is that child's `::before`; neither is an element.
-  The header is a collapse toggle by default, so the caret is hidden and
-  `pointer-events` are dropped. Measured against POSTECH CVLab, whose rail is the same
-  shape: 65px year column, 2.4px rule, 9px dot.
-- Patents skip the rail. One ungrouped view, `.notion-collection-list` turned into an
-  `auto-fill` card grid. Ascent rules `.notion-collection-list__item` with `!important`
-  on border, radius, margin and padding, so the card rules match that weight.
+- One page, one Head tab (`code/publications.html` linking `css/publications.css` at
+  a pinned SHA), scope `page__publications`.
+- Notion's tabs block is native in Super and renders as `.notion-tabs` holding
+  `.notion-tabs__nav` of `.notion-tabs__button` and `.notion-tabs__panels`; the
+  inactive panel is `[aria-hidden=true]` and already `display: none`, and the
+  toggle is the component's own `useState`. Papers and Patents are those two tabs,
+  so switching costs no page load and no script. Super's default dresses the block
+  as a bordered card; the chrome comes off and the nav becomes an underlined row.
+- Two switchers stack on this page, so they are styled apart on purpose: the outer
+  tabs read as sections, the three venue views inside Papers as a segmented control.
+  That inner one is Super's `.notion-dropdown`, a button plus an absolutely
+  positioned menu JS keeps inert through `.initial-state` and `.animate-out`; the
+  conversion to a row of buttons is Ascent's own
+  (`reference/ascent-template.css:386`). Options keep their handlers.
+- Both panels hold a `.notion-collection-list`, so the rows and the patent cards are
+  told apart by `:has(.notion-dropdown)`: only Papers carries three views, and only
+  more than one view emits a switcher at all.
+- Year rail: each group is a `.notion-collection-group__section` holding its header
+  and the rows, so the section becomes a two-column grid. The rule is a `border-left`
+  on the non-header child and the node dot is that child's `::before`; neither is an
+  element. The header is a collapse toggle by default, so the caret is hidden and
+  `pointer-events` are dropped. Measured against POSTECH CVLab, whose rail is the
+  same shape: 65px year column, 2.4px rule, 9px dot.
+- The navbar entry stays a flat link to `/publications`. A dropdown would have held
+  Papers and Patents as children, but its markup does not take the icon-over-label
+  rules `global.css` puts on `.super-navbar__item`, so the site avoids dropdowns.
+- Ascent rules `.notion-collection-list__item` with `!important` on border, radius,
+  margin and padding, so the rules that fight it match that weight.
 
 ## People Page
 
