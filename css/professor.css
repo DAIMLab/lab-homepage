@@ -211,8 +211,9 @@
         pointer-events: none;
       }
 
-      /* the hover bar: a fixed-height grid packed to its bottom edge, so
-         every card's bar matches (a one-line title just leaves headroom).
+      /* the hover bar: a fixed-height grid packed to its top edge, so
+         every card's bar matches and the title always takes the first
+         line (a one-line title leaves its slack at the bottom).
          Super's own stylesheet fights this bar three ways -- a 24px
          min-height on every property, overflow:hidden on the property
          list, and position:relative on the url wrapper -- so each is
@@ -224,7 +225,7 @@
         display: grid;
         grid-template-columns: max-content 1fr;
         column-gap: 6px;
-        align-content: end;
+        align-content: start;
         box-sizing: border-box;
         height: var(--media-bar-h);
         overflow: visible;
