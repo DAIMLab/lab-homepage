@@ -283,12 +283,23 @@ first quoted span carries all three.
 | Notion property | Source |
 | --- | --- |
 | `Title` | the quoted span, trailing period stripped |
-| `Venue` | everything after the closing quote |
+| `Venue` | everything after the closing quote, then split: a conference keeps its name alone |
+| `Location` | the city and country a conference citation trailed after its date |
 | `Year` | the last four-digit year in the citation |
 | `Type` | `Journal` / `Conference` from the tab, overridden to `Preprint` for the one arXiv entry and to `Workshop` where the venue says so |
 | `Scope` | `International` / `Domestic` from the tab |
 | `Authors` | lab members only, matched against the People and Alumni rosters |
 | page content | the citation, verbatim |
+
+A conference citation packs three fields into one string, `name, date, place`,
+and the date is already in `Year`. Splitting on the first part that is *only* a
+date (a four-digit year, or a month name with digits around it) puts the name
+before it and the place after, which survives a venue whose own name holds
+commas, `대한산업공학회, 한국경영과학회, 한국시뮬레이션학회 2025 춘계공동학술대회`, and a
+citation that trails its date instead of centring it, `INFORMS Annual Meeting
+2019, Seattle, USA, 2019`. All 49 distinct conference strings split cleanly;
+15 rows name no place and 73 do. Journal venues are left whole: their `vol. 85,
+2026, pp. 513-530` is the citation, not a date and a city.
 
 Three things the tab names get wrong, all corrected on the way in:
 
