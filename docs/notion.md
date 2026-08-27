@@ -17,6 +17,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
+| Papers | `/publications/papers` | `3c911c7b703c817cb526ea64efe49553` |
 | Patents | `/publications/patents` | `3c911c7b703c814fa6e9dcc4177c3b09` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
@@ -66,15 +67,15 @@ a page: Super renders `.notion-dropdown` only when a collection block holds more
 one view, so a linked block with a single view emits no switcher markup at all.
 Verified: `/projects` had 4 and a dropdown while it still carried the Ascent
 template's Blog posts view; that block is gone and its single `All` view emits no
-switcher. `/publications` now runs the other way on purpose: its linked block
-(`3c911c7b703c81d5b489ccde0143ff7c`) carries three views so the switcher appears and
+switcher. `/publications/papers` now runs the other way on purpose: its linked block
+(`3c911c7b703c81b8a335e9cadbbcccce`) carries three views so the switcher appears and
 `css/publications.css` can dress it as tabs. `/publications/patents` keeps one view
-and stays switcher-free.
+and stays switcher-free, and `/publications` carries no collection at all.
 
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | nowhere |
-| Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | Publications |
+| Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | Publications/Papers |
 | Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | Publications/Patents |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
@@ -90,9 +91,17 @@ exists elsewhere in the template, and the deleted blocks are in Notion's trash.
 
 The two live on separate pages, not one. A single Super view switcher spans one
 data source, so `Papers` and `Patents` cannot share a tab bar without merging into
-one database, which was considered and declined on 2026-08-28. Instead `Patents` is
-a child page at `/publications/patents`, and both pages open with the same pair of
-link-to-page blocks acting as a section nav.
+one database, which was considered and declined on 2026-08-28. `Publications` became
+a section instead: the page itself is a navbar dropdown holding two children,
+`Papers` (`/publications/papers`, block `3c911c7b703c81b8a335e9cadbbcccce`) and
+`Patents` (`/publications/patents`, block `3c911c7b703c811b9688fd6ac1c812b9`). All
+three open with the same pair of link-to-page blocks acting as a section nav; the
+landing page carries nothing else. The dropdown itself is a Super dashboard setting
+under Navigation, not markup.
+
+A first pass put the Papers views straight on `/publications` (block
+`3c911c7b703c81d5b489ccde0143ff7c`); that block went when Papers moved to its own
+page, and its three views went with it.
 
 `Papers` splits the four-quadrant taxonomy across two select properties, `Scope`
 (International/Domestic) and `Type` (Journal/Conference/Workshop/Preprint). Three

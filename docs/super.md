@@ -166,16 +166,19 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Publications Pages
 
-- Two pages, one stylesheet: `code/publications.html` and `code/publications-patents.html`
-  both link `css/publications.css` at the same pinned SHA. Scope classes are
-  `page__publications` and `page__publications-patents`; every rule names one of them,
-  even though per-page CSS cannot leak, so the two designs stay legible apart.
+- Three pages, one stylesheet: `code/publications.html`, `code/publications-papers.html`
+  and `code/publications-patents.html` all link `css/publications.css` at the same
+  pinned SHA. Scope classes are `page__publications`, `page__publications-papers` and
+  `page__publications-patents`; every rule names one of them, even though per-page CSS
+  cannot leak, so the designs stay legible apart. `/publications` is the navbar
+  dropdown's landing and carries only the nav.
 - Section nav: the two link-to-page blocks at the top of each page. Super renders a
   link-to-page as `a.notion-page` wrapping `.notion-page__icon` and
   `.notion-page__title` (an `alias` block renders its referenced block, so this is the
   page block itself), and they are the only `.notion-page` children of `.notion-root`.
-  Which entry is current comes from the page scope class crossed with an
-  `[href$="/patents"]` test, so no script reads the URL.
+  Which entry is current comes from the page scope class crossed with a test on the
+  last path segment (`[href$="/papers"]`, `[href$="/patents"]`), so no script reads
+  the URL. On the landing page neither matches, which is the intent.
 - Tabs: the three views on the linked block make Super emit `.notion-dropdown`, which
   is a button plus an absolutely positioned menu that JS keeps inert through
   `.initial-state` and `.animate-out`. The conversion to a row of buttons is Ascent's
