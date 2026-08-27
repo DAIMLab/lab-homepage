@@ -120,12 +120,23 @@ no directive for the group sort direction either. Each of the five views needs
 Group Range, Group Every 1, and descending order set in the Notion UI. Until that
 is done the grouping renders wrong, not absent.
 
-Whether a one-year bucket labels itself `2026` or as a range is still unverified;
-it needs a live Super render to settle. If it comes out as a range, the fix is one
-rule in `js/date-format.js` pulling the first four digits out of
-`.notion-collection-group__section-header .notion-property__number`, because CSS
-cannot rewrite the text: Super renders the group label as bare text with no data
-attribute holding the raw value.
+A one-year bucket labels itself by both bounds. With Range 2000 to 2100 and an
+interval of 1, a row with `Year` 2027 lands in a group Notion calls
+`2027 to 2028`. So the range label is not avoidable by narrowing the interval, and
+CSS cannot rewrite it: Super renders the group label as bare text with no data
+attribute holding the raw value. `js/date-format.js` carries the fix, one rule
+pulling the first four digits out of
+`.page__publications .notion-collection-group__section-header .notion-property__number`.
+It is a text swap like every other rule in that file, guarded by the same
+`next !== el.textContent` check, so it adds no observer and cannot loop.
+
+Set the range wide, not tight. `2000 to 2100` with `Hide empty groups` on draws
+only the years that have papers and never expires; a range ending at the current
+year quietly drops next year's work.
+
+`Sort` in the group panel still has to be flipped to descending by hand for each
+view. The DSL has no directive for it and Notion defaults to ascending, which puts
+the oldest year at the top.
 
 Grouping is Super-native. Super lists `Database grouping` as supported and ships
 the selectors already: each group becomes a `.notion-collection-group__section`

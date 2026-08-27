@@ -20,6 +20,11 @@
           ].indexOf(mon);
           return i < 0 ? m : `${y}.${String(i + 1).padStart(2, '0')}`;
         }) },
+    /* Publications: year group header 2027 to 2028 -> 2027. Year is a number,
+       and Notion groups numbers into ranges, so even an interval of 1 labels
+       the bucket by both bounds. Keeps the text when no year is found. */
+    { sel: '.page__publications .notion-collection-group__section-header .notion-property__number',
+      fix: (t) => (t.match(/\d{4}/) || [t])[0] },
   ];
 
   const run = () =>
