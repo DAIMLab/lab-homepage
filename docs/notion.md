@@ -20,7 +20,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
-| Databases | `/databases` (pending, see below) | `3c911c7b703c816c9d28dec4774a53b8` |
+| Databases | `/databases` | `3c911c7b703c816c9d28dec4774a53b8` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
 Team DAIM is the People page. The slug lives in Super under Site Pages and a
@@ -97,8 +97,8 @@ cover as the photo (external URLs into `assets/carousel/` at a pinned commit)
 and the title as the caption, shown through a gallery linked view inside a
 brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). It sat under People's
 `Subpages` toggle until 2026-08-27 and moved to `Databases` with the other five;
-Super still serves it at `/team-photos`, at the root, which is the frozen-path
-behaviour below.
+Super was still serving it from `/team-photos` when this was written, which is
+the staged propagation described below.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -216,28 +216,36 @@ Two traps came out of building Projects, both of which cost an afternoon:
    under Settings → Site Pages; nothing in Notion moves it. The segment is not worth
    chasing, since no visitor ever types it.
 
-### Super freezes a path, Notion does not move it
+### Super re-derives a path from the Notion tree, one page at a time
 
-Moving a database in Notion does not move its Super URL. Measured 2026-08-27, the
-Notion parent and the served path disagree for every database that has ever moved.
-All six now share one Notion parent, the `Databases` page inside the Control panel,
-and no two of them share a path shape:
+Moving a database in Notion does move its Super URL, and no dashboard edit is
+needed, but the rebuild lands page by page over tens of minutes rather than all at
+once. Measured while moving the six databases under `Databases` on 2026-08-27:
 
-| Database | Notion parent | Super path |
-| --- | --- | --- |
-| Lab News Posts | root, Control panel | `/lab-news/lab-news-posts` |
-| Projects DB | root, Control panel | `/projects/projects-db` |
-| Team Photos | root, Control panel | `/team-photos` |
-| People | root, Control panel | `/people-1` (`-1` from the collision with `/people`) |
-| Alumni | root, Control panel | `/alumni` |
-| Professor Media | root, Control panel | `/professor-media` |
+| Minutes after the move | State |
+| --- | --- |
+| ~5 | `/databases` 200. Every database still on its old path. |
+| ~15 | `/databases/people` and `/databases/people/wonseok-jang` 200, `/people-1/wonseok-jang` 404, the other five still on their old paths. |
 
-Super stores the path it first indexed and keeps serving it; the Notion tree only
-seeds a page's path the first time Super sees it. So the `Databases` move above is
-the Notion half of the job, and `/databases/<database>` arrives only once each
-database's URL is edited under **Settings → Site Pages** in the Super dashboard.
-Exclude `/databases` itself from the sitemap there, the way `/footer` is: it is an
-index for editors, not a page anyone should land on.
+Three things follow, all of them worth waiting out rather than fixing:
+
+1. **The old row path 404s before the page that links to it catches up.** `/people`
+   was still serving cached HTML full of `/people-1/<row>` anchors after those rows
+   had moved to `/databases/people/<row>`. Both ends settle, in their own time.
+2. **A database mid-migration is linked by raw id.** `/databases` rendered its
+   People child as `href="/40333c711338463887e0d21c77e4efa0"`, which 307s to
+   `/databases/people`. The raw id is Super's placeholder while the slug catches up,
+   not an error.
+3. **Partial propagation is not evidence of a broken build**, the same trap the
+   Projects rollout set. Re-read the paths before concluding anything.
+
+Nothing here contradicts the frozen **slug**: the last segment still comes from the
+name at creation, so `Projects DB` stays `projects-db` and the People database keeps
+the `people` it was given. What moves is the prefix, and it follows the Notion tree.
+
+`/databases` itself publishes and enters the sitemap. Exclude it under Settings →
+Site Pages the way `/footer` is: it is an index for editors, not a page anyone should
+land on.
 
 Nothing in `css/` or `js/` breaks when those paths change. Super's scope class is
 `page__<path with slashes as dashes>` plus `parent-page__<parent path>`, and the
