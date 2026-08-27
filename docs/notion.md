@@ -92,12 +92,20 @@ exists elsewhere in the template, and the deleted blocks are in Notion's trash.
 The two live on separate pages, not one. A single Super view switcher spans one
 data source, so `Papers` and `Patents` cannot share a tab bar without merging into
 one database, which was considered and declined on 2026-08-28. `Publications` became
-a section instead: the page itself is a navbar dropdown holding two children,
-`Papers` (`/publications/papers`, block `3c911c7b703c81b8a335e9cadbbcccce`) and
-`Patents` (`/publications/patents`, block `3c911c7b703c811b9688fd6ac1c812b9`). All
-three open with the same pair of link-to-page blocks acting as a section nav; the
-landing page carries nothing else. The dropdown itself is a Super dashboard setting
-under Navigation, not markup.
+a section instead: two children, `Papers` (`/publications/papers`, block
+`3c911c7b703c81b8a335e9cadbbcccce`) and `Patents` (`/publications/patents`, block
+`3c911c7b703c811b9688fd6ac1c812b9`). All three open with the same pair of
+link-to-page blocks acting as a section nav; the landing page carries nothing else.
+
+The navbar does not use a dropdown for this. Super offers one under Navigation, but
+its markup does not take the icon-over-label treatment `css/global.css` gives
+`.super-navbar__item`, so the item breaks; the site has avoided dropdowns for that
+reason. The `Publications` navbar entry is a custom link straight to
+`/publications/papers`, and switching between the two sections is the in-page nav,
+not the navbar. That leaves `/publications` reachable only by typing it. Keep it
+published anyway, because the children hang their path off it, and exclude it from
+the sitemap under Site Pages the way `/footer` is; its two links make a sane landing
+for anyone who does arrive.
 
 A first pass put the Papers views straight on `/publications` (block
 `3c911c7b703c81d5b489ccde0143ff7c`); that block went when Papers moved to its own

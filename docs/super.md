@@ -170,8 +170,12 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   and `code/publications-patents.html` all link `css/publications.css` at the same
   pinned SHA. Scope classes are `page__publications`, `page__publications-papers` and
   `page__publications-patents`; every rule names one of them, even though per-page CSS
-  cannot leak, so the designs stay legible apart. `/publications` is the navbar
-  dropdown's landing and carries only the nav.
+  cannot leak, so the designs stay legible apart.
+- The navbar entry points at `/publications/papers`, not at `/publications`. A Super
+  navbar dropdown would be the obvious way to hold two children, but its markup does
+  not take the icon-over-label rules `global.css` puts on `.super-navbar__item`, so
+  the item breaks and the site avoids dropdowns. `/publications` stays published,
+  carries only the nav, and is excluded from the sitemap.
 - Section nav: the two link-to-page blocks at the top of each page. Super renders a
   link-to-page as `a.notion-page` wrapping `.notion-page__icon` and
   `.notion-page__title` (an `alias` block renders its referenced block, so this is the
