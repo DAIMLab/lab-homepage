@@ -322,6 +322,18 @@
   content: ',\00a0';
 }
 
+/* the last author joins with "and": an Oxford comma over three or more,
+   a bare "and" over exactly two */
+.page__publications .notion-collection-list__item-property.notion-property__select
+  .notion-pill:nth-last-child(2)::after {
+  content: ',\00a0and\00a0';
+}
+
+.page__publications .notion-collection-list__item-property.notion-property__select
+  .notion-pill:first-child:nth-last-child(2)::after {
+  content: '\00a0and\00a0';
+}
+
 @media (max-width: 768px) {
   .page__publications {
     --pub-year: 50px;
