@@ -95,10 +95,10 @@ its own design pass.
 `Team Photos` holds the People hero carousel: one row per slide, the page
 cover as the photo (external URLs into `assets/carousel/` at a pinned commit)
 and the title as the caption, shown through a gallery linked view inside a
-brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). It is the one content
-database still outside `Databases`: it sits under People's `Subpages` toggle
-and Super serves it at `/team-photos`, at the root, matching neither its Notion
-parent nor the other databases.
+brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). It sat under People's
+`Subpages` toggle until 2026-08-27 and moved to `Databases` with the other five;
+Super still serves it at `/team-photos`, at the root, which is the frozen-path
+behaviour below.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -219,13 +219,15 @@ Two traps came out of building Projects, both of which cost an afternoon:
 ### Super freezes a path, Notion does not move it
 
 Moving a database in Notion does not move its Super URL. Measured 2026-08-27, the
-Notion parent and the served path disagree for every database that has ever moved:
+Notion parent and the served path disagree for every database that has ever moved.
+All six now share one Notion parent, the `Databases` page inside the Control panel,
+and no two of them share a path shape:
 
 | Database | Notion parent | Super path |
 | --- | --- | --- |
 | Lab News Posts | root, Control panel | `/lab-news/lab-news-posts` |
 | Projects DB | root, Control panel | `/projects/projects-db` |
-| Team Photos | People → `Subpages` | `/team-photos` |
+| Team Photos | root, Control panel | `/team-photos` |
 | People | root, Control panel | `/people-1` (`-1` from the collision with `/people`) |
 | Alumni | root, Control panel | `/alumni` |
 | Professor Media | root, Control panel | `/professor-media` |
