@@ -328,11 +328,11 @@ Two traps came out of building Projects, both of which cost an afternoon:
    while the served routes were three-segment. The routes also came alive in stages,
    the database page first and rows afterwards, so a partial count is not evidence of
    a broken build. Trust the anchors, not the sitemap.
-2. **The database slug is frozen at creation and ignores a rename.** The database was
-   renamed to `Project Database` and its segment stayed `projects-db`.
-   `/projects/project-database` 404s. Changing it means editing the slug in Super
-   under Settings → Site Pages; nothing in Notion moves it. The segment is not worth
-   chasing, since no visitor ever types it.
+2. **A rename alone does not move the slug.** The database was renamed to
+   `Project Database` and its segment stayed `projects-db`, so `/projects/project-database`
+   404d. A *move* does re-derive it, as the section below records: the same database
+   now answers at `/databases/projects`. The segment is still not worth chasing, since
+   no visitor ever types it.
 
 ### Super re-derives a path from the Notion tree, one page at a time
 
@@ -357,9 +357,21 @@ Three things follow, all of them worth waiting out rather than fixing:
 3. **Partial propagation is not evidence of a broken build**, the same trap the
    Projects rollout set. Re-read the paths before concluding anything.
 
-Nothing here contradicts the frozen **slug**: the last segment still comes from the
-name at creation, so `Projects DB` stays `projects-db` and the People database keeps
-the `people` it was given. What moves is the prefix, and it follows the Notion tree.
+The last segment moves too, which retires the frozen-slug rule the Projects
+rollout wrote down: `projects-db` came back as `projects` and `lab-news-posts` as
+`lab-news`, both shortened without a rename in Notion. Settled paths, all rows 200:
+
+| Database | Path |
+| --- | --- |
+| People | `/databases/people` |
+| Alumni | `/databases/alumni` |
+| Projects DB | `/databases/projects` |
+| Lab News Posts | `/databases/lab-news` |
+| Professor Media | `/databases/professor-media` |
+| Team Photos | `/databases/team-photos` |
+
+Every old path 404s, `/people-1` and `/lab-news/lab-news-posts` included, so nothing
+outside the site should have been pointed at one.
 
 `/databases` itself publishes and enters the sitemap. Exclude it under Settings →
 Site Pages the way `/footer` is: it is an index for editors, not a page anyone should
