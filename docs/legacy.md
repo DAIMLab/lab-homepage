@@ -103,8 +103,17 @@ Four things to know before reusing any of it:
    headcount on `/30` carries a `2023년 2월 기준` footnote. `/23`'s testbed slide has
    been superseded by KAIROS, announced 2026-03-23 and already covered in `Lab News`.
 
-All three are destined for one page, the new `/about`, replacing the Ascent template
-content still sitting there.
+All three were merged into one page on 2026-08-28. `/about-daim` now carries the
+five sections `Mission`, `Research Area`, `KAIROS`, `Track Record` and `Join`, written
+as native blocks; the slide text was rewritten rather than pasted as images. Three
+figures survive as pictures, cropped free of the watermark and the `Confidential`
+stamp and committed to `assets/about/`: the traditional-versus-MFRA IT architecture
+comparison from `/23` 02, the Key Know-How pipeline from `/30` 03, and the two
+`共生共存` photos from `/30` 02. Five more crops from `/23` 04 carry the industry
+domains. `/24`'s five cases became the second line of the five research topic cards,
+so no case slide is reused as an image. What was dropped and why is the metrics table
+in the About IA document; the short version is that headcount went to `/people`,
+patent counts to `/publications`, and the nine partner logos went nowhere.
 
 ## Lab News, Migrated
 

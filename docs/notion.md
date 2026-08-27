@@ -23,6 +23,18 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Databases | `/databases` | `3c911c7b703c816c9d28dec4774a53b8` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
+About DAIM was filled on 2026-08-28, replacing the Ascent lorem ipsum. It merges
+the legacy `/23`, `/30` and `/24` into five H2 sections under a `table_of_contents`
+block: `Mission`, `Research Area`, `KAIROS`, `Track Record`, `Join`. The layout is
+columns of callouts throughout, three then two for the five research topics, five for
+the industry domains; the eight pictures load from `assets/about/` over
+`raw.githubusercontent.com` except the KAIROS photo, which reuses the `lab-news-assets`
+copy already served to `/lab-news`. Links to People, Projects, Publications and the
+KAIROS post are `mention-page` blocks, so Super rewrites them to site paths rather
+than notion.so URLs. Two things are still open: the slug is `/about-daim` and the IA
+document asks for `/about` before DNS cutover, since Personal has no redirects; and
+Super needs a Sync before any of this reaches the live page.
+
 Team DAIM is the People page. The slug lives in Super under Site Pages and a
 Notion rename does not move it; on 2026-08-27 it was moved there by hand from
 `team-daim` to `people`, and `css/people.css` plus `js/date-format.js` scope by
