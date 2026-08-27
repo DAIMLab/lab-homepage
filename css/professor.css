@@ -116,9 +116,10 @@
         pointer-events: none;
       }
 
-      /* the hover bar: a fixed-height grid packed to its top edge, so
-         every card's bar matches and the title always takes the first
-         line (a one-line title leaves its slack at the bottom).
+      /* the hover bar: a fixed-height grid whose 1fr title row absorbs
+         the slack, so every card's bar matches, the title always takes
+         the first line, and the outlet and date anchor to the bar's
+         foot instead of floating over a void.
          Super's own stylesheet fights this bar three ways -- a 24px
          min-height on every property, overflow:hidden on the property
          list, and position:relative on the url wrapper -- so each is
@@ -129,7 +130,7 @@
         z-index: 3;
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        align-content: start;
+        grid-template-rows: minmax(0, 1fr) auto auto;
         box-sizing: border-box;
         height: var(--media-bar-h);
         overflow: visible;
@@ -181,6 +182,11 @@
 
       .notion-property__date {
         margin: 2px 0 0;
+
+        /* Super paints the span dark via .notion-semantic-string .date */
+        .date {
+          color: inherit;
+        }
       }
 
       /* the source link invites the click from the whole card: the anchor
