@@ -175,25 +175,41 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   so switching costs no page load and no script. Super's default dresses the block
   as a bordered card; the chrome comes off and the nav becomes an underlined row.
 - Two switchers stack on this page, so they are styled apart on purpose: the outer
-  tabs read as sections, the three venue views inside Papers as a segmented control.
-  That inner one is Super's `.notion-dropdown`, a button plus an absolutely
-  positioned menu JS keeps inert through `.initial-state` and `.animate-out`; the
-  conversion to a row of buttons is Ascent's own
-  (`reference/ascent-template.css:386`). Options keep their handlers.
-- Both panels hold a `.notion-collection-list`, so the rows and the patent cards are
-  told apart by `:has(.notion-dropdown)`: only Papers carries three views, and only
-  more than one view emits a switcher at all.
+  tabs read as sections, the four Papers views inside as a segmented control. That
+  inner one is Super's `.notion-dropdown`, a button plus an absolutely positioned
+  menu JS keeps inert through `.initial-state` and `.animate-out`. **Every view is
+  already in the served markup**, one `.notion-dropdown__option` each, handlers
+  attached: taking the menu out of its popup positioning is the whole conversion,
+  and no script is added. Verified by clicking `International Journal` in a
+  headless browser, 151 rows to 49.
 - Year rail: each group is a `.notion-collection-group__section` holding its header
-  and the rows, so the section becomes a two-column grid. The rule is a `border-left`
-  on the non-header child and the node dot is that child's `::before`; neither is an
-  element. The header is a collapse toggle by default, so the caret is hidden and
-  `pointer-events` are dropped. Measured against POSTECH CVLab, whose rail is the
-  same shape: 65px year column, 2.4px rule, 9px dot.
+  and the rows as siblings, so the section becomes a flex row. The rule is a
+  `border-left` on the list and the node dot is that list's `::before`; neither is
+  an element. The header is a collapse toggle by default, so the caret is hidden.
+  Measured against POSTECH CVLab, whose rail is the same shape: 65px year column,
+  50px offset, 3px rule, 9px dot, 17px title, 14px sub-line. The dot is
+  `--kaist-blue`.
+- **The rail is scoped to grouped lists**, `.notion-collection-group__section >
+  .notion-collection-list`. Patents is ungrouped, and there the left margin pushed
+  the rows past the container and stranded the dot beside an empty year column.
+- **The list title is not where its selectors say it is.** The text is a bare node
+  on `.notion-property__title`, which carries `.notion-semantic-string` on the same
+  element, so every descendant selector written for it matches nothing, Super's own
+  included. Style the element itself. There is no
+  `.notion-collection-list__item-title` in this markup either.
+- Three Super defaults have to be undone for a citation to fit: the title is
+  clamped to one ellipsised underlined line, the venue is capped at 180px, and
+  `.notion-collection-list__item-property` outranks the row anchor on `z-index`, so
+  only the title answered a click.
+- Authors arrive as `.notion-pill` chips. Stripping the chip and joining them with
+  a `::after` comma needs `\00a0`, since a trailing space in `content` collapses.
 - The navbar entry stays a flat link to `/publications`. A dropdown would have held
   Papers and Patents as children, but its markup does not take the icon-over-label
   rules `global.css` puts on `.super-navbar__item`, so the site avoids dropdowns.
-- Ascent rules `.notion-collection-list__item` with `!important` on border, radius,
-  margin and padding, so the rules that fight it match that weight.
+- `reference/ascent-template.css` rules `.notion-collection-list__item` with
+  `!important`, but **those rules are not on the live site**: the page serves no
+  Ascent stylesheet, and plain rules win. Measured, `padding` resolves to this
+  file's own value. Do not add `!important` on their account.
 
 ## People Page
 
