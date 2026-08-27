@@ -71,7 +71,10 @@ gone and its single `All` view emits no switcher.
 `df40c248-2fc0-4c66-aaa5-f5bb22623d65`) holds the professor's media
 appearances: one row per item, the cover as the thumbnail (external URLs into
 `assets/professor/media/` at a pinned commit) and `Source URL` as where the
-card clicks through to; the press-photo rows wait for their article URLs. The
+card clicks through to. Every row carries a `Source URL`: the videos their
+YouTube links, the press photos the articles that ran them (found by reverse
+image search), and a photo with no coverage would fall back to its own raw
+`main` image URL. The
 database was created workspace-private (the MCP cannot create inside toggles),
 so it waits for the manual drag into the Control panel, and the gallery view's
 Card preview needs the manual Page cover click.

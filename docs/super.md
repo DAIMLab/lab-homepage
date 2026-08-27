@@ -200,13 +200,14 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 The professor's profile page (`/people/professor`, scope `.page__people-professor`) is the card's
 full-page counterpart: Head tab `code/professor.html` links Font Awesome and `css/professor.css`, and
 the same markers drive it (mailto:/tel: glyph rows, SNS domains, bulleted entries). Its Media gallery
-is a linked view styled after Super's Gallery PosterGrid snippet (vendored:
-`reference/super-postergrid.css`): the cover fills a fixed-height card, the title rides a bottom
-gradient, and the outlet and date (trimmed to `YYYY.MM` by `js/date-format.js`) slide up on hover. The
-cards click through to the source: the `Source URL` property's anchor stretches over the card while the
-row-page anchor loses pointer-events and doubles as the badge layer; only linked cards animate, a
-`media-video-*` cover filename earns the play badge and other linked cards the corner arrow. The
-coverless header's 140px spacer trims to 40px.
+is a linked view styled after ascent.super.site's team gallery: the card rests as a clean cover
+photo, and hover slides a translucent bottom bar in carrying the title over a date-and-outlet line
+(date trimmed to `YYYY.MM` by `js/date-format.js`; the bar stays out on touch devices, where hover
+does not exist). Every card clicks through its `Source URL` property -- the article or video that
+covers the item, or the photo's own raw `main` URL when no coverage exists -- via the property's
+anchor stretched over the card (it overshoots the bottom bar upward; the card's overflow clips it).
+The row-page anchor loses pointer-events and doubles as the badge layer, and a `media-video-*`
+cover filename earns the play badge. The coverless header's 140px spacer trims to 40px.
 
 ## Known Quirks
 

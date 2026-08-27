@@ -156,19 +156,19 @@
   }
 
   /* ---- the media gallery: a linked view of the Professor Media database
-     (docs/notion.md), styled after Super's Gallery PosterGrid snippet
-     (reference/super-postergrid.css): the cover fills the card, the title
-     sits on a bottom gradient, and the outlet and date slide up on hover.
-     The Source URL property's anchor stretches over the card, so a click
-     goes to the original article or video, never the row page; only cards
-     carrying that link animate, a media-video-* cover earns the play badge
-     and other linked cards the corner arrow. Card preview must be clicked
-     to Page cover in Notion; the DSL cannot set it ---- */
+     (docs/notion.md), styled after ascent.super.site's team gallery: the
+     card rests as a clean cover photo, and hovering slides a translucent
+     bar up from the bottom carrying the title over a date-and-outlet line
+     (the bar stays out where hover does not exist). Every card clicks
+     through its Source URL property -- the article or video for credited
+     items, the original photo file for uncredited press photos -- and the
+     row page stays unreachable. A media-video-* cover earns the play
+     badge. Card preview must be clicked to Page cover in Notion; the DSL
+     cannot set it ---- */
 
   .collection-df40c2482fc04c66aaa5f5bb22623d65 {
     --media-card-h: 200px;
-    --media-overlay: rgb(10 14 20 / 26%);
-    --media-gradient: linear-gradient(to top, rgb(0 0 0 / 62%), rgb(0 0 0 / 0%));
+    --media-bar-bg: rgb(8 12 18 / 55%);
 
     /* the cover-size minimum is what yields four columns at full width */
     --collection-card-cover-size-small: 190px;
@@ -197,93 +197,90 @@
         min-height: 100%;
         /* the cover's object-fit arrives as an inline style */
         object-fit: cover !important;
-        transition: scale 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.6s;
+        transition: scale 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
       }
 
-      /* soft overlay, then the readability gradient under the text */
-      &::before,
-      &::after {
-        content: '';
-        position: absolute;
-        pointer-events: none;
-      }
-
-      &::before {
-        inset: 0;
-        z-index: 2;
-        background: var(--media-overlay);
-        transition: background 0.5s;
-      }
-
-      &::after {
-        inset: auto 0 0;
-        z-index: 3;
-        height: 64%;
-        background: var(--media-gradient);
-      }
-
-      /* the empty row-page anchor doubles as the badge layer */
+      /* the empty row-page anchor doubles as the badge layer; its own
+         title text stays collapsed */
       .notion-collection-card__anchor {
         position: absolute;
         inset: 0;
-        z-index: 4;
+        z-index: 2;
+        font-size: 0;
         pointer-events: none;
       }
 
+      /* the hover bar, tucked below its own fade until the pointer arrives */
       .notion-collection-card__content {
         position: absolute;
-        inset: auto 14px 12px;
-        z-index: 5;
-        padding: 0;
+        inset: auto 0 0;
+        z-index: 3;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 6px;
+        margin: 0;
+        padding: 10px 12px 11px;
+        background: var(--media-bar-bg);
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        translate: 0 8px;
+        transition: opacity 0.3s, translate 0.3s;
       }
 
       .notion-property__title {
+        flex-basis: 100%;
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 2;
         overflow: hidden;
-        font-size: 14.5px;
+        margin: 0;
+        font-size: 13.5px;
         font-weight: 700;
         line-height: 1.35;
         color: #fff;
-        text-shadow: 0 2px 12px rgb(0 0 0 / 40%);
       }
 
-      /* outlet and date stay tucked until hover */
+      /* the bar's second line reads date, then outlet */
       .notion-property__text,
       .notion-property__date {
-        max-height: 0;
-        margin-top: 0;
-        overflow: hidden;
-        font-size: 12px;
-        color: rgb(255 255 255 / 85%);
-        opacity: 0;
-        transition: max-height 0.35s, margin-top 0.35s, opacity 0.35s;
+        margin: 4px 0 0;
+        font-size: 11.5px;
+        line-height: 1.3;
+        color: rgb(255 255 255 / 82%);
       }
 
-      /* only a card carrying a source link invites the click */
+      .notion-property__date { order: 2; }
+      .notion-property__text { order: 3; }
+
+      /* the dot separates a date from an outlet, never a lone value;
+         the DOM keeps outlet before date, the order above swaps them */
+      .notion-property__text + .notion-property__date::after {
+        content: '\B7';
+        margin-left: 6px;
+      }
+
+      /* the source link invites the click from the whole card: the anchor
+         overshoots the bar upward and the card's overflow clips it */
+      .notion-property__url {
+        order: 4;
+      }
+
       .notion-property__url a {
         position: absolute;
-        inset: 0;
+        inset: calc(-1 * var(--media-card-h)) 0 0;
         z-index: 6;
         font-size: 0;
       }
 
-      &:has(.notion-property__url a):hover {
+      &:hover {
         img.notion-collection-card__cover {
-          scale: 1.06;
-          filter: brightness(1.12);
+          scale: 1.05;
         }
 
-        &::before {
-          background: rgb(10 14 20 / 5%);
-        }
-
-        .notion-property__text,
-        .notion-property__date {
-          max-height: 2lh;
-          margin-top: 6px;
+        .notion-collection-card__content {
           opacity: 1;
+          translate: 0 0;
         }
       }
 
@@ -298,32 +295,13 @@
         color: #fff;
         background: radial-gradient(circle at center, rgb(0 0 0 / 45%) 22px, transparent 23px);
       }
-
-      &:has(.notion-property__url a):not(:has(img[src*="/media-video-"]))
-        .notion-collection-card__anchor::after {
-        content: '\f35d';
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: grid;
-        place-items: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        font: var(--fa-font-solid);
-        font-size: 11px;
-        color: #fff;
-        background: rgb(0 0 0 / 45%);
-      }
     }
 
-    /* no hover on touch: the tucked lines stay out */
+    /* no hover on touch: the bar stays out */
     @media (hover: none), (pointer: coarse) {
-      .notion-property__text,
-      .notion-property__date {
-        max-height: 2lh;
-        margin-top: 6px;
+      .notion-collection-card .notion-collection-card__content {
         opacity: 1;
+        translate: 0 0;
       }
     }
   }
