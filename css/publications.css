@@ -22,6 +22,7 @@
   --pub-year: 65px;
   --pub-rail: 50px;
   --pub-sub: #666;
+  --pub-tabs-bg: #f1f2f4;
 }
 
 .page__publications .notion-header__icon-wrapper {
@@ -31,6 +32,134 @@
 .page__publications .notion-header__content.no-cover.has-icon
   .notion-header__title-wrapper {
   margin-top: 0;
+}
+
+/* ---- the outer tabs read as sections, the inner switcher as a filter ----
+
+   Notion's tabs block is native here: .notion-tabs holds a .notion-tabs__nav
+   of buttons and .notion-tabs__panels, the inactive panel already carries
+   [aria-hidden] and display:none, and the toggle is Super's own React state.
+   Its default dress is a bordered card, which reads as a widget dropped on
+   the page rather than as the page's own structure. ---------------------- */
+
+.page__publications .notion-tabs {
+  margin: 0 0 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.page__publications .notion-tabs__nav {
+  gap: 2rem;
+  margin: 0 0 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page__publications .notion-tabs__button {
+  height: auto;
+  padding: 0 0 14px;
+  border-radius: 0;
+  background: none;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--muted);
+  /* the active rule sits on the nav's own edge, so the button carries a
+     transparent one from the start and nothing shifts on click */
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.page__publications .notion-tabs__button:hover {
+  background: none;
+  color: var(--sub);
+}
+
+.page__publications .notion-tabs__button.active {
+  background: none;
+  color: var(--kaist-blue);
+  font-weight: 700;
+  border-bottom-color: var(--kaist-blue);
+}
+
+/* ---- the view switcher becomes a segmented tab bar --------------------
+
+   Super renders the switcher as a dropdown, but every view is already in the
+   markup: a hidden .notion-dropdown__menu holds one .notion-dropdown__option
+   per view, each carrying its own click handler. Taking the menu out of its
+   popup positioning turns the list into a row of tabs with no script. ------ */
+
+.page__publications .notion-dropdown__button,
+.page__publications .notion-dropdown__menu-header {
+  display: none;
+}
+
+.page__publications .notion-dropdown,
+.page__publications .notion-dropdown__menu-wrapper {
+  width: 100%;
+}
+
+.page__publications .notion-dropdown__menu {
+  position: static;
+  width: 100%;
+  margin-bottom: 28px;
+  min-width: 0;
+  max-width: none;
+  transform: none;
+  border-radius: 12px;
+  background: var(--pub-tabs-bg);
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* the closed and closing states park the menu off-screen and deaden it */
+.page__publications .notion-dropdown__menu.initial-state,
+.page__publications .notion-dropdown__menu.animate-out,
+.page__publications .notion-dropdown__menu.animate-in {
+  z-index: auto;
+  opacity: 1;
+  transform: none;
+  animation: none;
+  pointer-events: auto;
+  user-select: auto;
+}
+
+.page__publications .notion-dropdown__option-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+}
+
+.page__publications .notion-dropdown__option {
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 9px 18px;
+  border-radius: 9px;
+  color: var(--pub-sub);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.page__publications .notion-dropdown__option p {
+  font-size: 15px;
+}
+
+/* the icon repeats the page's own 📜 on every tab */
+.page__publications .notion-dropdown__option-icon {
+  display: none;
+}
+
+.page__publications .notion-dropdown__option:hover {
+  background: none;
+  color: var(--kaist-blue);
+}
+
+.page__publications .notion-dropdown__option.active {
+  background: var(--color-card-bg, #fff);
+  color: var(--kaist-blue);
+  box-shadow: 0 1px 3px rgba(15, 15, 15, 0.08);
 }
 
 /* ---- the year rail: the group header becomes a left margin column and the
