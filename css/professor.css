@@ -80,7 +80,7 @@
     --collection-card-cover-size-small: 190px;
     --collection-card-cover-size-medium: 190px;
     --collection-card-cover-size-large: 190px;
-    --collection-card-gap: 16px;
+    --collection-card-gap: 10px;
 
     .notion-collection__header-wrapper {
       display: none;
