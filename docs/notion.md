@@ -20,6 +20,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
+| Databases | `/databases` (pending, see below) | `3c911c7b703c816c9d28dec4774a53b8` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
 Team DAIM is the People page. The slug lives in Super under Site Pages and a
@@ -51,6 +52,13 @@ neither owns the database and neither shows a view switcher.
 
 ## Collections
 
+Every content database is a child of the **`Databases`** page
+(`3c911c7b703c816c9d28dec4774a53b8`), created 2026-08-27 and living inside the
+Control panel toggle, so it stays off the navbar and out of the Home page flow.
+The nesting is what should give Super `/databases/<database>` and
+`/databases/<database>/<row>`; whether Super follows it is the open question in
+[Super freezes a path, Notion does not move it](#super-freezes-a-path-notion-does-not-move-it).
+
 Databases live away from the page that shows them; the page carries a **linked view**
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
 a page: Super renders `.notion-dropdown` only when a collection block holds more than
@@ -75,9 +83,9 @@ card clicks through to. Every row carries a `Source URL`: the videos their
 YouTube links, the press photos the articles that ran them (found by reverse
 image search), and a photo with no coverage would fall back to its own raw
 `main` image URL. The
-database was created workspace-private (the MCP cannot create inside toggles),
-so it waits for the manual drag into the Control panel, and the gallery view's
-Card preview needs the manual Page cover click.
+database was created workspace-private (the MCP cannot create inside toggles)
+and now sits under `Databases` with the other four; the gallery view's Card
+preview still needs the manual Page cover click.
 
 The alumni records live in their own database, data source
 `ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block
@@ -87,10 +95,10 @@ its own design pass.
 `Team Photos` holds the People hero carousel: one row per slide, the page
 cover as the photo (external URLs into `assets/carousel/` at a pinned commit)
 and the title as the caption, shown through a gallery linked view inside a
-brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). The database was
-created workspace-private because the MCP cannot create databases inside
-columns or toggles, so moving it into the Control panel is the usual manual
-drag.
+brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). It is the one content
+database still outside `Databases`: it sits under People's `Subpages` toggle
+and Super serves it at `/team-photos`, at the root, matching neither its Notion
+parent nor the other databases.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -207,6 +215,39 @@ Two traps came out of building Projects, both of which cost an afternoon:
    `/projects/project-database` 404s. Changing it means editing the slug in Super
    under Settings → Site Pages; nothing in Notion moves it. The segment is not worth
    chasing, since no visitor ever types it.
+
+### Super freezes a path, Notion does not move it
+
+Moving a database in Notion does not move its Super URL. Measured 2026-08-27, the
+Notion parent and the served path disagree for every database that has ever moved:
+
+| Database | Notion parent | Super path |
+| --- | --- | --- |
+| Lab News Posts | root, Control panel | `/lab-news/lab-news-posts` |
+| Projects DB | root, Control panel | `/projects/projects-db` |
+| Team Photos | People → `Subpages` | `/team-photos` |
+| People | root, Control panel | `/people-1` (`-1` from the collision with `/people`) |
+| Alumni | root, Control panel | `/alumni` |
+| Professor Media | root, Control panel | `/professor-media` |
+
+Super stores the path it first indexed and keeps serving it; the Notion tree only
+seeds a page's path the first time Super sees it. So the `Databases` move above is
+the Notion half of the job, and `/databases/<database>` arrives only once each
+database's URL is edited under **Settings → Site Pages** in the Super dashboard.
+Exclude `/databases` itself from the sitemap there, the way `/footer` is: it is an
+index for editors, not a page anyone should land on.
+
+Nothing in `css/` or `js/` breaks when those paths change. Super's scope class is
+`page__<path with slashes as dashes>` plus `parent-page__<parent path>`, and the
+repo only ever scopes by the five site pages, never by a database or row page:
+
+| Used in the repo | Never used |
+| --- | --- |
+| `page__index`, `page__people`, `page__people-professor`, `page__lab-news`, `page__projects` | `page__people-1`, `page__alumni`, `page__professor-media`, `page__lab-news-lab-news-posts`, `page__projects-projects-db`, every row class, every `parent-page__*` |
+
+Card anchors are relative and Super-generated (`href="/people-1/wonseok-jang"`), so
+they follow the new path on the next build with no edit here. `js/date-format.js`
+keys `.page__projects .property-475c4c48`, and a property id survives a move.
 
 ### Keep the source database off the page that shows it
 
