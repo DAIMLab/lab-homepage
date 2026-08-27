@@ -250,8 +250,13 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 - Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
   the email property renders with no anchor and, on a `no-click` card, needs `pointer-events: auto`;
   `.notion-pill` is nowrap. Layout: the gallery becomes flex `space-evenly` with 320px cards and
-  `max-width: 1060px`; three per row falls out. Portraits sit inset at `--photo-w` 260px (low-res ID
-  photos must not zoom); equal row heights need `height: auto` to undo Super's `height: 100%`.
+  `max-width: 1060px` (`--content-w`); three per row falls out. Portraits sit inset at `--photo-w`
+  210px in `--photo-ratio` 3/4, the ID-photo shape the sources already are: a square cropped the heads,
+  and the fixed width keeps a low-resolution photo from zooming. Equal row heights need `height: auto`
+  to undo Super's `height: 100%`.
+- **The page is full width in Notion**, so `.notion-root` carries no `max-width` and a `width: 100%`
+  block grows with the viewport, 1728px at 1920. The professor callout hit that and now takes
+  `--content-w` with `margin-inline: auto`, which puts its edges on the member gallery's.
 - Icon row: the property list is a grid `repeat(5, 34px) 1fr`; every property spans `1 / -1` except Email
   and URL properties, which auto-place into the 34px tracks, Email first (fill Email on every member so
   bottom rows match). Icons are Font Awesome glyphs, declared as `--glyph`/`--glyph-font` and drawn by

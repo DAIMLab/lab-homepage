@@ -11,7 +11,9 @@
   --card-radius: 18px;
   --card-shadow: 0 10px 28px rgb(16 42 67 / 8%);
   --card-shadow-hover: 0 16px 36px rgb(16 42 67 / 14%);
-  --photo-w: 234px;
+  --photo-w: 210px;
+  /* an ID photo, taller than wide; a square cropped the heads */
+  --photo-ratio: 3 / 4;
 
   /* The hero carousel: first thing under the navbar, edge to edge. The page
      icon and title are hidden, as on Home; the carousel is the header. The
@@ -159,7 +161,7 @@
       min-height: 0;
       margin: 24px auto 0;
       border-radius: var(--photo-radius);
-      aspect-ratio: 1;
+      aspect-ratio: var(--photo-ratio);
     }
 
     .notion-collection-card__cover {
