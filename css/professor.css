@@ -223,8 +223,8 @@
         inset: auto 0 0;
         z-index: 3;
         display: grid;
-        grid-template-columns: max-content 1fr;
-        column-gap: 6px;
+        grid-template-columns: 1fr max-content minmax(0, max-content) 1fr;
+        column-gap: 8px;
         align-content: start;
         align-items: baseline;
         box-sizing: border-box;
@@ -256,10 +256,10 @@
         color: #fff;
       }
 
-      /* the second bar line reads date, then outlet, on one row; a long
-         outlet trims to an ellipsis instead of wrapping the bar taller.
-         Block display unwinds Super's centered flex on these cells, so
-         the separator dot hugs the date and both texts share a baseline */
+      /* the second bar line reads date, then outlet, centered as a pair
+         between the 1fr edge tracks; a long outlet trims to an ellipsis
+         instead of wrapping the bar taller. Block display unwinds Super's
+         centered flex on these cells, so both texts share a baseline */
       .notion-property__text,
       .notion-property__date {
         display: block;
@@ -271,24 +271,16 @@
 
       .notion-property__date {
         grid-row: 2;
-        grid-column: 1;
+        grid-column: 2;
       }
 
       .notion-property__text {
         grid-row: 2;
-        grid-column: 2;
+        grid-column: 3;
         max-width: 100%;
-        min-width: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-
-      /* the dot separates a date from an outlet, never a lone value;
-         the DOM keeps outlet before date, the grid swaps them */
-      .notion-property__text + .notion-property__date::after {
-        content: '\B7';
-        margin-left: 6px;
       }
 
       /* the source link invites the click from the whole card: the anchor
