@@ -101,13 +101,32 @@ plus the professor. Notion keeps per-row option order as entered, so author orde
 survives, and the option list makes filtering by a lab member possible. Every
 external co-author becomes a new option, so the list grows with the paper count.
 
-`Year` is a **select**, not a number, and that is deliberate. Notion groups a
-number property into ranges, not values: it needs a Group Range and a Group Every
-set by hand in the UI, the view DSL has no directive for either, and the header
-can come out as `2026 – 2027`, which CSS cannot rewrite because Super renders the
-group label as bare text with no data attribute. A select makes the option order
-the group order, so the newest year leads with no configuration at all. Options
-run 2026 down to 2010; a new year is one option added at the top.
+`Year` is a **number**, chosen on 2026-08-28 over the select it started as, with
+the number format left plain so no thousands separator ever reaches the group
+label. The cost is that number grouping is range grouping, and the ranges must be
+set by hand.
+
+Applying `GROUP BY "Year"` to a number property yields Notion's defaults, and they
+are wrong for years:
+
+```
+{"property":"Year","propertyType":"number","hideEmptyGroups":true,
+ "start":0,"end":1000,"size":100,"sort":{"type":"ascending"}}
+```
+
+`end` is 1000, so 2026 falls outside every bucket, and `size` is 100, so a bucket
+spans a century. The view DSL cannot fix this: `GROUP BY "Year" RANGE 2010 TO 2027
+EVERY 1` is rejected with `Expected directive keyword, got "RANGE"`, and there is
+no directive for the group sort direction either. Each of the five views needs
+Group Range, Group Every 1, and descending order set in the Notion UI. Until that
+is done the grouping renders wrong, not absent.
+
+Whether a one-year bucket labels itself `2026` or as a range is still unverified;
+it needs a live Super render to settle. If it comes out as a range, the fix is one
+rule in `js/date-format.js` pulling the first four digits out of
+`.notion-collection-group__section-header .notion-property__number`, because CSS
+cannot rewrite the text: Super renders the group label as bare text with no data
+attribute holding the raw value.
 
 Grouping is Super-native. Super lists `Database grouping` as supported and ships
 the selectors already: each group becomes a `.notion-collection-group__section`
@@ -116,11 +135,17 @@ the hook `css/publications.css` will use for the POSTECH-style year rail. Notion
 sets `hideEmptyGroups` on every one of these views, so a year with no papers in
 that quadrant does not render.
 
-`Patents` mirrors the same `Year` select so both halves of the page group alike.
-It keeps `Status` (출원/공개/등록/거절) and `Country` (KR/US/PCT/EP/JP/CN) apart so a
-pending filing never reads as a granted one, and one `All` view groups by `Year`
-sorted on `Filed`. `Venue` on Papers is a select seeded with eight placeholder
-abbreviations; it is a starting palette, not a fixed list.
+`Patents` mirrors the same `Year` number so both halves of the page group alike,
+and inherits the same range problem. It keeps `Status` (출원/공개/등록/거절) and
+`Country` (KR/US/PCT/EP/JP/CN) apart so a pending filing never reads as a granted
+one, and one `All` view groups by `Year` sorted on `Filed`.
+
+The Papers schema was trimmed further in Notion on 2026-08-28: `Code`, `Topic` and
+`Venue Full` are gone, `Venue` is now free text carrying the full citation rather
+than a select of abbreviations, and `PDF` holds an uploaded file instead of a URL.
+Eight properties remain: `Title`, `Authors`, `Year`, `Type`, `Scope`, `Venue`,
+`DOI`, `PDF`. Dropping `Venue` as a select also drops the abbreviation badge
+column the al-folio reference supplied, so the page design loses that hook.
 
 `Professor Media` (`f040a63431724614aaf533f8d6046ff6`, data source
 `df40c248-2fc0-4c66-aaa5-f5bb22623d65`) holds the professor's media
