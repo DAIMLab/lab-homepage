@@ -331,6 +331,22 @@ which the contiguity check rejects. External co-authors are deliberately not
 tagged: `Young Dae Ko`, `Hark Hwang`, `Eun Suk Suh`, `Dongsuk Kum` and the rest
 appear only in the body.
 
+DOIs were not in the legacy board; 43 of the 136 rows carry one, resolved
+against Crossref by `query.bibliographic` on the title. A hit counts only when
+the returned title matches at 0.93 or better and the year is within one, which
+is what keeps a same-named journal paper off a conference talk: `Optimal Design
+of Wireless Charging Electric Vehicle - Case Study` scored 0.87 against a real
+paper of nearly that name and was refused. Coverage is 30 of 44 journals and 12
+of 88 conferences; the arXiv preprint takes its own `10.48550/arXiv.` DOI. What
+has none is the Korean society work, which Crossref does not index, and the
+talks that were never in proceedings.
+
+Two things cost a retry. Crossref answers **429** under a fast loop, so a miss
+labelled `error 429` is a rate limit and not an absent DOI. And a title
+shortened on the way into the query drops the match below the threshold:
+`Semiconductor FAB Layout Design Analysis with 300-mm FAB Data` scored 0.62
+until the subtitle went back on, then 1.00.
+
 Patents carry `Title`, `특허번호` and `Date`; the inventor line goes in the body,
 since the schema has no inventor property. Fourteen are registrations and one,
 `10-2025-0029226`, is an application, which the body says and the number shows.
