@@ -279,10 +279,24 @@
   color: var(--pub-sub);
 }
 
+/* Venue and Location are both text properties and sit next to each other, so
+   they share the line the way the citation reads: name, then place. Super
+   omits an empty property, so a row without a place grows no stray dot */
 .page__publications .notion-collection-list__item-content
   .notion-property__text {
+  display: inline;
   max-width: none;
   font-size: 14px;
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__text + .notion-property__text::before {
+  content: '\00a0\00b7\00a0';
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__select {
+  display: block;
 }
 
 /* ---- the authors read as a citation line, not as chips ----------------- */
