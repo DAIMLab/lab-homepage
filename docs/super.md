@@ -247,7 +247,9 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   link breaks the card.
 - Motto: one quote block, its attribution a nested bullet the CSS restyles (`“` glyph, muted line);
   un-nesting it, or adding a second, breaks the design.
-- Member-card traps: the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
+- Member-card traps: the name is centred and everything under it stays left, but the card title is a
+  flex box, so `text-align` never reaches its text node and `justify-content` is what moves it;
+  the cover's `object-fit`/`object-position` are inline styles (`!important` needed);
   the email property renders with no anchor and, on a `no-click` card, needs `pointer-events: auto`;
   `.notion-pill` is nowrap. Layout: the gallery becomes flex `space-evenly` with 320px cards and
   `max-width: 1060px` (`--content-w`); three per row falls out. Portraits sit inset at `--photo-w`

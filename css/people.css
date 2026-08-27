@@ -193,12 +193,18 @@
       grid-column: 1 / -1;
       min-height: 0;
 
+      /* the name centres under the portrait; the research topics, date and
+         icon row below it stay left, so the card keeps one reading edge */
       &.title {
         margin-bottom: 10px;
         font-size: 18px;
         font-weight: 700;
         letter-spacing: -0.01em;
         line-height: 1.3;
+        /* Super lays the title out as a flex box, where text-align does not
+           reach the text node; the main axis is what centres it */
+        justify-content: center;
+        text-align: center;
         color: var(--ink);
       }
     }
