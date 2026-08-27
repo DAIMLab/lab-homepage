@@ -70,10 +70,43 @@ gone and its single `All` view emits no switcher.
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
 | Blog posts database | `35011c7b703c824cb3d7013957fdcc51` | `53b11c7b-703c-828c-8b6f-07108ff65286` | Publications |
+| Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | nowhere yet |
+| Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | nowhere yet |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
+
+`Papers` and `Patents` are the Publications rebuild, created 2026-08-27 and still
+empty. They replace the Ascent leftover `Blog posts database` that `/publications`
+currently shows; neither is on a page yet, so nothing on the site has changed.
+
+`Papers` splits the four-quadrant taxonomy across two select properties, `Scope`
+(International/Domestic) and `Type` (Journal/Conference/Workshop/Preprint), and
+carries five list views over that split: `Preprint`, `International Journal`,
+`International Conference`, `Domestic Journal`, `Domestic Conference`. Every view
+groups by `Year` and sorts by `Published` descending inside the group.
+
+`Year` is a **select**, not a number, and that is deliberate. Notion groups a
+number property into ranges, not values: it needs a Group Range and a Group Every
+set by hand in the UI, the view DSL has no directive for either, and the header
+can come out as `2026 – 2027`, which CSS cannot rewrite because Super renders the
+group label as bare text with no data attribute. A select makes the option order
+the group order, so the newest year leads with no configuration at all. Options
+run 2026 down to 2010; a new year is one option added at the top.
+
+Grouping is Super-native. Super lists `Database grouping` as supported and ships
+the selectors already: each group becomes a `.notion-collection-group__section`
+holding a `.notion-collection-group__section-header` and the view's rows, which is
+the hook `css/publications.css` will use for the POSTECH-style year rail. Notion
+sets `hideEmptyGroups` on every one of these views, so a year with no papers in
+that quadrant does not render.
+
+`Patents` mirrors the same `Year` select so both halves of the page group alike.
+It keeps `Status` (출원/공개/등록/거절) and `Country` (KR/US/PCT/EP/JP/CN) apart so a
+pending filing never reads as a granted one, and one `All` view groups by `Year`
+sorted on `Filed`. `Venue` on Papers is a select seeded with eight placeholder
+abbreviations; it is a starting palette, not a fixed list.
 
 `Professor Media` (`f040a63431724614aaf533f8d6046ff6`, data source
 `df40c248-2fc0-4c66-aaa5-f5bb22623d65`) holds the professor's media
