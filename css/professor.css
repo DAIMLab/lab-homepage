@@ -168,6 +168,7 @@
 
   .collection-df40c2482fc04c66aaa5f5bb22623d65 {
     --media-card-h: 200px;
+    --media-bar-h: 80px;
     --media-bar-bg: rgb(8 12 18 / 55%);
 
     /* the cover-size minimum is what yields four columns at full width */
@@ -210,15 +211,23 @@
         pointer-events: none;
       }
 
-      /* the hover bar, tucked below its own fade until the pointer arrives */
+      /* the hover bar: a fixed-height grid packed to its bottom edge, so
+         every card's bar matches (a one-line title just leaves headroom).
+         Super's own stylesheet fights this bar three ways -- a 24px
+         min-height on every property, overflow:hidden on the property
+         list, and position:relative on the url wrapper -- so each is
+         unwound right where it interferes. */
       .notion-collection-card__content {
         position: absolute;
         inset: auto 0 0;
         z-index: 3;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
+        display: grid;
+        grid-template-columns: max-content 1fr;
         column-gap: 6px;
+        align-content: end;
+        box-sizing: border-box;
+        height: var(--media-bar-h);
+        overflow: visible;
         margin: 0;
         padding: 10px 12px 11px;
         background: var(--media-bar-bg);
@@ -228,8 +237,12 @@
         transition: opacity 0.3s, translate 0.3s;
       }
 
+      .notion-collection-card__property {
+        min-height: 0;
+      }
+
       .notion-property__title {
-        flex-basis: 100%;
+        grid-column: 1 / -1;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -241,7 +254,8 @@
         color: #fff;
       }
 
-      /* the bar's second line reads date, then outlet */
+      /* the second bar line reads date, then outlet, on one row; a long
+         outlet trims to an ellipsis instead of wrapping the bar taller */
       .notion-property__text,
       .notion-property__date {
         margin: 4px 0 0;
@@ -250,27 +264,43 @@
         color: rgb(255 255 255 / 82%);
       }
 
-      .notion-property__date { order: 2; }
-      .notion-property__text { order: 3; }
+      .notion-property__date {
+        grid-row: 2;
+        grid-column: 1;
+      }
+
+      .notion-property__text {
+        grid-row: 2;
+        grid-column: 2;
+        max-width: 100%;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
       /* the dot separates a date from an outlet, never a lone value;
-         the DOM keeps outlet before date, the order above swaps them */
+         the DOM keeps outlet before date, the grid swaps them */
       .notion-property__text + .notion-property__date::after {
         content: '\B7';
         margin-left: 6px;
       }
 
       /* the source link invites the click from the whole card: the anchor
-         overshoots the bar upward and the card's overflow clips it */
+         climbs from the bar's box back up to the card's top edge. Its
+         wrapper drops Super's position:relative, or the anchor would
+         collapse onto the zero-width wrapper instead of the bar. */
       .notion-property__url {
-        order: 4;
+        position: static;
+        margin: 0;
       }
 
       .notion-property__url a {
         position: absolute;
-        inset: calc(-1 * var(--media-card-h)) 0 0;
+        inset: calc(var(--media-bar-h) - var(--media-card-h)) 0 0;
         z-index: 6;
         font-size: 0;
+        pointer-events: auto;
       }
 
       &:hover {
