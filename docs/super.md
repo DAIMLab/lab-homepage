@@ -217,6 +217,26 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   Ascent stylesheet, and plain rules win. Measured, `padding` resolves to this
   file's own value. Do not add `!important` on their account.
 
+## About Page
+
+- Head tab `code/about.html`: one pinned link, `css/about.css`, scoped
+  `main:is(.page__about-daim, .page__about)` so the planned `/about` rename costs no CSS change.
+  Section H1s reuse People's centred treatment; the page title hides and the `DAIM` heading opens
+  the page.
+- Deck carousels: the Gallery Carousel snippet frames every carousel at `16/11` with `!important`,
+  sized for the People photos. The About overrides (also `!important`, higher specificity) reframe
+  to `16/9`, letterbox with `object-fit: contain` on white, and hide the caption overlay, which
+  would sit on the slide's own footer; `js/carousel-lightbox.js` opens the full image instead.
+- Target Journal: the page's only bulleted lists (two columns) restyle into pills; the only H3
+  becomes a small uppercase label.
+- Cards: `.notion-column > .notion-callout` is a white card. The blue (`bg-blue-light`) callouts
+  are excluded: they are the four pipeline steps, centred, with a `→` drawn on every
+  non-last column via `::after` and dropped under 768px where columns stack. Blue is otherwise
+  unused on this page (the footer's blue callout lives on its own page), which is what makes the
+  pipeline selectable.
+- The 적용 line in a topic card is its last text block, pinned to the card's bottom edge by a
+  flex column with `margin-top: auto`.
+
 ## People Page
 
 - Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
