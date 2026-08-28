@@ -69,9 +69,10 @@
      items, the original photo file for uncredited press photos -- and the
      row page stays unreachable. A media-video-* cover earns the play
      badge. Card preview must be clicked to Page cover in Notion; the DSL
-     cannot set it ---- */
+     cannot set it. Keyed as the page's only collection, not by collection
+     id, which a workspace duplicate would reissue ---- */
 
-  .collection-df40c2482fc04c66aaa5f5bb22623d65 {
+  .notion-collection {
     --media-card-h: 200px;
     --media-bar-h: 96px;
     --media-bar-bg: rgb(8 12 18 / 55%);
