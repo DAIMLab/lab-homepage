@@ -229,12 +229,12 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   would sit on the slide's own footer; `js/carousel-lightbox.js` opens the full image instead.
 - Target Journal: the page's only bulleted lists (two columns) restyle into pills; the only H3
   becomes a small uppercase label.
-- Cards: `.notion-column > .notion-callout` is a white card. The blue (`bg-blue-light`) callouts
-  are excluded: they are the four pipeline steps, centred, with a `→` drawn on every
-  non-last column via `::after` and dropped under 768px where columns stack. Blue is otherwise
-  unused on this page (the footer's blue callout lives on its own page), which is what makes the
-  pipeline selectable.
-- The 적용 line in a topic card is its last text block, pinned to the card's bottom edge by a
+- Domain stack: the section draws the MFRA IT stack as column rows, and callout colors are the
+  CSS keys. **Yellow** is a layer label (`MES / WES`, `MCS`, `Robots`, `Foundation`), **gray** a
+  topic cell on the row's light band, **purple** a foundation cell on the dark plate, and brown
+  stays the carousel's. A row is selected by what it contains
+  (`.notion-column-list:has(.bg-yellow-light)`), so adding a layer in Notion needs no CSS change.
+- The 적용 line in a topic cell is its last text block, pinned to the cell's bottom edge by a
   flex column with `margin-top: auto`.
 
 ## People Page
