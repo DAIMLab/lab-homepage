@@ -14,7 +14,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Page | Slug | Notion ID |
 | --- | --- | --- |
 | Home | `/` | `3c611c7b703c809fb685f773804f1684` |
-| About DAIM | `/about-daim` | `21f11c7b703c83f399ea01c297c4d409` |
+| About | `/about` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
 | Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
@@ -40,9 +40,10 @@ purpose. The four-step pipeline and the five domain photo columns were dropped i
 the same pass. `DAIM Technology` (renamed from DAIM Research, link
 `daimtechnology.com`) is a short mention plus a YouTube video block
 (`youtu.be/1MX7rMT_8uo`). The page's Head tab is `code/about.html`
-([`super.md`](super.md#about-page)). Still open: the slug is `/about-daim` and the IA
-document asks for `/about` before DNS cutover (Personal has no redirects), and Super
-needs a Sync before any of this reaches the live page.
+([`super.md`](super.md#about-page)). The slug moved by hand from `/about-daim` to
+`/about` on 2026-08-28, as with People's rename the old path still answers 200;
+`css/about.css` scopes over both. A Notion edit still needs a Sync before it
+reaches the live page.
 
 Team DAIM is the People page. The slug lives in Super under Site Pages and a
 Notion rename does not move it; on 2026-08-27 it was moved there by hand from

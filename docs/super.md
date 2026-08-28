@@ -217,6 +217,17 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   Ascent stylesheet, and plain rules win. Measured, `padding` resolves to this
   file's own value. Do not add `!important` on their account.
 
+## Lightbox
+
+The image lightbox is the stock snippet's stylesheet plus `js/lightbox.js`, not the
+stock script: a Head-tab script runs before React hydration, and hydration discards
+any node it appended to `body` (measured: `#lightbox-overlay` absent, React #418 in
+the console). The replacement builds the overlay on first click and delegates every
+click, so it also survives client-side navigation. It covers plain `.notion-image`
+images (ones wrapped in a caption link keep their link) and the carousel cards,
+where it swaps the spr.so resize suffix for `/public` and blocks the card's own
+row-page link.
+
 ## About Page
 
 - Head tab `code/about.html`: one pinned link, `css/about.css`, scoped
@@ -226,7 +237,7 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 - Deck carousels: the Gallery Carousel snippet frames every carousel at `16/11` with `!important`,
   sized for the People photos. The About overrides (also `!important`, higher specificity) reframe
   to `16/9`, letterbox with `object-fit: contain` on white, and hide the caption overlay, which
-  would sit on the slide's own footer; `js/carousel-lightbox.js` opens the full image instead.
+  would sit on the slide's own footer; `js/lightbox.js` opens the full image instead.
 - Target Journal: the page's only bulleted lists (two columns) restyle into pills; the only H3
   becomes a small uppercase label.
 - Domain rows: callout colors are the CSS keys. A **gray** callout at the page's top level is one
