@@ -229,13 +229,12 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   would sit on the slide's own footer; `js/carousel-lightbox.js` opens the full image instead.
 - Target Journal: the page's only bulleted lists (two columns) restyle into pills; the only H3
   becomes a small uppercase label.
-- Domain stack: the section draws the MFRA IT stack as column rows, and callout colors are the
-  CSS keys. **Yellow** is a layer label (`MES / WES`, `MCS`, `Robots`, `Foundation`), **gray** a
-  topic cell on the row's light band, **purple** a foundation cell on the dark plate, and brown
-  stays the carousel's. A row is selected by what it contains
-  (`.notion-column-list:has(.bg-yellow-light)`), so adding a layer in Notion needs no CSS change.
-- The 적용 line in a topic cell is its last text block, pinned to the cell's bottom edge by a
-  flex column with `margin-top: auto`.
+- Domain rows: callout colors are the CSS keys. A **gray** callout at the page's top level is one
+  numbered index row; its three text lines land on a grid (title, one-liner, tag pill) through
+  `display: contents` on the callout content, and the number is a CSS counter, so reordering rows
+  in Notion renumbers them for free. **Purple** callouts in columns are the dashed foundation
+  tiles under the small-caps H3 label; brown stays the carousel's. Icons on any of these callouts
+  are hidden: Notion's block reuse leaves stale emoji behind when a section is rebuilt.
 
 ## People Page
 

@@ -30,13 +30,14 @@ restructured the same day to four H1 sections: `DAIM`, `Research Area`, `Domain`
 carousels carry the testbed slide.
 `DAIM` and `Research Area` each end in a Gallery Carousel (brown callout over a
 linked gallery view of `About Slides`, the same snippet as the People hero) showing
-the legacy `/30` and `/23` decks as original slide images. `Domain` is the MFRA
-stack, chosen from three candidate designs on 2026-08-28: four column rows, each a
-`yellow_bg` label callout (`MES / WES` / `MCS` / `Robots` / `Foundation`) beside
-`gray_bg` topic cells, the last row `purple_bg` for the two base technologies; the
-colors are CSS keys ([`super.md`](super.md#about-page)), so they look odd in the
-Notion editor on purpose. The four-step pipeline and the five domain photo columns
-were dropped in the same pass. `DAIM Technology` (renamed from DAIM Research, link
+the legacy `/30` and `/23` decks as original slide images. `Domain` is the numbered
+index list, the survivor of three candidate designs tried on 2026-08-28 (the MFRA
+stack was built and then retired the same day): five `gray_bg` callouts at the top
+level, one row each with title, one-liner and tag line, then a `### Foundation ·
+기반 기술` label over two `purple_bg` tile callouts in columns. The colors are CSS
+keys ([`super.md`](super.md#about-page)), so they look odd in the Notion editor on
+purpose. The four-step pipeline and the five domain photo columns were dropped in
+the same pass. `DAIM Technology` (renamed from DAIM Research, link
 `daimtechnology.com`) is a short mention plus a YouTube video block
 (`youtu.be/1MX7rMT_8uo`). The page's Head tab is `code/about.html`
 ([`super.md`](super.md#about-page)). Still open: the slug is `/about-daim` and the IA
