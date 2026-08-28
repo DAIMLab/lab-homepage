@@ -103,17 +103,16 @@ Four things to know before reusing any of it:
    headcount on `/30` carries a `2023년 2월 기준` footnote. `/23`'s testbed slide has
    been superseded by KAIROS, announced 2026-03-23 and already covered in `Lab News`.
 
-All three were merged into one page on 2026-08-28. `/about-daim` now carries the
-five sections `Mission`, `Research Area`, `KAIROS`, `Track Record` and `Join`, written
-as native blocks; the slide text was rewritten rather than pasted as images. Three
-figures survive as pictures, cropped free of the watermark and the `Confidential`
-stamp and committed to `assets/about/`: the traditional-versus-MFRA IT architecture
-comparison from `/23` 02, the Key Know-How pipeline from `/30` 03, and the two
-`共生共存` photos from `/30` 02. Five more crops from `/23` 04 carry the industry
-domains. `/24`'s five cases became the second line of the five research topic cards,
-so no case slide is reused as an image. What was dropped and why is the metrics table
-in the About IA document; the short version is that headcount went to `/people`,
-patent counts to `/publications`, and the nine partner logos went nowhere.
+The merge landed on 2026-08-28 and was restructured the same day: the About page
+now shows the `/30` and `/23` decks as original slide images through two Gallery
+Carousels backed by the `About Slides` database, watermark and stamps kept, since
+the slides are the content the lab already presents. The ten files live in
+`assets/about/slides/`. `/24`'s five cases survive as the second line of the five
+research-topic cards in the `Domain` section, and the five domain photo crops from
+`/23` 04 illustrate the same section; the other crops from the first pass were
+deleted. The `/30` Target Journal list sits under Research Area rather than
+`/publications`. Headcount still goes to `/people` and patent counts to
+`/publications`; the nine partner logos went nowhere.
 
 ## Lab News, Migrated
 

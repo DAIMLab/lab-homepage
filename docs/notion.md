@@ -23,17 +23,19 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Databases | `/databases` | `3c911c7b703c816c9d28dec4774a53b8` |
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
-About DAIM was filled on 2026-08-28, replacing the Ascent lorem ipsum. It merges
-the legacy `/23`, `/30` and `/24` into five H2 sections under a `table_of_contents`
-block: `Mission`, `Research Area`, `KAIROS`, `Track Record`, `Join`. The layout is
-columns of callouts throughout, three then two for the five research topics, five for
-the industry domains; the eight pictures load from `assets/about/` over
-`raw.githubusercontent.com` except the KAIROS photo, which reuses the `lab-news-assets`
-copy already served to `/lab-news`. Links to People, Projects, Publications and the
-KAIROS post are `mention-page` blocks, so Super rewrites them to site paths rather
-than notion.so URLs. Two things are still open: the slug is `/about-daim` and the IA
-document asks for `/about` before DNS cutover, since Personal has no redirects; and
-Super needs a Sync before any of this reaches the live page.
+The About page (renamed to plain `About` in Notion) was filled on 2026-08-28 and
+restructured the same day to six H1 sections: `DAIM`, `Research Area`, `KAIROS`,
+`Domain`, `DAIM Research`, `Join`, plus a `### Target Journal` under Research Area.
+`DAIM` and `Research Area` each end in a Gallery Carousel (brown callout over a
+linked gallery view of `About Slides`, the same snippet as the People hero) showing
+the legacy `/30` and `/23` decks as original slide images. `Domain` holds the five
+research-topic callout cards, the two base-technology cards, the four-step pipeline
+paragraph, and the five domain photo columns from `assets/about/`. `DAIM Research`
+is a short mention plus a YouTube video block (`youtu.be/1MX7rMT_8uo`). Links to
+People, Projects, Publications and the KAIROS post are `mention-page` blocks, so
+Super rewrites them to site paths. Still open: the slug is `/about-daim` and the IA
+document asks for `/about` before DNS cutover (Personal has no redirects), and Super
+needs a Sync before any of this reaches the live page.
 
 Team DAIM is the People page. The slug lives in Super under Site Pages and a
 Notion rename does not move it; on 2026-08-27 it was moved there by hand from
@@ -91,6 +93,7 @@ stylesheet tells the two panels apart: `:has(.notion-dropdown)` is Papers.
 | Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
+| About Slides | `9ee88d7c867247998c5e1a69d8944bf8` | `32c5fb4c-c55e-4d1e-8ecf-f123b787ac25` | About (two deck carousels) |
 
 `Papers` and `Patents` are the Publications rebuild, created 2026-08-27 and still
 empty. What they replaced on `/publications` was not the `Blog posts database` this
@@ -239,6 +242,15 @@ The alumni records live in their own database, data source
 `ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block
 `3c711c7b703c8182b96cc60edf70784f`. It keeps the migrated `/36` rows and waits for
 its own design pass.
+
+`About Slides` feeds the two About carousels the same way: one row per slide,
+the page cover as the image (external URLs into `assets/about/slides/` at commit
+`e87e870`), `Deck` picking the carousel (`About DAIM` / `Research Area`) and
+`Order` sorting inside it. The page carries two filtered linked gallery views,
+`3ca11c7b703c818e8a02d5c728af4bf6` (About DAIM) and
+`3ca11c7b703c81d4a068c217d15a11d3` (Research Area), each inside its own brown
+callout. Card preview must be set to Page cover per view in the Notion UI; the
+API's view DSL has no such directive.
 
 `Team Photos` holds the People hero carousel: one row per slide, the page
 cover as the photo (external URLs into `assets/carousel/` at a pinned commit)

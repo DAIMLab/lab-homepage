@@ -228,7 +228,8 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   repinned to its new SHA ([`hosting.md`](hosting.md#jsdelivr)).
 - Hero carousel: the Gallery Carousel snippet (a gallery view of `Team Photos` inside a brown callout;
   self-guarding, site-wide safe) plus `js/carousel-autoplay.js` clicking the next arrow every 5s, pausing
-  under the pointer and in hidden tabs. Manual Notion steps: Card preview to Page cover, and the
+  under the pointer and in hidden tabs. Since 2026-08-28 the autoplay selector pins `.page__people`:
+  the About page runs the same snippet over the two legacy slide decks, which need reading time. Manual Notion steps: Card preview to Page cover, and the
   database's drag into the Control panel.
 - Professor card: a `gray_bg` callout (blue is the footer's, brown the carousel's) that
   `css/people-professor.css` turns into a full-row white card (`width: 100%`, own `box-sizing:
