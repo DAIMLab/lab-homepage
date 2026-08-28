@@ -120,7 +120,12 @@
     display: none;
   }
 
-  .collection-2d2152b853b942359c0f0b1a2225fb85 {
+  /* The five People galleries, keyed structurally: the only top-level
+     collections whose cards carry a photo cover. A collection or property id
+     would not survive a workspace duplicate, which reissues them all. Edges:
+     a view where no member has a Picture drops out of the design, and a
+     cover on the Alumni view would pull it in */
+  .notion-root > .notion-collection:has(.notion-collection-card__cover) {
     .notion-collection-gallery {
       display: flex;
       flex-wrap: wrap;
@@ -349,14 +354,20 @@
       }
     }
 
+    /* Which icon a URL gets is read off the href, not the property id, for
+       the same duplicate-survival reason as the scope above. Anything
+       unmatched is a homepage; github.com only, since a github.io site is a
+       homepage, not a profile. The file patterns sit last so a CV pdf hosted
+       on github.com still reads as a CV */
     .notion-property__url {
-      --glyph: '\f0c1'; /* link, fallback for a URL property added later */
+      --glyph: '\f015'; /* house */
       --glyph-font: var(--fa-font-solid);
 
-      &.property-6e4c7e43 { --glyph: '\f015'; }                                      /* Homepage: house */
-      &.property-5a4c6b3d { --glyph: '\f09b'; --glyph-font: var(--fa-font-brands); } /* GitHub */
-      &.property-7956403c { --glyph: '\f0e1'; --glyph-font: var(--fa-font-brands); } /* LinkedIn */
-      &.property-45444558 { --glyph: '\f15c'; --glyph-font: var(--fa-font-regular); } /* CV: file-lines */
+      &:has(.notion-link[href*='github.com' i])   { --glyph: '\f09b'; --glyph-font: var(--fa-font-brands); } /* GitHub */
+      &:has(.notion-link[href*='linkedin.com' i]) { --glyph: '\f0e1'; --glyph-font: var(--fa-font-brands); } /* LinkedIn */
+      &:has(.notion-link[href*='.pdf' i]),
+      &:has(.notion-link[href*='dropbox.' i]),
+      &:has(.notion-link[href*='drive.google.' i]) { --glyph: '\f15c'; --glyph-font: var(--fa-font-regular); } /* CV: file-lines */
     }
 
     @media (max-width: 640px) {
