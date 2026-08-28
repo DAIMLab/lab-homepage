@@ -66,3 +66,14 @@ html {
 .notion-callout.bg-brown-light .notion-collection__header-wrapper {
   display: none;
 }
+
+/* The stock lightbox sheet only caps the image, so a low-res slide showed
+   at its intrinsic width, smaller than the carousel it came from. Fill the
+   viewport and letterbox inside; the deeper selector outranks the snippet's. */
+#lightbox-overlay #lightbox-image {
+  width: 94vw;
+  height: 92vh;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
