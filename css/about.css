@@ -27,12 +27,10 @@ main:is(.page__about-daim, .page__about) {
     margin-inline: auto;
   }
 
-  /* Section headings, People's rule and weight but flush left; centring
-     read wrong on this page */
+  /* Section headings, People's weight but flush left and without the
+     underline rule, which read as clutter here */
   .notion-root > h1.notion-heading {
-    margin: 56px 0 0;
-    padding-bottom: 9px;
-    border-bottom: 1px solid var(--rule);
+    margin: 56px 0 4px;
     text-align: left;
     font-size: 26px;
     font-weight: 800;
