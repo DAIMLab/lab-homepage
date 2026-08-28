@@ -58,3 +58,11 @@ html {
 .notion-toggle.bg-brown {
   display: none !important;
 }
+
+/* A gallery inside a brown callout is the Gallery Carousel snippet
+   (code/global.html); the collection title is chrome there, not content.
+   people.css hides it page-wide for its own reasons; this covers the About
+   deck carousels and any future one */
+.notion-callout.bg-brown-light .notion-collection__header-wrapper {
+  display: none;
+}
