@@ -24,16 +24,16 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Ascent leftover | `/home` | `fd211c7b703c8315b76b81c4858d6152` |
 
 The About page (renamed to plain `About` in Notion) was filled on 2026-08-28 and
-restructured the same day to six H1 sections: `DAIM`, `Research Area`, `KAIROS`,
-`Domain`, `DAIM Research`, `Join`, plus a `### Target Journal` under Research Area.
+restructured the same day to four H1 sections: `DAIM`, `Research Area`, `Domain`,
+`DAIM Research`, plus a `### Target Journal` under Research Area. `KAIROS` and
+`Join` were cut later that day; KAIROS coverage stays on `/lab-news`, and the deck
+carousels carry the testbed slide.
 `DAIM` and `Research Area` each end in a Gallery Carousel (brown callout over a
 linked gallery view of `About Slides`, the same snippet as the People hero) showing
 the legacy `/30` and `/23` decks as original slide images. `Domain` holds the five
 research-topic callout cards, the two base-technology cards, the four-step pipeline
 paragraph, and the five domain photo columns from `assets/about/`. `DAIM Research`
-is a short mention plus a YouTube video block (`youtu.be/1MX7rMT_8uo`). Links to
-People, Projects, Publications and the KAIROS post are `mention-page` blocks, so
-Super rewrites them to site paths. Still open: the slug is `/about-daim` and the IA
+is a short mention plus a YouTube video block (`youtu.be/1MX7rMT_8uo`). Still open: the slug is `/about-daim` and the IA
 document asks for `/about` before DNS cutover (Personal has no redirects), and Super
 needs a Sync before any of this reaches the live page.
 
