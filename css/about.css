@@ -7,9 +7,9 @@
    Notion:  H1 DAIM        tagline + intro + carousel (brown callout)
             H1 Research Area  carousel + H3 Target Journal over two
                               columns of bullets (the chips)
-            H1 Domain      the MFRA stack: four column rows, each a
-                           yellow label callout + gray cell callouts,
-                           the last row purple (foundation)
+            H1 Domain      numbered index rows (top-level gray
+                           callouts) + H3 Foundation label over two
+                           purple tile callouts in columns
             H1 DAIM Technology  paragraph + video */
 
 main:is(.page__about-daim, .page__about) {
@@ -118,83 +118,79 @@ main:is(.page__about-daim, .page__about) {
     &::marker { content: none; }
   }
 
-  /* ── Domain stack ───────────────────────────────────────────────
-     The MFRA IT stack drawn as rows. Colors are Notion-side markers:
-     a yellow callout is a layer label, gray callouts are the layer's
-     cells, purple marks the dark foundation plate; brown stays the
-     carousel's. The key lives in docs/super.md, "About Page". */
-  .notion-column-list:has(.notion-callout.bg-yellow-light) {
-    display: flex;
-    align-items: stretch;
-    gap: 14px;
-    margin-top: 12px;
-    background: #f7f9fb;
-    border: 1px solid var(--rule);
-    border-radius: var(--photo-radius);
-    padding: 12px 16px;
-
-    /* Super sizes columns with inline calc() widths and --column-spacing
-       margins; the row takes over with flex: label 150px, cells share
-       the rest at a 14px gap */
-    .notion-column {
-      width: auto !important;
-      margin: 0 !important;
-      min-width: 0;
-      flex: 1 1 0;
-    }
-
-    .notion-column:first-child {
-      flex: 0 0 150px;
-    }
-
-    /* Icons inherited from the reshuffled blocks are noise here */
-    .notion-callout__icon {
-      display: none;
-    }
+  /* ── Domain index rows ──────────────────────────────────────────
+     Numbered rows over hairline rules. A gray callout at the page's
+     top level is one row of three lines (title, one-liner, tag); the
+     number is a CSS counter. Purple callouts in columns are the
+     foundation tiles. The key lives in docs/super.md, "About Page". */
+  .notion-root {
+    counter-reset: domain-row;
   }
 
-  .notion-column > .notion-callout.bg-yellow-light {
-    height: 100%;
+  .notion-root > .notion-callout.bg-gray-light {
+    counter-increment: domain-row;
+    display: grid;
+    grid-template-columns: 56px minmax(180px, 240px) 1fr auto;
+    gap: 18px;
+    align-items: center;
     background: transparent !important;
     border: 0;
-    padding: 0;
-    align-items: center;
-  }
+    border-bottom: 1px solid var(--rule);
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 16px 6px;
+    transition: background 0.15s ease;
 
-  .notion-column > .notion-callout.bg-yellow-light .notion-callout__content {
-    margin-inline-start: 0;
+    &::before {
+      content: counter(domain-row, decimal-leading-zero);
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-variant-numeric: tabular-nums;
+      color: var(--rule);
+      transition: color 0.15s ease;
+    }
 
-    .notion-text {
-      margin-block: 1px;
-      font-size: 11px;
+    &:hover { background: #f7f9fb; }
+    &:hover::before { color: var(--accent); }
+
+    .notion-callout__icon { display: none; }
+
+    /* The content wrapper dissolves so the three lines sit on the grid */
+    .notion-callout__content {
+      display: contents;
+    }
+
+    .notion-text { margin: 0; }
+    .notion-text:nth-of-type(1) { font-size: 15.5px; color: var(--ink); }
+    .notion-text:nth-of-type(2) { font-size: 13.5px; line-height: 1.6; color: var(--sub); }
+
+    .notion-text:nth-of-type(3) {
+      justify-self: end;
+      font-size: 12px;
       line-height: 1.4;
-      letter-spacing: 0.05em;
       color: var(--muted);
-    }
-
-    .notion-text:first-child {
-      font-size: 12.5px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--sub);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 5px 12px;
+      white-space: nowrap;
     }
   }
 
-  .notion-column > .notion-callout.bg-gray-light {
+  /* Foundation tiles under their small-caps H3 label */
+  .notion-column > .notion-callout.bg-purple-light {
     height: 100%;
     box-sizing: border-box;
-    background: #fff !important;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 12px 14px;
-    box-shadow: 0 1px 3px rgb(33 33 33 / 0.06);
+    background: #f7f9fb !important;
+    border: 1px dashed var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+
+    .notion-callout__icon { display: none; }
   }
 
-  /* Compact cell type; the italic 적용 line anchors to the bottom edge */
-  .notion-column > .notion-callout.bg-gray-light .notion-callout__content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  .notion-column > .notion-callout.bg-purple-light .notion-callout__content {
     margin-inline-start: 0;
 
     .notion-text {
@@ -204,52 +200,7 @@ main:is(.page__about-daim, .page__about) {
       color: var(--sub);
     }
 
-    .notion-text:first-child {
-      font-size: 14.5px;
-      color: var(--ink);
-    }
-
-    .notion-text:last-child {
-      margin-top: auto;
-      padding-top: 8px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-  }
-
-  /* The foundation plate: dark ground under the three layers */
-  .notion-column-list:has(.notion-callout.bg-purple-light) {
-    background: #10222e;
-    border-color: #10222e;
-  }
-
-  .notion-column-list:has(.notion-callout.bg-purple-light)
-    .notion-callout.bg-yellow-light .notion-callout__content {
-    .notion-text { color: rgb(159 196 216 / 0.75); }
-    .notion-text:first-child { color: #cfe6f2; }
-  }
-
-  .notion-column > .notion-callout.bg-purple-light {
-    height: 100%;
-    background: transparent !important;
-    border: 0;
-    padding: 6px 2px;
-  }
-
-  .notion-column > .notion-callout.bg-purple-light .notion-callout__content {
-    margin-inline-start: 0;
-
-    .notion-text {
-      margin-block: 2px;
-      font-size: 12.5px;
-      line-height: 1.6;
-      color: #9fc4d8;
-    }
-
-    .notion-text:first-child {
-      font-size: 14px;
-      color: #fff;
-    }
+    .notion-text:first-child { font-size: 14px; color: var(--ink); }
   }
 
   /* ── Video ───────────────────────────────────────────────────────*/
@@ -261,13 +212,16 @@ main:is(.page__about-daim, .page__about) {
 }
 
 
-/* Stacked rows: the label turns into a strip over its cells */
+/* Narrow screens: the row wraps to number+title / one-liner / tag */
 @media (max-width: 700px) {
   main:is(.page__about-daim, .page__about)
-    .notion-column-list:has(.notion-callout.bg-yellow-light) {
-    flex-direction: column;
-    gap: 10px;
+    .notion-root > .notion-callout.bg-gray-light {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 6px 12px;
 
-    .notion-column:first-child { flex: 0 0 auto; }
+    &::before { font-size: 17px; }
+
+    .notion-text:nth-of-type(2) { grid-column: 2; }
+    .notion-text:nth-of-type(3) { grid-column: 2; justify-self: start; }
   }
 }
