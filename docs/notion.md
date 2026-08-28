@@ -38,8 +38,10 @@ level, one row each with title, one-liner and tag line, then a `### Foundation Â
 keys ([`super.md`](super.md#about-page)), so they look odd in the Notion editor on
 purpose. The four-step pipeline and the five domain photo columns were dropped in
 the same pass. `DAIM Technology` (renamed from DAIM Research, link
-`daimtechnology.com`) is a short mention plus a YouTube video block
-(`youtu.be/1MX7rMT_8uo`). The page's Head tab is `code/about.html`
+`daimtechnology.com`) is a short mention plus a video block. The clip is the
+26-second intro from `youtu.be/1MX7rMT_8uo`, which refused to embed
+(X-Frame-Options), re-served as `assets/video/daim-intro-720p.mp4` over jsDelivr
+at a pinned SHA. The page's Head tab is `code/about.html`
 ([`super.md`](super.md#about-page)). The slug moved by hand from `/about-daim` to
 `/about` on 2026-08-28, as with People's rename the old path still answers 200;
 `css/about.css` scopes over both. A Notion edit still needs a Sync before it
