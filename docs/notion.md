@@ -359,6 +359,13 @@ and Staff keep manual order.
   were dropped. Safe to re-run when an option name is unchanged, destructive when it
   is renamed. It also blanks the property `description`, so put `COMMENT` back in the
   same statement.
+- **A workspace duplicate reissues data source ids but keeps property ids.** Measured
+  2026-08-29 after the whole site tree was duplicated into a new workspace for the
+  daimlab.super.site rebuild: every property id on People, Projects, Lab News and
+  Publications survived, while both collection classes the repo's CSS keyed on
+  (`People`, `Professor Media`) came back new. CSS keyed on `property-<id>` outlives
+  a duplicate; CSS keyed on `collection-<id>` does not, which is why `people.css`
+  and `professor.css` now key structurally instead ([`super.md`](super.md#people-page)).
 - The MCP move tool cannot target a toggle or a column, so moving a database into the
   Control panel is a manual drag in Notion. It reports the refusal as
   `Could not find block with ID`, a 404 on the destination, which reads like missing

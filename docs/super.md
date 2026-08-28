@@ -295,9 +295,16 @@ row-page link.
   bottom rows match). Icons are Font Awesome glyphs, declared as `--glyph`/`--glyph-font` and drawn by
   one absolute `::before` layer (a centering grid on the button misaligns on the hidden text node); the
   check glyph is solid-only, so `.copied` swaps `--glyph-font`; the tooltip shows `data-email` via `attr()`.
-- Property hooks: Research `property-61796943`, Email `property-3a50566e`, Homepage `property-6e4c7e43`,
-  GitHub `property-5a4c6b3d`, LinkedIn `property-7956403c`, CV `property-45444558`, Joined
-  `property-75566065` (via the generic `.notion-property__date`).
+- No id hooks remain: the card scope is
+  `.notion-root > .notion-collection:has(.notion-collection-card__cover)` and every property is
+  addressed by type (`__select`, `__date`, `__email`, `__url`). URL icons read the href, not the
+  property: `github.com` and `linkedin.com` by domain, `.pdf`/Dropbox/Drive as a CV, anything else a
+  homepage (so a `github.io` homepage draws the house, not the GitHub mark). Keyed this way on
+  2026-08-29 after a workspace duplicate reissued the collection id and orphaned the old
+  `.collection-2d2152b8…` scope; the property ids survived the same duplicate (Research `61796943`,
+  Email `3a50566e`, Joined `75566065`, the four URLs unchanged), so id-keyed rules on other pages
+  kept working. `css/professor.css` dropped its Professor Media collection id the same day, keyed as
+  that page's only collection.
 
 The professor's profile page (`/people/professor`, scope `.page__people-professor`) is the card's
 full-page counterpart: Head tab `code/professor.html` links Font Awesome, `css/people-identity.css`
