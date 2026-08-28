@@ -41,7 +41,9 @@ the same pass. `DAIM Technology` (renamed from DAIM Research, link
 `daimtechnology.com`) is a short mention plus a video block. The clip is the
 26-second intro from `youtu.be/1MX7rMT_8uo`, which refused to embed
 (X-Frame-Options), re-served as `assets/video/daim-intro-720p.mp4` over jsDelivr
-at a pinned SHA. The page's Head tab is `code/about.html`
+at a pinned SHA. A brown `Subpages` toggle at the page bottom holds the
+`About Slides` source database since 2026-08-28 ([Collections](#collections)).
+The page's Head tab is `code/about.html`
 ([`super.md`](super.md#about-page)). The slug moved by hand from `/about-daim` to
 `/about` on 2026-08-28, as with People's rename the old path still answers 200;
 `css/about.css` scopes over both. A Notion edit still needs a Sync before it
@@ -76,9 +78,13 @@ neither owns the database and neither shows a view switcher.
 
 ## Collections
 
-Every content database is a child of the **`Databases`** page
-(`3c911c7b703c816c9d28dec4774a53b8`), created 2026-08-27 and living inside the
-Control panel toggle, so it stays off the navbar and out of the Home page flow.
+Every content database that accumulates rows is a child of the **`Databases`**
+page (`3c911c7b703c816c9d28dec4774a53b8`), created 2026-08-27 and living inside
+the Control panel toggle, so it stays off the navbar and out of the Home page
+flow. `About Slides` and `Team Photos` opted out on 2026-08-28: they are display
+decks of a handful of rows each, maintained by adding and deleting slides rather
+than accumulating, so central storage bought nothing. Each lives inside a hidden
+brown `Subpages` toggle on the page that shows it.
 The nesting is what should give Super `/databases/<database>` and
 `/databases/<database>/<row>`; whether Super follows it is the open question in
 [Super freezes a path, Notion does not move it](#super-freezes-a-path-notion-does-not-move-it).
@@ -259,16 +265,18 @@ the page cover as the image (external URLs into `assets/about/slides/` at commit
 `Order` sorting inside it. The page carries two filtered linked gallery views,
 `3ca11c7b703c818e8a02d5c728af4bf6` (About DAIM) and
 `3ca11c7b703c81d4a068c217d15a11d3` (Research Area), each inside its own brown
-callout. Card preview must be set to Page cover per view in the Notion UI; the
-API's view DSL has no such directive.
+callout. The source database moved out of `Databases` and into a brown
+`Subpages` toggle at the bottom of the About page on 2026-08-28, for the same
+reason as `Team Photos`. Card preview must be set to Page cover per view in the
+Notion UI; the API's view DSL has no such directive.
 
 `Team Photos` holds the People hero carousel: one row per slide, the page
 cover as the photo (external URLs into `assets/carousel/` at a pinned commit)
 and the title as the caption, shown through a gallery linked view inside a
 brown callout (block `3c811c7b703c8129a5aecd3e5e4c7fd7`). It sat under People's
-`Subpages` toggle until 2026-08-27 and moved to `Databases` with the other five;
-Super was still serving it from `/team-photos` when this was written, which is
-the staged propagation described below.
+`Subpages` toggle until 2026-08-27, spent a day under `Databases`, and moved
+back into that toggle on 2026-08-28, beside the Professor page: a display-only
+deck lives with the page that shows it.
 
 Four more content databases (case studies, careers, and two unnamed) back the
 template's remaining list and gallery views.
@@ -355,6 +363,10 @@ and Staff keep manual order.
   Control panel is a manual drag in Notion. It reports the refusal as
   `Could not find block with ID`, a 404 on the destination, which reads like missing
   access and is not: the same tool moves the same database to a plain page fine.
+  The way in over MCP is the tabs wrap: an `update_content` that rewrites the
+  `<details>` block with the database's block URL inside moves the block into
+  the toggle, measured 2026-08-28 moving `Team Photos` into People's `Subpages`
+  toggle.
 - The schema DDL builds a `status` property but cannot name its options. Both
   `ADD COLUMN "X" STATUS('Planned':gray, …)` and the `ALTER … SET STATUS(…)` form come
   back `Expected ADD, DROP, RENAME, or ALTER keyword, got "("`. A new status property
@@ -440,6 +452,11 @@ rollout wrote down: `projects-db` came back as `projects` and `lab-news-posts` a
 Every old path 404s, `/people-1` and `/lab-news/lab-news-posts` included, so nothing
 outside the site should have been pointed at one.
 
+`Team Photos` and `About Slides` left `/databases` again on 2026-08-28, so their
+paths re-derive once more, to `/people/team-photos` and `/about/about-slides`,
+with the same staged propagation. Nothing in `css/` or `js/` keys on either
+path.
+
 `/databases` itself publishes and enters the sitemap. Exclude it under Settings →
 Site Pages the way `/footer` is: it is an index for editors, not a page anyone should
 land on.
@@ -462,3 +479,9 @@ While `Lab News Posts` still sat under the Lab News page, Super rendered it ther
 a child-page link (`a.notion-link.notion-page`) that only CSS could hide. Moving it
 out retires that rule, and the linked view's own header collapses to an empty `h3`
 once it is gone.
+
+The rule is about the visible link, not the nesting. `About Slides` and
+`Team Photos` sit on their display pages since 2026-08-28 without rendering one,
+because each is inside a brown `Subpages` toggle and `.notion-toggle.bg-brown`
+(`css/global.css`) hides brown toggles site-wide, the same cover the Professor
+page uses under People.
