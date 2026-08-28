@@ -98,22 +98,25 @@ main:is(.page__about-daim, .page__about) {
     color: var(--muted);
   }
 
-  .notion-column .notion-bulleted-list {
+  .notion-root > .notion-bulleted-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 6px 0 0;
   }
 
-  .notion-column .notion-bulleted-list .notion-list-item {
-    display: inline-block;
-    margin: 4px 6px 4px 0;
+  .notion-root > .notion-bulleted-list .notion-list-item {
+    margin: 0;
     padding: 6px 14px;
     border: 1px solid var(--rule);
     border-radius: 999px;
     background: #fff;
-    font-size: 13.5px;
+    font-size: 13px;
     line-height: 1.4;
     color: var(--sub);
+    white-space: nowrap;
 
     &::marker { content: none; }
   }
@@ -230,5 +233,14 @@ main:is(.page__about-daim, .page__about) {
 
     .notion-text:nth-of-type(2) { grid-column: 2; }
     .notion-text:nth-of-type(3) { grid-column: 2; justify-self: start; }
+  }
+}
+
+/* The longest journal name outgrows a very narrow screen as one chip */
+@media (max-width: 480px) {
+  main:is(.page__about-daim, .page__about)
+    .notion-root > .notion-bulleted-list .notion-list-item {
+    white-space: normal;
+    max-width: 100%;
   }
 }
