@@ -13,10 +13,10 @@ NanumSquare fills two of them; the other two come from NanumSquare Neo, below.
 
 | Super slot | File |
 | --- | --- |
-| Regular (400) | `NanumSquareNeo-Regular.woff2` |
-| Medium (500) | `NanumSquareNeo-Medium.woff2` |
-| Semibold (600) | `NanumSquareNeo-SemiBold.woff2` |
-| Bold (700) | `NanumSquareNeo-Bold.woff2` |
+| Regular (400) | `NanumSquareNeo-Regular-400.woff2` |
+| Medium (500) | `NanumSquareNeo-Medium-500.woff2` |
+| Semibold (600) | `NanumSquareNeo-SemiBold-600.woff2` |
+| Bold (700) | `NanumSquareNeo-Bold-700.woff2` |
 
 Use one family or the other across all four slots. Mixing a classic cut with a Neo
 cut puts two different drawings of the same letters next to each other.
@@ -33,10 +33,10 @@ so any weight between can be cut from it.
 
 | File | CSS weight | Cut from axis |
 | --- | --- | --- |
-| `NanumSquareNeo-Regular.woff2` | 400 | `wght` 300 |
-| `NanumSquareNeo-Medium.woff2` | 500 | `wght` 400 |
-| `NanumSquareNeo-SemiBold.woff2` | 600 | `wght` 450 |
-| `NanumSquareNeo-Bold.woff2` | 700 | `wght` 500 |
+| `NanumSquareNeo-Regular-400.woff2` | 400 | `wght` 300 |
+| `NanumSquareNeo-Medium-500.woff2` | 500 | `wght` 400 |
+| `NanumSquareNeo-SemiBold-600.woff2` | 600 | `wght` 450 |
+| `NanumSquareNeo-Bold-700.woff2` | 700 | `wght` 500 |
 
 **The axis is not the CSS scale.** This font's named instances are `100 Light`,
 `300 Regular`, `500 Bold`, `700 ExtraBold`, `900 Heavy`. Instancing at `wght: 500`
@@ -53,12 +53,12 @@ Kept for the 400 and 700 slots if the Neo drawing is ever rejected.
 
 | File | Weight | woff2 | woff | ttf |
 | --- | --- | --- | --- | --- |
-| `NanumSquareR` | 400 | 191K | 274K | 707K |
-| `NanumSquareB` | 700 | 193K | 274K | 716K |
-| `NanumSquareEB` | 800 | 193K | 273K | 710K |
+| `NanumSquareR-400` | 400 | 191K | 274K | 707K |
+| `NanumSquareB-700` | 700 | 193K | 274K | 716K |
+| `NanumSquareEB-800` | 800 | 193K | 273K | 710K |
 
-`NanumSquareEB` is weight 800 and has no slot. Put it in the 700 slot instead of
-`NanumSquareB` if the hero headline should be heavier, but every bold on the site
+`NanumSquareEB-800` is weight 800 and has no slot. Put it in the 700 slot instead of
+`NanumSquareB-700` if the hero headline should be heavier, but every bold on the site
 becomes ExtraBold.
 
 Try `.woff2` first; `.woff` and `.ttf` are kept as fallbacks since the accepted
@@ -70,6 +70,8 @@ Classic `.woff` and `.ttf` pulled from the `moonspam/NanumSquare` webfont mirror
 2026-08-25; verified genuine by their internal name records (`나눔스퀘어`,
 `나눔스퀘어 Bold`, `나눔스퀘어 ExtraBold`) and `usWeightClass` 400 / 700 / 800. The
 classic `.woff2` files were converted from those `.ttf` here with fontTools.
+Every filename carries a `-<CSS weight>` suffix added here on 2026-08-29; the
+upstream names are `NanumSquareR/B/EB` and `NanumSquareNeo-<style>`.
 
 Neo cut from
 <https://cdn.jsdelivr.net/gh/moonspam/NanumSquareNeo@1.0.0/NanumSquareNeo-Variable.woff2>
