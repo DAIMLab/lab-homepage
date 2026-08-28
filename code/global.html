@@ -1,12 +1,11 @@
 <!-- Site-wide Head tab; the site CSS and Body tabs stay empty. Every script
      lives here so it runs on whatever page loads first and follows the
      client-side navigation, each guarded by its own selector (docs/super.md).
-     The carousel and lightbox pairs are Super's own snippets, their hosting
-     and versioning: a gallery database inside a brown callout becomes a
-     carousel (docs.super.so/code-snippets/gallery-carousel), and any
-     .notion-image opens zoomed on click (docs.super.so/code-snippets/
-     image-lightbox); js/carousel-lightbox.js extends the latter to the
-     carousels' own cards. -->
+     The carousel pair is Super's own snippet (docs.super.so/code-snippets/
+     gallery-carousel): a gallery database inside a brown callout becomes a
+     carousel. The lightbox keeps only the snippet's stylesheet; its script
+     is js/lightbox.js, because the stock one builds its overlay at load
+     and React hydration throws the foreign node away. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@ebd8b81dd1207fc00b721bade0013a87f0a7c06f/css/global.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@0aa6857c9dfff454b96e057b7b38f50f855048a0/css/footer.css">
 <script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@8b3be91cc02e80f6cdcd6a1892d84c29daec2a6c/js/email-copy.js" defer></script>
@@ -19,5 +18,4 @@
 <script src="https://sites.super.so/snippets/v2/carousel.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@36f0f8b63d4d7c0cdb9128d24854a8c67183e9a2/js/carousel-autoplay.js" defer></script>
 <link rel="stylesheet" href="https://sites.super.so/snippets/v2/lightbox.css">
-<script src="https://sites.super.so/snippets/v2/lightbox.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@2f2532d4abb6f566fe86001e2cd1ec683db58259/js/carousel-lightbox.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/DAIMLab/lab-homepage@b4bb8406ed388d493ad9926faabdfdc04abd6831/js/lightbox.js" defer></script>
