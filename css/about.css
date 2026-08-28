@@ -61,7 +61,11 @@ main:is(.page__about-daim, .page__about) {
      the slides are 16:9, so the frame follows and the image letterboxes
      instead of stretching. The caption overlay would sit on the slide's
      own footer, and the lightbox already carries the title. */
+  /* notion-root is a column flexbox; an auto inline margin cancels the
+     default stretch and, the snippet's cards being absolute, the callout
+     would shrink to nothing. The explicit width restores a definite size */
   .notion-callout.bg-brown-light {
+    width: 100%;
     max-width: 900px;
     margin-inline: auto;
   }
