@@ -25,7 +25,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 
 The About page (renamed to plain `About` in Notion) was filled on 2026-08-28 and
 restructured the same day to four H1 sections: `DAIM`, `Research Area`, `Domain`,
-`DAIM Research`, plus a `### Target Journal` under Research Area. `KAIROS` and
+`DAIM Research`, plus a `### Target Journal` under Research Area (one flat bulleted list, rendered as chips). `KAIROS` and
 `Join` were cut later that day; KAIROS coverage stays on `/lab-news`, and the deck
 carousels carry the testbed slide.
 `DAIM` and `Research Area` each end in a Gallery Carousel (brown callout over a
