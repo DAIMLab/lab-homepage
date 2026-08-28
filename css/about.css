@@ -48,7 +48,7 @@ main:is(.page__about-daim, .page__about) {
     letter-spacing: 0.01em;
     color: var(--sub);
 
-    b { color: var(--accent-deep); }
+    b { color: var(--kaist-blue); }
   }
 
   /* The one-paragraph introduction below it */
@@ -153,7 +153,7 @@ main:is(.page__about-daim, .page__about) {
     }
 
     &:hover { background: #f7f9fb; }
-    &:hover::before { color: var(--accent); }
+    &:hover::before { color: var(--kaist-blue); }
 
     .notion-callout__icon { display: none; }
 
