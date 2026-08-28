@@ -1,6 +1,6 @@
 /* About. Served by the pinned jsDelivr <link> in code/about.html. Scoped to
    both slugs so the planned /about rename costs no CSS change. The two deck
-   carousels ride Super's Gallery Carousel snippet (code/global.html), whose
+   carousels sit at 900px, the decks' native resolution, and ride Super's Gallery Carousel snippet (code/global.html), whose
    own rules carry !important, so the overrides here do too. docs/super.md,
    "About Page".
 
@@ -17,6 +17,13 @@ main:is(.page__about-daim, .page__about) {
      page instead, as on Home and People */
   .notion-header {
     display: none !important;
+  }
+
+  /* The Notion page carries the full-width toggle; the site reads at a
+     column, so one cap brings every section back whatever the toggle says */
+  .notion-root.full-width {
+    max-width: 1060px;
+    margin-inline: auto;
   }
 
   /* Section headings, People's treatment (css/people.css) */
@@ -56,6 +63,11 @@ main:is(.page__about-daim, .page__about) {
      the slides are 16:9, so the frame follows and the image letterboxes
      instead of stretching. The caption overlay would sit on the slide's
      own footer, and the lightbox already carries the title. */
+  .notion-callout.bg-brown-light {
+    max-width: 900px;
+    margin-inline: auto;
+  }
+
   .notion-callout.bg-brown-light .notion-collection-gallery {
     aspect-ratio: 16 / 9 !important;
     border: 1px solid var(--rule);
