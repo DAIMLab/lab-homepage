@@ -5,11 +5,12 @@
    "About Page".
 
    Notion:  H1 DAIM        tagline + intro + carousel (brown callout)
-            H1 Research Area  two paragraphs + carousel + H3 Target Journal
-                              over two columns of bullets (the chips)
-            H1 Domain      topic callouts ×5, base-tech callouts ×2,
-                           pipeline callouts ×4 (blue_bg), photo columns 3+2
-            H1 DAIM Research  paragraph + video */
+            H1 Research Area  carousel + H3 Target Journal over two
+                              columns of bullets (the chips)
+            H1 Domain      the MFRA stack: four column rows, each a
+                           yellow label callout + gray cell callouts,
+                           the last row purple (foundation)
+            H1 DAIM Technology  paragraph + video */
 
 main:is(.page__about-daim, .page__about) {
 
@@ -117,72 +118,90 @@ main:is(.page__about-daim, .page__about) {
     &::marker { content: none; }
   }
 
-  /* ── Topic and base-tech cards ──────────────────────────────────
-     Gray callouts are the five topics, the colorless pair the base
-     technologies; the blue ones belong to the pipeline below */
-  .notion-column > .notion-callout:not(.bg-blue-light) {
-    height: 100%;
-    box-sizing: border-box;
-    background: #fff;
+  /* ── Domain stack ───────────────────────────────────────────────
+     The MFRA IT stack drawn as rows. Colors are Notion-side markers:
+     a yellow callout is a layer label, gray callouts are the layer's
+     cells, purple marks the dark foundation plate; brown stays the
+     carousel's. The key lives in docs/super.md, "About Page". */
+  .notion-column-list:has(.notion-callout.bg-yellow-light) {
+    background: #f7f9fb;
     border: 1px solid var(--rule);
     border-radius: var(--photo-radius);
-    padding: 18px 18px 16px;
+    padding: 8px 18px;
+  }
+
+  .notion-column > .notion-callout.bg-yellow-light {
+    height: 100%;
+    background: transparent !important;
+    border: 0;
+    align-items: center;
+  }
+
+  .notion-column > .notion-callout.bg-yellow-light .notion-callout__content {
+    margin-inline-start: 0;
+
+    .notion-text {
+      font-size: 11.5px;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .notion-text:first-child {
+      font-size: 13.5px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--sub);
+    }
+  }
+
+  .notion-column > .notion-callout.bg-gray-light {
+    height: 100%;
+    box-sizing: border-box;
+    background: #fff !important;
+    border: 1px solid var(--rule);
+    border-radius: var(--photo-radius);
+    padding: 14px 16px;
     box-shadow: 0 1px 3px rgb(33 33 33 / 0.06);
   }
 
-  /* The italic 적용 line anchors to the card's bottom edge */
-  .notion-column > .notion-callout:not(.bg-blue-light) .notion-callout__content {
+  /* The italic 적용 line anchors to the cell's bottom edge */
+  .notion-column > .notion-callout.bg-gray-light .notion-callout__content {
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin-inline-start: 0;
 
     .notion-text:last-child {
       margin-top: auto;
-      padding-top: 10px;
-      font-size: 13px;
+      padding-top: 8px;
+      font-size: 12.5px;
       color: var(--muted);
     }
   }
 
-  /* ── Four-step pipeline ─────────────────────────────────────────
-     The blue callouts, each column pointing at the next */
-  .notion-column > .notion-callout.bg-blue-light {
-    height: 100%;
-    box-sizing: border-box;
-    border-radius: var(--photo-radius);
-    padding: 16px 12px;
-    text-align: center;
-
-    .notion-text { font-size: 13px; color: var(--sub); }
-    .notion-text:first-child { font-size: 14.5px; color: var(--ink); }
+  /* The foundation plate: dark ground under the three layers */
+  .notion-column-list:has(.notion-callout.bg-purple-light) {
+    background: #10222e;
+    border-color: #10222e;
   }
 
-  .notion-column-list:has(.notion-callout.bg-blue-light) .notion-column {
-    position: relative;
+  .notion-column-list:has(.notion-callout.bg-purple-light)
+    .notion-callout.bg-yellow-light .notion-callout__content {
+    .notion-text { color: rgb(159 196 216 / 0.75); }
+    .notion-text:first-child { color: #cfe6f2; }
   }
 
-  .notion-column-list:has(.notion-callout.bg-blue-light)
-    .notion-column:not(:last-child)::after {
-    content: '→';
-    position: absolute;
-    top: 50%;
-    right: -30px;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: var(--muted);
+  .notion-column > .notion-callout.bg-purple-light {
+    background: transparent !important;
+    border: 0;
+    padding: 8px 0;
   }
 
-  /* ── Domain photos ───────────────────────────────────────────────*/
-  .notion-column .notion-image img {
-    border-radius: var(--photo-radius);
-  }
+  .notion-column > .notion-callout.bg-purple-light .notion-callout__content {
+    margin-inline-start: 0;
 
-  .notion-column > .notion-image + .notion-text {
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--muted);
-
-    b { color: var(--ink); }
+    .notion-text { font-size: 12.5px; color: #9fc4d8; }
+    .notion-text:first-child { font-size: 14px; color: #fff; }
   }
 
   /* ── Video ───────────────────────────────────────────────────────*/
@@ -193,11 +212,3 @@ main:is(.page__about-daim, .page__about) {
   }
 }
 
-/* Stacked columns leave no room between the pipeline steps */
-@media (max-width: 768px) {
-  main:is(.page__about-daim, .page__about)
-    .notion-column-list:has(.notion-callout.bg-blue-light)
-    .notion-column:not(:last-child)::after {
-    display: none;
-  }
-}
