@@ -159,7 +159,9 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   keeps a two-line clamp (Chrome reports it as `flow-root`; measure the height).
 - The status tabs are Super's `.notion-dropdown` restyled per `reference/ascent-template.css:386`; left
   alone below 576px. The four views live on the linked block (its id is the `notion-create-view`
-  `database_id`). Cell wrapping is the view's `WRAP CELLS`, not CSS.
+  `database_id`). Cell wrapping is the view's `WRAP CELLS`, not CSS. Pinning the menu open also needs `z-index: auto`:
+  super.css parks the closed menu at `-1`, so an in-flow relative menu paints behind its own
+  wrapper and the wrapper eats every click (2026-08-30, daimlab: tabs looked fine, none responded).
 - Dates: Notion has no year-month format and formula properties never render on Super collection cards (do
   not rebuild the deleted `Term` formula), so `js/date-format.js` rewrites the Period under a
   `MutationObserver`.
