@@ -301,7 +301,9 @@ row-page link.
   `.notion-root > .notion-collection:has(.notion-collection-card__cover)` and every property is
   addressed by type (`__select`, `__date`, `__email`, `__url`). URL icons read the href, not the
   property: `github.com` and `linkedin.com` by domain, `.pdf`/Dropbox/Drive as a CV, anything else a
-  homepage (so a `github.io` homepage draws the house, not the GitHub mark). Keyed this way on
+  homepage (so a `github.io` homepage draws the house, not the GitHub mark). A URL property whose
+  anchor has no `http` href draws nothing: Super ships a cleared value as `href="#"` where a value
+  that never existed is omitted, and that empty anchor wore the house on 2026-08-30. Keyed this way on
   2026-08-29 after a workspace duplicate reissued the collection id and orphaned the old
   `.collection-2d2152b8…` scope; the property ids survived the same duplicate (Research `61796943`,
   Email `3a50566e`, Joined `75566065`, the four URLs unchanged), so id-keyed rules on other pages
