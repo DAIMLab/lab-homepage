@@ -61,6 +61,9 @@ curl -sL https://daim.super.site/ | sed -n 's/.*@charset/@charset/p' | head -c 4
 - **Content edits belong in Notion.** Reach for CSS only when Notion's block options
   cannot express the design.
 - **Override a Super CSS variable** before writing a per-block rule.
+- **Never write the site's own URL into Notion or code.** Link a site page with a
+  Notion page mention; Super rewrites it to a relative path that survives a domain
+  change. A pasted `https://<host>/...` freezes the host.
 - **Prefer per-page injection** over CSS selector gymnastics when a rule concerns one
   page.
 - **Expect to compromise on the IMweb design.** Notion's block model has no arbitrary

@@ -1,7 +1,10 @@
 # Notion Workspace
 
 Page content, structure, and navigation live here, not in the repo. Read and edit
-with the `notion-fetch` / `notion-update-page` MCP tools.
+with the `notion-fetch` / `notion-update-page` MCP tools. The connection reaches
+the original workspace only; the duplicate behind `daimlab.super.site`
+(2026-08-29) is a separate workspace it cannot see, so edits there are manual
+until that workspace is added to the connection.
 
 Built on Super's **Ascent** template; several sections still hold template lorem
 ipsum. A collapsed `🎛 Control panel` toggle at the top of the root page holds every
@@ -57,12 +60,17 @@ into `Professor`, `Students` and `Alumni` sub-pages; all three are in the
 trash. The page now carries five linked views of the `People` database plus
 one view of a separate alumni database, each under its own H1. The Professor
 section is plain blocks: a `gray_bg` callout card (anatomy in
-[`super.md`](super.md#people-page)) whose name link leads to the full profile
+[`super.md`](super.md#people-page)) whose name leads to the full profile
 page `Young Jae Jang` (`3c811c7b703c8185bf7dd09096c94e73`), a child of People
 kept inside the collapsed `Subpages` toggle, served at `/people/professor`
 (scope class `page__people-professor`, Head tab `code/professor.html`). The
 profile page holds the identity columns, bulleted sections mirroring the card,
-and a `### Media` heading over a gallery linked view of `Professor Media`.
+and a `### Media` heading over a gallery linked view of `Professor Media`. The
+name on the card must be a **page mention** of the profile page, not a pasted
+site URL: Super renders a mention as a relative `/people/professor` link that
+follows whatever domain serves the site, while a URL froze `daim.super.site`
+into the duplicate and sent daimlab.super.site's visitors to the old host
+(found 2026-08-30).
 
 `Footer` is not a content page. It holds the footer band so exactly one copy exists;
 `js/footer-inject.js` clones it onto the rest. It sits under the Control panel and is
