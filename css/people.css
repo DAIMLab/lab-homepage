@@ -354,6 +354,13 @@
       }
     }
 
+    /* A cleared URL property still ships as an anchor with href="#" (seen
+       2026-08-30 after a LinkedIn value was deleted; a value that never
+       existed is omitted instead). Nothing to open, so no button */
+    .notion-property__url:not(:has(.notion-link[href^='http' i])) {
+      display: none;
+    }
+
     /* Which icon a URL gets is read off the href, not the property id, for
        the same duplicate-survival reason as the scope above. Anything
        unmatched is a homepage; github.com only, since a github.io site is a
