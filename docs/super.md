@@ -219,6 +219,11 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   Ascent stylesheet, and plain rules win. Measured, `padding` resolves to this
   file's own value. Do not add `!important` on their account.
 
+- A URL chip draws only over an `http` href: Super ships a cleared DOI cell as an anchor with
+  `href="#"` (a cell that never had a value is omitted), and that empty anchor wore the DOI chip on
+  2026-08-30. The PDF chip's drop below the DOI chip keys on the same `http` test. Hovering the DOI
+  chip shows the address it opens, `content: attr(href)` on `::after`, no script.
+
 ## Lightbox
 
 The image lightbox is the stock snippet's stylesheet plus `js/lightbox.js`, not the
