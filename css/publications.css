@@ -495,6 +495,18 @@
     transform: none;
   }
 
+  /* the venue and location are inline, so a chip would run on at the end of
+     their line; a newline after the last text property, when a live chip
+     follows, starts the chips on a line of their own */
+  .page__publications .notion-collection-list__item-content
+    .notion-property__text:not(:has(~ .notion-property__text)):has(
+      ~ .notion-property__url a[href^='http' i],
+      ~ .notion-property__file
+    )::after {
+    content: '\A';
+    white-space: pre;
+  }
+
   /* the tooltip hangs from the chip's left edge here, since the chip now
      sits at the row's left and would push it off the page otherwise */
   .page__publications .notion-collection-list__item-content
