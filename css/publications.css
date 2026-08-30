@@ -302,14 +302,21 @@
 /* ---- the right-hand icon column ---------------------------------------
 
    DOI and PDF ride at the row's right edge, one under the other, and each
-   appears only where its property is filled: Super emits no element for an
-   empty one. They pin to the row rather than sitting in the text flow, so
+   appears only where its property is filled. Super omits a property that
+   never had a value but ships a cleared one as an anchor with href="#"
+   (2026-08-30), so the URL chip also hides itself when no http href is
+   there. They pin to the row rather than sitting in the text flow, so
    the second drops by its own height instead of a measured offset, and any
    of the four combinations lands right. The z-index puts them back over the
    row anchor, which the rule above deliberately lowered. ----------------- */
 
 .page__publications .notion-collection-list__item {
   padding-right: 76px;
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__url:not(:has(a[href^='http' i])) {
+  display: none;
 }
 
 .page__publications .notion-collection-list__item-content
@@ -323,7 +330,7 @@
 }
 
 .page__publications
-  .notion-collection-list__item-content:has(.notion-property__url)
+  .notion-collection-list__item-content:has(.notion-property__url a[href^='http' i])
   .notion-property__file {
   transform: translateY(calc(100% + 6px));
 }
@@ -358,6 +365,39 @@
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.03em;
+}
+
+/* hovering the DOI chip shows the address it opens, read off the href so no
+   script is needed; it hangs from the chip's right edge so a long DOI grows
+   leftwards into the row instead of off the page */
+.page__publications .notion-collection-list__item-content
+  .notion-property__url a {
+  position: relative;
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__url a::after {
+  content: attr(href);
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #1d2730;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.page__publications .notion-collection-list__item-content
+  .notion-property__url a:hover::after {
+  opacity: 1;
 }
 
 /* the file property renders a thumbnail; the chip carries the word instead */
