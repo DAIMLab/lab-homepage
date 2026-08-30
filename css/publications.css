@@ -406,6 +406,16 @@
   display: none;
 }
 
+/* on the list view the file arrives inside a gray .notion-pill with 6px of
+   side padding (2026-08-30), which showed as a gray band around the chip;
+   the pill is stripped so only the anchor's chip is left */
+.page__publications .notion-collection-list__item-content
+  .notion-property__file .notion-pill {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+}
+
 .page__publications .notion-collection-list__item-content
   :is(.notion-property__file a, .notion-property__file > div)::before {
   content: 'PDF';
