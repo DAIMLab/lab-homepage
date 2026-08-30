@@ -479,4 +479,27 @@
     .notion-semantic-string {
     font-size: 16px;
   }
+
+  /* the chips leave the right-hand column and drop into the flow under the
+     venue line, side by side, so the text can use the whole row */
+  .page__publications .notion-collection-list__item {
+    padding-right: 0;
+  }
+
+  .page__publications .notion-collection-list__item-content
+    :is(.notion-property__url, .notion-property__file) {
+    position: static;
+    display: inline-flex;
+    vertical-align: top;
+    margin: 10px 8px 0 0;
+    transform: none;
+  }
+
+  /* the tooltip hangs from the chip's left edge here, since the chip now
+     sits at the row's left and would push it off the page otherwise */
+  .page__publications .notion-collection-list__item-content
+    .notion-property__url a::after {
+    right: auto;
+    left: 0;
+  }
 }
