@@ -264,8 +264,18 @@ preview still needs the manual Page cover click.
 
 The alumni records live in their own database, data source
 `ba0889c2-963a-4d13-89e4-11420c4bf2b0`, shown on the People page through block
-`3c711c7b703c8182b96cc60edf70784f`. It keeps the migrated `/36` rows and waits for
-its own design pass.
+`3c711c7b703c8182b96cc60edf70784f`. It keeps the migrated `/36` rows. Schema:
+`Name`, `Email`, `Degree` (select: Ph.D blue / Master green), `Year` (number),
+`Placement`, `Thesis`. `Placement` is where an alumnus went, one text field
+covering all three shapes the lab's graduates take (`Samsung Electronics`,
+`PostDoc, KAIST`, `Professor, Institut Teknologi Harapan Bangsa`); it was named
+on 2026-08-31 over `Current Position`, which promises what someone is doing now
+and goes stale the first time anyone changes jobs. The view is a gallery
+dressed by `css/people-alumni.css` ([`super.md`](super.md#people-page)); the
+three cards it draws are in `docs/mockups/alumni-cards.html`. Property ids on
+the daimlab workspace: Email `7e4a5846`, Degree `55607c3f`, Year `493a6346`,
+Placement `794a5759`, Thesis `4e523b6c`. The stylesheet needs the last two,
+which are both `notion-property__text` and indistinguishable otherwise.
 
 `About Slides` feeds the two About carousels the same way: one row per slide,
 the page cover as the image (external URLs into `assets/about/slides/` at commit

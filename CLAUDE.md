@@ -34,7 +34,8 @@ css/        stylesheet sources: linked from code/ by pinned URL, or pasted
 js/         script sources: linked from code/ by pinned URL, or pasted into a
             Body tab inside <script>
 assets/     images and video referenced by URL
-docs/       the reference above
+docs/       the reference above; docs/mockups/ holds standalone design
+            proposals, kept for the record and served nowhere
 reference/  vendored third-party CSS, read-only
 ```
 

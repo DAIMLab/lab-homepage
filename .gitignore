@@ -1,1 +1,4 @@
 /.playwright-mcp/
+
+# playwright screenshots land in the repo root
+alumni-*.png

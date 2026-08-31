@@ -257,7 +257,8 @@ row-page link.
 ## People Page
 
 - Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
-  `css/people-professor.css`, each pinned to a SHA); the CSS and Body tabs stay empty. The identity file
+  `css/people-professor.css`, `css/people-alumni.css`, each pinned to a SHA); the CSS and Body tabs stay
+  empty. The identity file
   holds what the card shares with the profile page: the mailto:/tel: contact rows, the domain-marked SNS
   circles, and the blue entry bars, scoped `:is()` over both pages' exact containers. Behavior is site-wide: `js/email-copy.js`
   (deliberately unscoped, any email property on any page gets click-to-copy) and a `.page__people` rule in
@@ -297,6 +298,23 @@ row-page link.
 - **The page is full width in Notion**, so `.notion-root` carries no `max-width` and a `width: 100%`
   block grows with the viewport, 1728px at 1920. The professor callout hit that and now takes
   `--content-w` with `margin-inline: auto`, which puts its edges on the member gallery's.
+- Alumni roster: `css/people-alumni.css`, scoped as the inverse of the member cards
+  (`.notion-root > .notion-collection:not(:has(.notion-collection-card__cover))`, the one top-level
+  collection with no photos). Four borderless columns inside `--content-w`, name and mail button on one
+  line, degree and year on the next, placement, then the thesis clamped to two lines. Most of it is
+  Super's own variables: cover size 238px on all three sizes for the column count, `--collection-card-gap`
+  **0** because a row rule is each card's `border-bottom` and a column gap would break that rule into four
+  segments, so the gutter is the cards' right padding instead. Traps: every property box carries
+  `min-height: 24px`, which stretches a 20px icon into an ellipse (`min-height: 0`) and which the empty
+  placement's stand-in has to restate to take the same line; the content box is a four-row grid with
+  explicit `grid-area` per property, because a property Notion drops would otherwise pull the rows under
+  it up and knock the card out of line with its row. The title spans both columns, which is what leaves
+  column 1 sized to the degree pill so the year lands beside it however long a name runs.
+- **An empty placement is a dropped element, not an empty one.** The line is held open by the content
+  box's own `::before` printing an em dash, suppressed by
+  `.notion-collection-card:has(.property-794a5759)` where Notion did ship a value (3 of 47 rows are
+  empty today). Degree is told apart by Notion's select colour, `.pill-blue` Ph.D navy and `.pill-green`
+  master's slate, not by the value string: a relabel (Master to M.S.) leaves the colours standing.
 - Icon row: the property list is a grid `repeat(5, 34px) 1fr`; every property spans `1 / -1` except Email
   and URL properties, which auto-place into the 34px tracks, Email first (fill Email on every member so
   bottom rows match). Icons are Font Awesome glyphs, declared as `--glyph`/`--glyph-font` and drawn by

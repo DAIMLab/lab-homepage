@@ -1,0 +1,279 @@
+/* Alumni, the roster block at the foot of /people. Served by the pinned
+   jsDelivr <link> in code/people.html, after css/people.css, whose
+   --content-w and section headings this file builds on; the palette is
+   css/global.css. Font Awesome (the envelope) is already linked there.
+
+   The design is a borderless roster: name and a mail button on one line,
+   degree and graduation year on the next, the placement, then the thesis
+   clamped to two lines. Rules between rows, no card chrome. Anatomy and
+   traps: docs/super.md, "People Page". */
+
+.page__people {
+  /* The Alumni view is the only top-level collection whose cards carry no
+     photo cover, and that is the whole scope: a collection id is reissued by
+     a workspace duplicate, this is not. The two text properties are a
+     different matter, being indistinguishable by class, so they are told
+     apart by property id below (an id does survive a duplicate; it is only
+     reissued when the property itself is deleted and remade). */
+  .notion-root > .notion-collection:not(:has(.notion-collection-card__cover)) {
+    --alum-gutter: 34px;
+    /* the dash standing in for an empty placement: a placeholder, so lighter
+       than the value it holds the line for, darker than the row rules */
+    --alum-empty: #b9c2ca;
+
+    /* Super's collection variables carry most of the design. The three cover
+       sizes are set alike because a Notion view switch silences a rule
+       written for one of them; 238px is the column floor, so the roster runs
+       four across inside --content-w and steps down on its own below that */
+    --collection-card-cover-size-small: 238px;
+    --collection-card-cover-size-medium: 238px;
+    --collection-card-cover-size-large: 238px;
+    /* Zero gap on purpose. A row rule is each card's own bottom border, and
+       a column gap would break that rule into four segments; the gutter is
+       the cards' right padding instead, which every column carries alike */
+    --collection-card-gap: 0;
+    --collection-card-padding: 18px var(--alum-gutter) 18px 0;
+    --collection-card-content-padding: 0;
+    --collection-card-border-radii: 0;
+    --collection-card-shadow: none;
+    --collection-card-title-padding: 0;
+    --collection-card-title-size: 15.5px;
+    --color-card-bg: transparent;
+    --color-card-bg-hover: transparent;
+
+    .notion-collection-gallery {
+      max-width: var(--content-w);
+      margin-inline: auto;
+      /* the section heading already draws its own rule, so the first row
+         needs clearance from it, not a second line */
+      padding-top: 6px;
+      padding-bottom: 0;
+    }
+
+    .notion-collection-card {
+      border-bottom: 1px solid var(--rule);
+      /* the mail tooltip leaves the card box */
+      overflow: visible;
+    }
+
+    /* The whole card is a link to the alumnus's row page, where the thesis
+       is not clipped; Super's anchor already covers it at z-index 10 */
+    .notion-collection-card:hover .notion-property__title {
+      color: var(--accent-deep);
+    }
+
+    .notion-collection-card__anchor:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    /* Four explicit rows, so a property Notion drops cannot pull the ones
+       below it up a line and knock the row out of alignment. The first
+       column is sized to the degree pill, the title and the lines under it
+       spanning both, which is what lets the year sit beside the degree
+       however long a name runs */
+    .notion-collection-card__content {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      align-content: start;
+      column-gap: 7px;
+      overflow: visible;
+    }
+
+    .notion-property__title {
+      grid-area: 1 / 1 / 2 / -1;
+      /* the mail button's lane, so a long name wraps before it collides */
+      padding-right: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      transition: color 0.15s;
+    }
+
+    /* Email: a small envelope button at the end of the name line. It renders
+       with no anchor, so the property div is the button itself; the
+       site-wide js/email-copy.js copies the address and mirrors it into
+       data-email for the bubble */
+    .notion-property__email {
+      --glyph: '\f0e0'; /* envelope */
+      --glyph-font: var(--fa-font-regular);
+
+      grid-area: 1 / 1 / 2 / -1;
+      justify-self: end;
+      align-self: start;
+      position: relative;
+      z-index: 11;
+      width: 20px;
+      height: 20px;
+      /* every property box carries min-height: 24px, which would stretch the
+         circle into an ellipse and take the name's line with it */
+      min-height: 0;
+      margin-top: 2px;
+      border-radius: 50%;
+      background: #eff4f8;
+      font-size: 0;
+      color: transparent;
+      cursor: pointer;
+      /* the property list has pointer-events off and only anchors win them
+         back, so a button that is not an anchor must opt in itself */
+      pointer-events: auto;
+      transition: background 0.15s;
+
+      &.copied {
+        /* check exists only in the solid face of FA Free; regular shows tofu */
+        --glyph: '\f00c';
+        --glyph-font: var(--fa-font-solid);
+      }
+
+      /* the glyph is its own layer over the whole circle, so the hidden
+         address text node cannot push it off center */
+      &::before {
+        content: var(--glyph);
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font: var(--glyph-font);
+        font-size: 10px;
+        color: #6b7783;
+        transition: color 0.15s;
+      }
+
+      &:is(:hover, .copied) {
+        background: var(--accent-deep);
+      }
+
+      &:is(:hover, .copied)::before {
+        color: #fff;
+      }
+
+      /* the bubble hangs below the button, not above it: this row is the top
+         of the card and there is nothing over it to hang into */
+      &[data-email]::after {
+        content: attr(data-email);
+        position: absolute;
+        top: calc(100% + 7px);
+        right: 0;
+        z-index: 12;
+        padding: 5px 9px;
+        border-radius: 6px;
+        background: var(--ink);
+        font-size: 11.5px;
+        font-weight: 500;
+        line-height: 1.4;
+        white-space: nowrap;
+        color: #fff;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      &:hover::after {
+        opacity: 1;
+        transition: opacity 0.15s;
+      }
+
+      &.copied::after {
+        content: 'Copied!';
+        opacity: 1;
+      }
+    }
+
+    /* Degree and year share the second line. The pill loses its chrome and
+       becomes coloured text: Notion's own select colour is the hook that
+       tells the two degrees apart, and unlike a value string it survives a
+       relabel (Master to M.S.) and a workspace duplicate alike */
+    .notion-property__select {
+      grid-area: 2 / 1;
+      width: auto;
+      margin-top: 4px;
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .notion-pill {
+      max-width: none;
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      color: var(--sub);
+    }
+
+    .notion-pill.pill-blue {
+      color: var(--kaist-blue);
+    }
+
+    .notion-pill.pill-green {
+      color: #55616e;
+    }
+
+    /* The year is the quietest thing on the line, a step lighter than either
+       degree: it is what separates the doctoral navy from the master's slate,
+       which read alike against a grey of their own weight */
+    .notion-property__number {
+      grid-area: 2 / 2;
+      justify-self: start;
+      margin-top: 4px;
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: #9aa4ae;
+      font-variant-numeric: tabular-nums;
+
+      &::before {
+        content: '\00b7';
+        margin-right: 7px;
+      }
+    }
+
+    /* Placement, property-794a5759. Notion omits the element when the value
+       is empty, so the line is held open by the content box's own ::before
+       and the dash it prints; without it the thesis climbs a line and the
+       cards in a row stop lining up (three of 47 rows are empty today) */
+    .property-794a5759,
+    .notion-collection-card__content::before {
+      grid-area: 3 / 1 / 4 / -1;
+      /* the property box's own shape, restated so the pseudo takes exactly
+         the line the real value would have taken */
+      display: flex;
+      align-items: center;
+      min-height: 24px;
+      max-width: none;
+      margin-top: 9px;
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--accent-deep);
+    }
+
+    .notion-collection-card__content::before {
+      content: '\2014'; /* em dash */
+      color: var(--alum-empty);
+    }
+
+    .notion-collection-card:has(.property-794a5759) .notion-collection-card__content::before {
+      content: none;
+    }
+
+    /* Thesis, property-4e523b6c. Two lines here, the full title on the row
+       page the card links to */
+    .property-4e523b6c {
+      grid-area: 4 / 1 / 5 / -1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-width: none;
+      margin-top: 7px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    /* one column: the gutter is dead space, and the rules run the full width */
+    @media (max-width: 640px) {
+      --alum-gutter: 0px;
+    }
+  }
+}

@@ -1,0 +1,1032 @@
+<!doctype html>
+<!-- Alumni card design proposals, 2026-08-31. Three directions drawn on real
+     rows pulled from the live site; A (Roster) was chosen and shipped as
+     css/people-alumni.css. Kept for reference, not served anywhere.
+     Also published as an Artifact: claude.ai/code/artifact/6e27aebc-8376-4b0a-881a-bdca31ee2808 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DAIM Alumni 카드 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+/* ---------- wrapper tokens: the review chrome, theme-aware ---------- */
+:root {
+  --ground: #f6f8fa;
+  --panel: #ffffff;
+  --panel-edge: #e1e7ec;
+  --ink: #161c22;
+  --sub: #46525c;
+  --muted: #6b7883;
+  --rule: #e1e7ec;
+  --chip: #eef3f7;
+  --accent: #0479b8;
+  --deep: #004191;
+  --shadow: 0 1px 2px rgba(16, 32, 45, .05), 0 12px 32px -18px rgba(16, 32, 45, .35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0e1318;
+    --panel: #151b21;
+    --panel-edge: #232b33;
+    --ink: #e3e9ef;
+    --sub: #b3bec8;
+    --muted: #8b98a3;
+    --rule: #232b33;
+    --chip: #1d252c;
+    --accent: #4cb9ef;
+    --deep: #7fc4f2;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 12px 32px -18px rgba(0, 0, 0, .9);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0e1318;
+  --panel: #151b21;
+  --panel-edge: #232b33;
+  --ink: #e3e9ef;
+  --sub: #b3bec8;
+  --muted: #8b98a3;
+  --rule: #232b33;
+  --chip: #1d252c;
+  --accent: #4cb9ef;
+  --deep: #7fc4f2;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 12px 32px -18px rgba(0, 0, 0, .9);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: Montserrat, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 64px 0 30px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+}
+
+.masthead h1 i {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.masthead p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--sub);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.fact {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11.5px;
+  letter-spacing: .01em;
+  color: var(--muted);
+  background: var(--chip);
+  border-radius: 4px;
+  padding: 4px 9px;
+}
+
+/* ---------- jump nav ---------- */
+.jump {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.jump a {
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--sub);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.jump a:hover,
+.jump a:focus-visible { color: var(--accent); border-color: var(--accent); }
+
+/* ---------- proposal block ---------- */
+.proposal { padding-top: 56px; }
+
+.proposal__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin-bottom: 6px;
+}
+
+.proposal__head h2 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.015em;
+}
+
+.proposal__head .kr {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.proposal__lede {
+  margin: 0 0 16px;
+  max-width: 68ch;
+  color: var(--sub);
+  font-size: 14.5px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+.tag {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--sub);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+.tag--warn { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+/* the preview panel: deliberately fixed to the live site's own light palette,
+   because it is a picture of a light-only website, not a themed component */
+.stage {
+  --s-ink: #212121;
+  --s-sub: #3c454d;
+  --s-muted: #7a858e;
+  --s-rule: #e3e8ec;
+  --s-accent: #0479b8;
+  --s-kaist: #004191;
+  --s-tint: #f3f7fa;
+
+  background: #fff;
+  color: var(--s-ink);
+  border: 1px solid var(--panel-edge);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 34px 30px 38px;
+  overflow-x: auto;
+}
+
+.stage__title {
+  margin: 0 0 26px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--s-ink);
+  text-align: center;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--s-rule);
+  letter-spacing: -.01em;
+}
+
+/* ---------- notes under each preview ---------- */
+.notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1px;
+  margin-top: 20px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.note {
+  background: var(--panel);
+  padding: 14px 16px 16px;
+}
+
+.note h3 {
+  margin: 0 0 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.note p { margin: 0; font-size: 13.5px; color: var(--sub); line-height: 1.55; }
+
+.note code {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  background: var(--chip);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+/* =========================================================
+   SHARED preview primitives
+   ========================================================= */
+.stage a { color: inherit; text-decoration: none; }
+
+.mail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--s-tint);
+  color: var(--s-muted);
+  vertical-align: 2px;
+  flex: none;
+}
+
+.mail svg { width: 10px; height: 10px; display: block; }
+.mail:hover { background: var(--s-accent); color: #fff; }
+
+/* =========================================================
+   A. ROSTER
+   ========================================================= */
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
+  column-gap: 34px;
+}
+
+.roster .r {
+  padding: 17px 0 19px;
+  border-top: 1px solid var(--s-rule);
+}
+
+/* the first row keeps no rule above it; the count is tied to the 4-column
+   track, so it only holds where four tracks actually fit */
+@media (min-width: 1040px) {
+  .roster .r:nth-child(-n + 4) { border-top: 0; padding-top: 0; }
+}
+
+.r__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--s-ink);
+  line-height: 1.3;
+}
+
+.r__meta {
+  margin-top: 5px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--s-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.r__place {
+  margin-top: 9px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--s-accent);
+  line-height: 1.35;
+}
+
+.r__thesis {
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--s-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================================================
+   B. LEDGER
+   ========================================================= */
+.ledger { display: flex; flex-direction: column; }
+
+.lgroup { display: flex; align-items: flex-start; }
+
+.lgroup__year {
+  flex: none;
+  width: 74px;
+  padding-top: 12px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--s-kaist);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+}
+
+.lgroup__body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border-left: 3px solid var(--s-rule);
+  padding: 0 0 26px 26px;
+}
+
+.lgroup:last-child .lgroup__body { padding-bottom: 4px; }
+
+.lgroup__body::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 18px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--s-kaist);
+}
+
+.l {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: 24px;
+  padding: 11px 0;
+}
+
+.l + .l { border-top: 1px solid var(--s-rule); }
+
+.l__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--s-ink);
+}
+
+.deg {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--s-sub);
+  border: 1px solid var(--s-rule);
+  border-radius: 3px;
+  padding: 2px 6px;
+  line-height: 1.2;
+}
+
+.l__thesis {
+  grid-column: 1;
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--s-muted);
+  line-height: 1.45;
+}
+
+.l__place {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--s-accent);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.l__place::before { content: "→\00a0"; color: var(--s-muted); font-weight: 400; }
+.l__place:empty::before { content: none; }
+
+/* =========================================================
+   C. DOSSIER
+   ========================================================= */
+.dossier {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+
+.d {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--s-rule);
+  border-radius: 8px;
+  padding: 18px 20px 0;
+  overflow: hidden;
+}
+
+.d__year {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--s-rule);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.03em;
+}
+
+.d__name {
+  position: relative;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--s-ink);
+  letter-spacing: -.01em;
+  padding-right: 68px;
+}
+
+.d__deg {
+  margin-top: 7px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--s-kaist);
+}
+
+.d__thesis {
+  flex: 1;
+  margin: 12px 0 16px;
+  padding-left: 12px;
+  border-left: 2px solid var(--s-rule);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--s-sub);
+}
+
+.d__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 -20px;
+  padding: 11px 20px;
+  background: var(--s-tint);
+  border-top: 1px solid var(--s-rule);
+}
+
+.d__place {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--s-accent);
+  min-width: 0;
+}
+
+.d__place span {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+  margin-bottom: 1px;
+}
+
+.d__place em { font-style: normal; color: var(--s-muted); font-weight: 500; }
+
+/* =========================================================
+   compare table
+   ========================================================= */
+.compare { padding-top: 64px; }
+
+.compare h2 {
+  margin: 0 0 18px;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.015em;
+}
+
+.tablewrap {
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 13.5px; }
+
+th, td {
+  text-align: left;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+
+thead th {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--chip);
+}
+
+tbody tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+td { color: var(--sub); }
+
+@media (max-width: 720px) {
+  .stage { padding: 24px 18px 28px; }
+  .roster { column-gap: 22px; }
+  .lgroup__year { width: 54px; font-size: 15px; }
+  .lgroup__body { padding-left: 18px; }
+  .l { grid-template-columns: 1fr; }
+  .l__place { grid-row: auto; grid-column: 1; text-align: left; margin-top: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <header class="masthead">
+    <h1>Alumni 카드 시안<i>.</i></h1>
+    <p>세 방향 모두 같은 13명(2026–2024)으로 그렸습니다. 데이터는 daimlab.super.site에서 그대로 가져온 실제 행이고, 색·서체는 사이트가 이미 쓰는 토큰입니다.</p>
+    <div class="facts">
+      <span class="fact">rows 47</span>
+      <span class="fact">Name · Email · Degree · Year · Placement · Thesis</span>
+      <span class="fact">collection-d2fa7e13…c20b6</span>
+      <span class="fact">Montserrat / NanumSquare</span>
+    </div>
+  </header>
+
+  <nav class="jump">
+    <a href="#roster">A · Roster</a>
+    <a href="#ledger">B · Ledger</a>
+    <a href="#dossier">C · Dossier</a>
+    <a href="#compare">비교표</a>
+  </nav>
+
+  <!-- ============================== A ============================== -->
+  <section class="proposal" id="roster">
+    <div class="proposal__head">
+      <h2>A. Roster</h2>
+      <span class="kr">보내주신 레퍼런스에 Thesis 한 줄을 얹은 형태</span>
+    </div>
+    <p class="proposal__lede">테두리를 전부 없애고 행 사이 헤어라인만 남깁니다. 이름 → 학위·연도 → 취업처 → 논문 제목 순으로 굵기가 계단처럼 떨어져서, 47명을 위에서 아래로 훑을 때 눈이 이름에만 걸립니다. 4열이라 한 화면에 12명이 들어옵니다.</p>
+    <div class="tags">
+      <span class="tag">Gallery view 유지</span>
+      <span class="tag">Notion 작업 없음</span>
+      <span class="tag">4열 · 카드 높이 균일</span>
+      <span class="tag">이메일 = 아이콘</span>
+    </div>
+
+    <div class="stage">
+      <h3 class="stage__title">Alumni</h3>
+      <div class="roster">
+
+        <div class="r">
+          <div class="r__name">ChangHyun Chung<a class="mail" href="#" title="cch0720@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">Ph.D. · 2026</div>
+          <div class="r__place">PostDoc, KAIST</div>
+          <div class="r__thesis">Executable multi agent path finding algorithm in general AGV system</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Sungwook Jang<a class="mail" href="#" title="jedi829@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">Ph.D. · 2026</div>
+          <div class="r__place">DAIM Technology</div>
+          <div class="r__thesis">Operational Optimization and Analysis of Multiple-Load Mobile Transport Systems</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Jaeung Lee<a class="mail" href="#" title="ira.hyper@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">Ph.D. · 2026</div>
+          <div class="r__place">Samsung Electronics</div>
+          <div class="r__thesis">A Study on Idle Vehicle Operations of Large-Scale AMHS in Semiconductor FABs</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Soyoung Bang<a class="mail" href="#" title="sybang@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2026</div>
+          <div class="r__place">SK Hynix</div>
+          <div class="r__thesis">Hybrid Control Method for Autonomous Mobile Robots in Manufacturing Logistics Systems</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Sungwoo Park<a class="mail" href="#" title="sungw.park@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2026</div>
+          <div class="r__thesis">Two-Layer Hot lot Routing Framework for OHT Systems</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Sanguk Im<a class="mail" href="#" title="sangukim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2026</div>
+          <div class="r__place">PwC</div>
+          <div class="r__thesis">Health-aware Job Assignment in Overhead Hoist Transport Systems</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">JaeHo Lee<a class="mail" href="#" title="maloveph@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">Ph.D. · 2025</div>
+          <div class="r__place">DAIM Technology</div>
+          <div class="r__thesis">Advanced Dynamic Routing Algorithm for Overhead Hoist Transport Systems in Semiconductor Fabs</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Tae Hoon Kim<a class="mail" href="#" title="thkim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2025</div>
+          <div class="r__place">GS Caltex</div>
+          <div class="r__thesis">Study on OHT Track Layout Design from Network Optimization Perspective</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Japhne Ferdinandz</div>
+          <div class="r__meta">M.S. · 2025</div>
+          <div class="r__place">Samsung Electronics DS</div>
+          <div class="r__thesis">Digital Twin Based Dynamic Routing for Automated Material Handling System in Semiconductor FABs</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Gyuho Lee<a class="mail" href="#" title="potential17@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2025</div>
+          <div class="r__thesis">Predictive Model for Evaluating System Performance in AMR Operation Mode Decisions</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Nakjoon Im<a class="mail" href="#" title="nakjoonim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2025</div>
+          <div class="r__place">LG CNS</div>
+          <div class="r__thesis">Buffer Allocation Problem in Battery Manufacturing System</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Taejong Park<a class="mail" href="#" title="parktaejong@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">Ph.D. · 2024</div>
+          <div class="r__place">Hankook Tire &amp; Technology</div>
+          <div class="r__thesis">Lot sizing and scheduling problem for parallel machines</div>
+        </div>
+
+        <div class="r">
+          <div class="r__name">Sejong Lim<a class="mail" href="#" title="sejong.lim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.6"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a></div>
+          <div class="r__meta">M.S. · 2024</div>
+          <div class="r__place">Samsung Electronics</div>
+          <div class="r__thesis">Network Risk-Adaptive Abnormality Response Policy for OHT Vehicle in Semiconductor Fab</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Notion 작업</h3>
+        <p>없음. 지금 Gallery view 그대로, 속성 순서만 Name → Email → Degree → Year → Placement → Thesis로 맞추면 됩니다.</p>
+      </div>
+      <div class="note">
+        <h3>CSS 난이도</h3>
+        <p>낮음. <code>Ph.D · 2026</code> 한 줄 합치기는 학위 pill을 <code>display:inline</code>으로 풀고 연도 앞에 <code>::before</code>로 가운뎃점을 넣는 방식.</p>
+      </div>
+      <div class="note">
+        <h3>주의점</h3>
+        <p>Placement가 빈 행은 Notion이 요소 자체를 지웁니다. Sungwoo Park·Gyuho Lee처럼 줄이 하나 빠지므로 카드 높이를 고정하지 말 것.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== B ============================== -->
+  <section class="proposal" id="ledger">
+    <div class="proposal__head">
+      <h2>B. Ledger</h2>
+      <span class="kr">Publications 페이지의 연도 레일을 그대로 재사용</span>
+    </div>
+    <p class="proposal__lede">한 줄에 한 명씩, 왼쪽에 연도 기둥과 점을 세웁니다. 취업처를 오른쪽 끝에 정렬해서 "누가 어디로 갔나"가 세로로 한 줄에 읽히고, 졸업 연도가 구조 자체로 드러납니다. Publications가 이미 쓰는 레일이라 두 페이지가 한 세트로 보입니다.</p>
+    <div class="tags">
+      <span class="tag tag--warn">Notion: List view + Group by Year 필요</span>
+      <span class="tag">1열 · 47행</span>
+      <span class="tag">publications.css 레일 재사용</span>
+      <span class="tag">이메일 숨김</span>
+    </div>
+
+    <div class="stage">
+      <h3 class="stage__title">Alumni</h3>
+      <div class="ledger">
+
+        <div class="lgroup">
+          <div class="lgroup__year">2026</div>
+          <div class="lgroup__body">
+            <div class="l">
+              <div class="l__head">ChangHyun Chung <span class="deg">Ph.D</span></div>
+              <div class="l__thesis">Executable multi agent path finding algorithm in general AGV system</div>
+              <div class="l__place">PostDoc, KAIST</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Sungwook Jang <span class="deg">Ph.D</span></div>
+              <div class="l__thesis">Operational Optimization and Analysis of Multiple-Load Mobile Transport Systems</div>
+              <div class="l__place">DAIM Technology</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Jaeung Lee <span class="deg">Ph.D</span></div>
+              <div class="l__thesis">A Study on Idle Vehicle Operations of Large-Scale AMHS in Semiconductor FABs</div>
+              <div class="l__place">Samsung Electronics</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Soyoung Bang <span class="deg">M.S</span></div>
+              <div class="l__thesis">Hybrid Control Method for Autonomous Mobile Robots in Manufacturing Logistics Systems</div>
+              <div class="l__place">SK Hynix</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Sungwoo Park <span class="deg">M.S</span></div>
+              <div class="l__thesis">Two-Layer Hot lot Routing Framework for OHT Systems</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Sanguk Im <span class="deg">M.S</span></div>
+              <div class="l__thesis">Health-aware Job Assignment in Overhead Hoist Transport Systems</div>
+              <div class="l__place">PwC</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lgroup">
+          <div class="lgroup__year">2025</div>
+          <div class="lgroup__body">
+            <div class="l">
+              <div class="l__head">JaeHo Lee <span class="deg">Ph.D</span></div>
+              <div class="l__thesis">Advanced Dynamic Routing Algorithm for Overhead Hoist Transport Systems in Semiconductor Fabs</div>
+              <div class="l__place">DAIM Technology</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Tae Hoon Kim <span class="deg">M.S</span></div>
+              <div class="l__thesis">Study on OHT Track Layout Design from Network Optimization Perspective</div>
+              <div class="l__place">GS Caltex</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Japhne Ferdinandz <span class="deg">M.S</span></div>
+              <div class="l__thesis">Digital Twin Based Dynamic Routing for Automated Material Handling System in Semiconductor FABs</div>
+              <div class="l__place">Samsung Electronics DS</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Gyuho Lee <span class="deg">M.S</span></div>
+              <div class="l__thesis">Predictive Model for Evaluating System Performance in AMR Operation Mode Decisions</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Nakjoon Im <span class="deg">M.S</span></div>
+              <div class="l__thesis">Buffer Allocation Problem in Battery Manufacturing System</div>
+              <div class="l__place">LG CNS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lgroup">
+          <div class="lgroup__year">2024</div>
+          <div class="lgroup__body">
+            <div class="l">
+              <div class="l__head">Taejong Park <span class="deg">Ph.D</span></div>
+              <div class="l__thesis">Lot sizing and scheduling problem for parallel machines</div>
+              <div class="l__place">Hankook Tire &amp; Technology</div>
+            </div>
+            <div class="l">
+              <div class="l__head">Sejong Lim <span class="deg">M.S</span></div>
+              <div class="l__thesis">Network Risk-Adaptive Abnormality Response Policy for OHT Vehicle in Semiconductor Fab</div>
+              <div class="l__place">Samsung Electronics</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Notion 작업</h3>
+        <p>Alumni 블록을 Gallery → List로 바꾸고 <code>Group by: Year</code>, 정렬 Year DESC. 20분이면 끝납니다.</p>
+      </div>
+      <div class="note">
+        <h3>CSS 난이도</h3>
+        <p>중간. 레일은 <code>publications.css</code>의 <code>notion-collection-group__section</code> 규칙을 복사해 오면 되고, 새로 짜는 건 취업처 오른쪽 정렬뿐입니다.</p>
+      </div>
+      <div class="note">
+        <h3>주의점</h3>
+        <p>세로로 47줄이라 페이지가 길어집니다. 연도 그룹이 접히므로 Notion에서 기본 펼침 상태를 확인할 것.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== C ============================== -->
+  <section class="proposal" id="dossier">
+    <div class="proposal__head">
+      <h2>C. Dossier</h2>
+      <span class="kr">지금 카드를 유지하되 위계를 다시 세운 형태</span>
+    </div>
+    <p class="proposal__lede">카드는 남기고 안을 갈아엎습니다. 연도를 큰 회색 숫자로 오른쪽 위에 놓아 배경처럼 읽히게 하고, 논문 제목에는 세로 선을 붙여 인용문처럼 떼어냅니다. 취업처는 카드 바닥의 옅은 띠로 내려 카드마다 같은 자리에서 눈에 걸립니다. 논문 제목을 자르지 않는 유일한 안입니다.</p>
+    <div class="tags">
+      <span class="tag">Gallery view 유지</span>
+      <span class="tag">Notion 작업 없음</span>
+      <span class="tag">3열 · 카드 높이 균일</span>
+      <span class="tag tag--warn">CSS 난이도 높음</span>
+    </div>
+
+    <div class="stage">
+      <h3 class="stage__title">Alumni</h3>
+      <div class="dossier">
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">ChangHyun Chung</div>
+          <div class="d__deg">Ph.D</div>
+          <div class="d__thesis">Executable multi agent path finding algorithm in general AGV system</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>PostDoc, KAIST</div>
+            <a class="mail" href="#" title="cch0720@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">Sungwook Jang</div>
+          <div class="d__deg">Ph.D</div>
+          <div class="d__thesis">Operational Optimization and Analysis of Multiple-Load Mobile Transport Systems</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>DAIM Technology</div>
+            <a class="mail" href="#" title="jedi829@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">Jaeung Lee</div>
+          <div class="d__deg">Ph.D</div>
+          <div class="d__thesis">A Study on Idle Vehicle Operations of Large-Scale AMHS in Semiconductor FABs</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>Samsung Electronics</div>
+            <a class="mail" href="#" title="ira.hyper@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">Soyoung Bang</div>
+          <div class="d__deg">M.S</div>
+          <div class="d__thesis">Hybrid Control Method for Autonomous Mobile Robots in Manufacturing Logistics Systems</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>SK Hynix</div>
+            <a class="mail" href="#" title="sybang@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">Sungwoo Park</div>
+          <div class="d__deg">M.S</div>
+          <div class="d__thesis">Two-Layer Hot lot Routing Framework for OHT Systems</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span><em>—</em></div>
+            <a class="mail" href="#" title="sungw.park@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2026</div>
+          <div class="d__name">Sanguk Im</div>
+          <div class="d__deg">M.S</div>
+          <div class="d__thesis">Health-aware Job Assignment in Overhead Hoist Transport Systems</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>PwC</div>
+            <a class="mail" href="#" title="sangukim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2025</div>
+          <div class="d__name">JaeHo Lee</div>
+          <div class="d__deg">Ph.D</div>
+          <div class="d__thesis">Advanced Dynamic Routing Algorithm for Overhead Hoist Transport Systems in Semiconductor Fabs</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>DAIM Technology</div>
+            <a class="mail" href="#" title="maloveph@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2025</div>
+          <div class="d__name">Tae Hoon Kim</div>
+          <div class="d__deg">M.S</div>
+          <div class="d__thesis">Study on OHT Track Layout Design from Network Optimization Perspective</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>GS Caltex</div>
+            <a class="mail" href="#" title="thkim@kaist.ac.kr" aria-label="이메일"><svg viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="10" rx="1.5"/><path d="M1.6 1.8 8 6.6l6.4-4.8"/></svg></a>
+          </div>
+        </div>
+
+        <div class="d">
+          <div class="d__year">2025</div>
+          <div class="d__name">Japhne Ferdinandz</div>
+          <div class="d__deg">M.S</div>
+          <div class="d__thesis">Digital Twin Based Dynamic Routing for Automated Material Handling System in Semiconductor FABs</div>
+          <div class="d__foot">
+            <div class="d__place"><span>Placement</span>Samsung Electronics DS</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Notion 작업</h3>
+        <p>없음. 속성 순서만 A와 동일하게 맞추면 됩니다.</p>
+      </div>
+      <div class="note">
+        <h3>CSS 난이도</h3>
+        <p>높음. 취업처 띠를 카드 바닥에 붙이려면 <code>__content</code>를 grid로 바꾸고 마지막 두 속성을 <code>grid-row</code>로 재배치해야 합니다. people.css가 이미 쓰는 방식.</p>
+      </div>
+      <div class="note">
+        <h3>주의점</h3>
+        <p>Placement가 빈 행은 요소가 사라져서 띠가 통째로 비어 보입니다. <code>:not(:has(…))</code>로 학위를 대신 넣거나 띠를 숨겨야 합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== compare ============================== -->
+  <section class="compare" id="compare">
+    <h2>비교표</h2>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>시안</th>
+            <th>한 화면 인원</th>
+            <th>Notion 작업</th>
+            <th>논문 제목</th>
+            <th>적합한 상황</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A · Roster</td>
+            <td>약 12명</td>
+            <td>없음</td>
+            <td>2줄에서 잘림</td>
+            <td>47명을 이름·취업처 위주로 빠르게 훑게 하고 싶을 때. 레퍼런스에 가장 가깝습니다.</td>
+          </tr>
+          <tr>
+            <td>B · Ledger</td>
+            <td>약 8명</td>
+            <td>List view + Group by Year</td>
+            <td>전문 노출</td>
+            <td>졸업 연도가 정보의 축일 때. Publications와 같은 언어를 쓰게 됩니다.</td>
+          </tr>
+          <tr>
+            <td>C · Dossier</td>
+            <td>약 6명</td>
+            <td>없음</td>
+            <td>전문 노출</td>
+            <td>논문 제목을 자르고 싶지 않고, 지금의 카드 느낌을 유지하고 싶을 때.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
