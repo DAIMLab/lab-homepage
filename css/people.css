@@ -104,9 +104,19 @@
   }
 
   /* Section headings, top-level blocks only; the professor card styles its
-     own headings in css/people-professor.css */
+     own headings in css/people-professor.css.
+
+     The rule under a heading takes --content-w, the measure every block below
+     it already holds, so a section line starts and ends where its cards do.
+     The page is full width in Notion, so without the cap the rule ran the
+     whole viewport and overhung the content by ~200px a side at 1660px; the
+     alumni roster made it obvious by drawing rules of its own underneath.
+     width: 100% is not redundant: .notion-root is a flex column, and a
+     max-width alone shrink-wraps a heading to its text. */
   .notion-root > .notion-heading {
-    margin: 46px 0 0;
+    width: 100%;
+    max-width: var(--content-w);
+    margin: 46px auto 0;
     padding-bottom: 9px;
     border-bottom: 1px solid var(--rule);
     text-align: center;
@@ -114,6 +124,12 @@
     font-weight: 800;
     line-height: 1.3;
     color: var(--ink);
+  }
+
+  /* the section breaks hold the same measure as the headings they sit above */
+  .notion-root > .notion-divider {
+    max-width: var(--content-w);
+    margin-inline: auto;
   }
 
   .notion-collection__header-wrapper {

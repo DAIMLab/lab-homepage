@@ -297,7 +297,11 @@ row-page link.
   to undo Super's `height: 100%`.
 - **The page is full width in Notion**, so `.notion-root` carries no `max-width` and a `width: 100%`
   block grows with the viewport, 1728px at 1920. The professor callout hit that and now takes
-  `--content-w` with `margin-inline: auto`, which puts its edges on the member gallery's.
+  `--content-w` with `margin-inline: auto`, which puts its edges on the member gallery's. So do the
+  section headings and the dividers since 2026-08-31: their rules ran the full width and overhung the
+  content by ~196px a side at 1660px, invisible until the alumni roster drew rules of its own beneath
+  them. A heading needs `width: 100%` alongside the cap, `.notion-root` being a flex column where a bare
+  `max-width` shrink-wraps the heading to its text (measured: 1453px to 93px).
 - Alumni roster: `css/people-alumni.css`, scoped as the inverse of the member cards
   (`.notion-root > .notion-collection:not(:has(.notion-collection-card__cover))`, the one top-level
   collection with no photos). Four borderless columns inside `--content-w`, name and mail button on one
