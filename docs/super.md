@@ -258,7 +258,8 @@ row-page link.
 
 - Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
   `css/people-professor.css`, `css/people-alumni.css`, each pinned to a SHA); the CSS and Body tabs stay
-  empty. The identity file
+  empty. Behaviour is site-wide and page-guarded: `js/clamp-tooltip.js` for the alumni thesis bubble,
+  plus the two named below. The identity file
   holds what the card shares with the profile page: the mailto:/tel: contact rows, the domain-marked SNS
   circles, and the blue entry bars, scoped `:is()` over both pages' exact containers. Behavior is site-wide: `js/email-copy.js`
   (deliberately unscoped, any email property on any page gets click-to-copy) and a `.page__people` rule in
@@ -319,6 +320,19 @@ row-page link.
   `.notion-collection-card:has(.property-794a5759)` where Notion did ship a value (3 of 47 rows are
   empty today). Degree is told apart by Notion's select colour, `.pill-blue` Ph.D navy and `.pill-green`
   master's slate, not by the value string: a relabel (Master to M.S.) leaves the colours standing.
+- The card does not click. Super's anchor takes `pointer-events: none` (as the member cards' does),
+  which leaves `:hover` reaching the card, events passing through the inert overlay to the box behind
+  it; the row pages it pointed at are bare and nothing links back from them. The anchor stays in the
+  DOM because it carries the title's text node. It is still a tab stop, and Enter still follows it.
+- The thesis reads back two ways, both needed because the card no longer opens anything. Selection:
+  the property list has `pointer-events: none`, which takes text selection with it, so the thesis wins
+  them back (`pointer-events: auto`, `user-select: text`). Tooltip: `js/clamp-tooltip.js` mirrors the
+  full title into `data-clamped` **on the card**, and only where `scrollHeight` says the clamp cut
+  something (26 of 47 at four columns). It reads the computed `-webkit-line-clamp` rather than naming a
+  property, so the design owns which line is clamped. The bubble is the card's `::after`, not the
+  property's: an `::after` inside a `-webkit-box` is clipped by the overflow that draws the ellipsis and
+  counts as a line first. The hovered card needs `z-index: 12` to clear the following rows' own
+  positioned children (their anchors sit at 10, their mail buttons at 11).
 - Icon row: the property list is a grid `repeat(5, 34px) 1fr`; every property spans `1 / -1` except Email
   and URL properties, which auto-place into the 34px tracks, Email first (fill Email on every member so
   bottom rows match). Icons are Font Awesome glyphs, declared as `--glyph`/`--glyph-font` and drawn by

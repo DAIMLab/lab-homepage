@@ -56,15 +56,17 @@
       overflow: visible;
     }
 
-    /* The whole card is a link to the alumnus's row page, where the thesis
-       is not clipped; Super's anchor already covers it at z-index 10 */
-    .notion-collection-card:hover .notion-property__title {
-      color: var(--accent-deep);
+    /* Super lays an anchor over the whole card, pointing at a bare row page
+       nothing links back from. It goes inert rather than away: the element
+       still carries the title's text node, and hiding it would take that with
+       it. :hover still reaches the card, events passing through an inert
+       overlay to the box behind it */
+    .notion-collection-card__anchor {
+      pointer-events: none;
     }
 
-    .notion-collection-card__anchor:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
+    .notion-collection-card:hover .notion-property__title {
+      color: var(--accent-deep);
     }
 
     /* Four explicit rows, so a property Notion drops cannot pull the ones
@@ -256,8 +258,9 @@
       content: none;
     }
 
-    /* Thesis, property-4e523b6c. Two lines here, the full title on the row
-       page the card links to */
+    /* Thesis, property-4e523b6c. Two lines here; the rest is the bubble below.
+       The property list has pointer-events off, which takes text selection
+       with it, so the one property worth copying wins them back */
     .property-4e523b6c {
       grid-area: 4 / 1 / 5 / -1;
       display: -webkit-box;
@@ -269,6 +272,46 @@
       font-size: 12px;
       line-height: 1.45;
       color: var(--muted);
+      pointer-events: auto;
+      user-select: text;
+      cursor: text;
+    }
+
+    /* The full title on hover. It hangs off the card, not off the clamped
+       property: an ::after inside a -webkit-box would be clipped by the very
+       overflow that draws the ellipsis, and would join the line count first.
+       js/clamp-tooltip.js writes data-clamped, and only where the clamp
+       actually cut something, so a title that fits gets no bubble */
+    .notion-collection-card[data-clamped]::after {
+      content: attr(data-clamped);
+      position: absolute;
+      top: calc(100% - 12px);
+      left: 0;
+      z-index: 2;
+      width: max-content;
+      max-width: 240px;
+      padding: 8px 11px;
+      border-radius: 6px;
+      background: var(--ink);
+      font-size: 11.5px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: #fff;
+      opacity: 0;
+      /* never in the way of the drag that selects the text under it */
+      pointer-events: none;
+    }
+
+    /* the bubble belongs to the thesis, not to the whole card, so hovering a
+       name does not throw one up; the hovered card outranks the rows below it,
+       which come later in the document and would otherwise paint over it */
+    .notion-collection-card:has(.property-4e523b6c:hover) {
+      z-index: 12;
+    }
+
+    .notion-collection-card[data-clamped]:has(.property-4e523b6c:hover)::after {
+      opacity: 1;
+      transition: opacity 0.14s;
     }
 
     /* one column: the gutter is dead space, and the rules run the full width */
