@@ -147,15 +147,15 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Projects Card
 
-- `css/projects.css`, linked by `code/accomplishment.html`. The Projects page it was written for is
-  gone since 2026-08-31, folded into `/accomplishment` as a third tab over a linked view of the same
+- `css/projects.css`, linked by `code/research.html`. The Projects page it was written for is
+  gone since 2026-08-31, folded into `/research` as a third tab over a linked view of the same
   database, so the file no longer scopes by page at all: the card block is keyed on the database,
   `.notion-collection:has(:is(<the four property ids>))`. A collection id is reissued by a workspace
   duplicate where a property id is not, and any one of the four matches, so hiding a property in a
   view cannot cost the design. The bare selector is safe because the file is linked per-page and
   Super deactivates a page's styles on leaving it. `js/date-format.js` dropped its `.page__projects`
   scope in the same pass, the Period id being the database's. The status-tab block went with the page:
-  Accomplishment dresses that dropdown as the segmented control it already uses for the Papers views.
+  Research dresses that dropdown as the segmented control it already uses for the Papers views.
   Hooks: Partner `property-75626b3b`, Period `property-475c4c48`, Summary
   `property-45774b6f`, Status `property-46414376`. The property list is a wrapping flex row: every
   property `width: 100%` except the date and the status chip (`auto`), which share a line; the chip needs
@@ -172,16 +172,17 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   in-flow relative menu paints behind its own wrapper and the wrapper eats every click (2026-08-30,
   daimlab: tabs looked fine, none responded). Cell wrapping is a view's `WRAP CELLS`, not CSS.
 
-## Accomplishment Page
+## Research Page
 
-- One page, one Head tab (`code/accomplishment.html`, linking `css/accomplishment.css` and, since
-  2026-08-31, `css/projects.css`, each at a pinned SHA), scope `page__accomplishment`.
-- **A slug move renames the scope class, and here the old path did not survive.** Publications became
-  Accomplishment on 2026-08-31: `/publications` went **404**, not a live alias as `/about-daim` and
-  `/team-daim` had, and all 64 `.page__publications` rules stopped matching at once. The page rendered
-  as raw Notion with no error anywhere, which is the signature to recognise. Rescoping the file is the
-  whole fix; dropping the scope instead is not safe, a bare selector in a per-page head surviving into
-  the next page on client-side navigation (see Home Page).
+- One page, one Head tab (`code/research.html`, linking `css/research.css` and, since
+  2026-08-31, `css/projects.css`, each at a pinned SHA).
+- **The scope is the page's structure, not its slug.** Two renames in one day (Publications →
+  Accomplishment → Research, 2026-08-31, each old path 404) each rewrote the slug-derived scope
+  class and silently undressed the page: raw Notion, no error anywhere, which is the signature to
+  recognise. `css/research.css` now scopes every rule with
+  `.super-content:has(.notion-tabs)`, the site's only tabs block, so the next rename costs nothing.
+  The inverse edge: a tabs block added to a second page pulls this design onto it. A bare selector
+  is still not safe in a per-page head (see Home Page); the content key keeps the locality.
 - Notion's tabs block is native in Super and renders as `.notion-tabs` holding
   `.notion-tabs__nav` of `.notion-tabs__button` and `.notion-tabs__panels`; the
   inactive panel is `[aria-hidden=true]` and already `display: none`, and the
@@ -223,7 +224,7 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   tokens.** CSS reads `\00a0a`, prints U+0A0A (`ਊ`) and leaves `nd` behind. The
   space that terminates the escape is consumed, not printed: write `'\00a0 and'`.
   `\00a0\00b7\00a0` needs no space, because the backslash ends the digits itself.
-- The navbar entry stays a flat link to `/accomplishment`. A dropdown would have held
+- The navbar entry stays a flat link to `/research`. A dropdown would have held
   Papers and Patents as children, but its markup does not take the icon-over-label
   rules `global.css` puts on `.super-navbar__item`, so the site avoids dropdowns.
 - `reference/ascent-template.css` rules `.notion-collection-list__item` with
