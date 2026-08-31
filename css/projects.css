@@ -1,9 +1,9 @@
 /* The Projects card. Served by the pinned jsDelivr <link> in
    code/accomplishment.html, where a Projects tab carries a linked gallery view
    of the database. It had a page of its own until 2026-08-31; the status-tab
-   block that dressed that page's view switcher went with it, /publications
+   block that dressed that page's view switcher went with it, Accomplishment
    already dressing the same dropdown as the segmented control it uses for the
-   Papers views (css/publications.css).
+   Papers views (css/accomplishment.css).
 
    A wrapping flex row reorders the emitted rows and seats the status chip
    after the date; no fixed row heights. docs/super.md, "Projects Card".

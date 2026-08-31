@@ -111,8 +111,8 @@ the slides are the content the lab already presents. The ten files live in
 research-topic cards in the `Domain` section, and the five domain photo crops from
 `/23` 04 illustrate the same section; the other crops from the first pass were
 deleted. The `/30` Target Journal list sits under Research Area rather than
-`/publications`. Headcount still goes to `/people` and patent counts to
-`/publications`; the nine partner logos went nowhere.
+`/accomplishment`. Headcount still goes to `/people` and patent counts to
+`/accomplishment`; the nine partner logos went nowhere.
 
 ## Lab News, Migrated
 

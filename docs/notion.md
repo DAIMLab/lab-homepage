@@ -19,7 +19,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Home | `/` | `3c611c7b703c809fb685f773804f1684` |
 | About | `/about` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
-| Accomplishment | `/publications` | `11211c7b703c8253a3208121bec822f3` |
+| Accomplishment | `/accomplishment` | `11211c7b703c8253a3208121bec822f3` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
 | Databases | `/databases` | `3c911c7b703c816c9d28dec4774a53b8` |
@@ -94,7 +94,7 @@ than accumulating, so central storage bought nothing. Each lives inside a hidden
 brown `Subpages` toggle on the page that shows it.
 The nesting is what should give Super `/databases/<database>` and
 `/databases/<database>/<row>`; whether Super follows it is the open question in
-[Super freezes a path, Notion does not move it](#super-freezes-a-path-notion-does-not-move-it).
+[Super re-derives a path from the Notion tree, one page at a time](#super-re-derives-a-path-from-the-notion-tree-one-page-at-a-time).
 
 Databases live away from the page that shows them; the page carries a **linked view**
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
@@ -104,7 +104,7 @@ Verified on the retired Projects page: it had 4 views and a dropdown while it
 still carried the Ascent template's Blog posts view, and dropped to no switcher
 markup once that block went and a single `All` view was left. The Papers and
 Projects blocks now run the other way on purpose, carrying several views each so
-the switcher appears and `css/publications.css` can dress it as a segmented
+the switcher appears and `css/accomplishment.css` can dress it as a segmented
 control; Patents keeps one view and stays switcher-free. Two of the three panels
 now hold a dropdown, so `:has(.notion-dropdown)` no longer tells one from
 another; nothing in the stylesheet leans on it.
@@ -121,7 +121,7 @@ another; nothing in the stylesheet leans on it.
 | About Slides | `9ee88d7c867247998c5e1a69d8944bf8` | `32c5fb4c-c55e-4d1e-8ecf-f123b787ac25` | About (two deck carousels) |
 
 `Papers` and `Patents` are the Publications rebuild, created 2026-08-27 and still
-empty. What they replaced on `/publications` was not the `Blog posts database` this
+empty. What they replaced on `/accomplishment` was not the `Blog posts database` this
 file used to name but a linked view titled `View of Case studies database`, over
 the Ascent data source `79c11c7b-703c-8282-bfc0-87761a3b6b96`; that block and the
 lorem ipsum column above it were deleted on 2026-08-28. The source database still
@@ -130,7 +130,7 @@ exists elsewhere in the template, and the deleted blocks are in Notion's trash.
 The two share one page through a **Notion tabs block**. A single Super view
 switcher spans one data source, so `Papers` and `Patents` cannot share the venue
 tab bar without merging into one database, which was considered and declined on
-2026-08-28. Notion's own tabs block solves it a level up: `/publications` holds one
+2026-08-28. Notion's own tabs block solves it a level up: `/accomplishment` holds one
 `<tabs>` with a `Papers` tab over the linked block
 `3c911c7b703c81ef91a7cf0f147290a1` and a `Patents` tab over
 `3c911c7b703c81008143de44de1bcfbc`. Super renders it natively and the toggle is its
@@ -143,7 +143,7 @@ page's top level with `notion-create-view` first, then wrap both in `<tabs>` wit
 
 Three earlier shapes are in the trash: a `Patents` child page, a `Papers` child
 page beside it, and before those a single Papers block sitting straight on
-`/publications` under an Ascent leftover. Two dead ends drove the moves: Super's
+`/accomplishment` under an Ascent leftover. Two dead ends drove the moves: Super's
 navbar dropdown does not take the icon-over-label rules `css/global.css` puts on
 `.super-navbar__item`, so the site keeps every navbar entry flat, and a section nav
 built from link-to-page blocks meant a page load per switch.
@@ -157,7 +157,7 @@ until it comes back. Every view groups by `Year` and orders rows manually inside
 group; there is no date property to sort on, so drag decides the order within a year.
 
 The views exist twice over. The source database carries a set for editing, and the
-linked block on `/publications` carries its own, because a linked view never
+linked block on `/accomplishment` carries its own, because a linked view never
 inherits the source's tabs. A tab added in one place has to be added in the other,
 and a new view starts at Notion's default number range, so it needs the range set by
 hand like the rest.
@@ -166,7 +166,7 @@ hand like the rest.
 row set to either shows up in no tab. Drop the two options or add tabs for them
 before using either. A fifth view, the `All` table, is the editing surface and
 stays ungrouped; it never reaches the site, because the linked view on
-`/publications` carries its own views. The Notion API has no delete-view call, so
+`/accomplishment` carries its own views. The Notion API has no delete-view call, so
 a view that outlives its purpose needs a right-click in the UI.
 
 `Authors` is a multi-select seeded with the twenty names in the `People` database
@@ -200,7 +200,7 @@ interval of 1, a row with `Year` 2027 lands in a group Notion calls
 CSS cannot rewrite it: Super renders the group label as bare text with no data
 attribute holding the raw value. `js/date-format.js` carries the fix, one rule
 pulling the first four digits out of
-`.page__publications .notion-collection-group__section-header .notion-property__number`.
+`.page__accomplishment .notion-collection-group__section-header .notion-property__number`.
 It is a text swap like every other rule in that file, guarded by the same
 `next !== el.textContent` check, so it adds no observer and cannot loop.
 
@@ -215,7 +215,7 @@ the oldest year at the top.
 Grouping is Super-native. Super lists `Database grouping` as supported and ships
 the selectors already: each group becomes a `.notion-collection-group__section`
 holding a `.notion-collection-group__section-header` and the view's rows, which is
-the hook `css/publications.css` will use for the POSTECH-style year rail. Notion
+the hook `css/accomplishment.css` will use for the POSTECH-style year rail. Notion
 sets `hideEmptyGroups` on every one of these views, so a year with no papers in
 that quadrant does not render.
 
@@ -223,7 +223,7 @@ that quadrant does not render.
 properties, `Title`, `특허권자`, `특허번호`, `Date` and `Link`, so `Year`, `Status`
 and `Country` are gone and none of the range setup above applies to it. Filings stay
 few enough that a year rail would be noise, so its single `All` view carries no
-grouping at all, sorts on `Date` descending, and `css/publications.css` reflows the
+grouping at all, sorts on `Date` descending, and `css/accomplishment.css` reflows the
 rows as cards.
 
 The Papers schema was trimmed further in Notion on 2026-08-28: `Code`, `Topic` and
@@ -487,13 +487,20 @@ path.
 Site Pages the way `/footer` is: it is an index for editors, not a page anyone should
 land on.
 
-Nothing in `css/` or `js/` breaks when those paths change. Super's scope class is
+Nothing in `css/` or `js/` breaks when a **database** path changes. A **site
+page** slug is the opposite: it is what Super's scope class is derived from, so
+moving one silently unhooks every rule written for that page. Publications
+became `/accomplishment` on 2026-08-31 and all 64 `.page__publications` rules in
+its stylesheet stopped matching at once, the page rendering as raw Notion with
+no error anywhere. Rename the scope in the same pass as the slug, and do not
+count on the old path answering: `/about-daim` and `/team-daim` stayed 200 after
+their renames, `/publications` went 404. Super's scope class is
 `page__<path with slashes as dashes>` plus `parent-page__<parent path>`, and the
 repo only ever scopes by the five site pages, never by a database or row page:
 
 | Used in the repo | Never used |
 | --- | --- |
-| `page__index`, `page__people`, `page__people-professor`, `page__lab-news`, `page__publications` | `page__people-1`, `page__alumni`, `page__professor-media`, `page__lab-news-lab-news-posts`, `page__projects-projects-db`, every row class, every `parent-page__*` |
+| `page__index`, `page__people`, `page__people-professor`, `page__lab-news`, `page__accomplishment` | `page__people-1`, `page__alumni`, `page__professor-media`, `page__lab-news-lab-news-posts`, `page__projects-projects-db`, every row class, every `parent-page__*` |
 
 Card anchors are relative and Super-generated (`href="/people-1/wonseok-jang"`), so
 they follow the new path on the next build with no edit here. `js/date-format.js`
