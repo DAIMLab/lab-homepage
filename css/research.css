@@ -1,11 +1,13 @@
-/* Accomplishment, /accomplishment. Served by the pinned jsDelivr <link> in
-   code/accomplishment.html. The page was Publications until 2026-08-31, when
-   the slug moved under Site Pages; unlike About's and People's renames the old
-   path went 404 rather than staying live, and every rule here was keyed to the
-   scope class the slug derives (`page__publications`), which is what silently
-   undressed the whole page. A slug is the one thing this file cannot outlive:
-   the scope stays, because a bare selector in a per-page head survives into the
-   next page on client-side navigation (docs/super.md, "Home Page").
+/* Research, /research. Served by the pinned jsDelivr <link> in
+   code/research.html. The page was Publications until 2026-08-31 and
+   Accomplishment for a day after; both renames silently undressed it, because
+   the rules were keyed to the scope class the slug derives (`page__<slug>`)
+   and a slug move rewrites that class. The scope is now the page's own
+   structure instead: this is the site's only page carrying a Notion tabs
+   block, so `.super-content:has(.notion-tabs)` finds it whatever the slug
+   says, and a bare selector still never leaks into another page on
+   client-side navigation. The cost is the inverse edge: a tabs block added
+   to a second page would pull this design onto it.
 
    The list follows cvlab.postech.ac.kr/page/publication: a year in the left
    margin, a rail with a dot beside it, and one stacked entry per paper,
@@ -24,18 +26,18 @@
    margin has to go with it or the title floats 84px down an empty band
    (both rules read from /styles/super.css). */
 
-.page__accomplishment {
+.super-content:has(.notion-tabs) {
   --pub-year: 65px;
   --pub-rail: 50px;
   --pub-sub: #666;
   --pub-tabs-bg: #f1f2f4;
 }
 
-.page__accomplishment .notion-header__icon-wrapper {
+.super-content:has(.notion-tabs) .notion-header__icon-wrapper {
   display: none;
 }
 
-.page__accomplishment .notion-header__content.no-cover.has-icon
+.super-content:has(.notion-tabs) .notion-header__content.no-cover.has-icon
   .notion-header__title-wrapper {
   margin-top: 0;
 }
@@ -48,7 +50,7 @@
    Its default dress is a bordered card, which reads as a widget dropped on
    the page rather than as the page's own structure. ---------------------- */
 
-.page__accomplishment .notion-tabs {
+.super-content:has(.notion-tabs) .notion-tabs {
   margin: 0 0 2.5rem;
   padding: 0;
   border: 0;
@@ -56,13 +58,13 @@
   background: none;
 }
 
-.page__accomplishment .notion-tabs__nav {
+.super-content:has(.notion-tabs) .notion-tabs__nav {
   gap: 2rem;
   margin: 0 0 2rem;
   border-bottom: 1px solid var(--rule);
 }
 
-.page__accomplishment .notion-tabs__button {
+.super-content:has(.notion-tabs) .notion-tabs__button {
   height: auto;
   padding: 0 0 14px;
   border-radius: 0;
@@ -77,12 +79,12 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.page__accomplishment .notion-tabs__button:hover {
+.super-content:has(.notion-tabs) .notion-tabs__button:hover {
   background: none;
   color: var(--sub);
 }
 
-.page__accomplishment .notion-tabs__button.active {
+.super-content:has(.notion-tabs) .notion-tabs__button.active {
   background: none;
   color: var(--kaist-blue);
   font-weight: 700;
@@ -96,17 +98,17 @@
    per view, each carrying its own click handler. Taking the menu out of its
    popup positioning turns the list into a row of tabs with no script. ------ */
 
-.page__accomplishment .notion-dropdown__button,
-.page__accomplishment .notion-dropdown__menu-header {
+.super-content:has(.notion-tabs) .notion-dropdown__button,
+.super-content:has(.notion-tabs) .notion-dropdown__menu-header {
   display: none;
 }
 
-.page__accomplishment .notion-dropdown,
-.page__accomplishment .notion-dropdown__menu-wrapper {
+.super-content:has(.notion-tabs) .notion-dropdown,
+.super-content:has(.notion-tabs) .notion-dropdown__menu-wrapper {
   width: 100%;
 }
 
-.page__accomplishment .notion-dropdown__menu {
+.super-content:has(.notion-tabs) .notion-dropdown__menu {
   position: static;
   width: 100%;
   margin-bottom: 28px;
@@ -120,9 +122,9 @@
 }
 
 /* the closed and closing states park the menu off-screen and deaden it */
-.page__accomplishment .notion-dropdown__menu.initial-state,
-.page__accomplishment .notion-dropdown__menu.animate-out,
-.page__accomplishment .notion-dropdown__menu.animate-in {
+.super-content:has(.notion-tabs) .notion-dropdown__menu.initial-state,
+.super-content:has(.notion-tabs) .notion-dropdown__menu.animate-out,
+.super-content:has(.notion-tabs) .notion-dropdown__menu.animate-in {
   z-index: auto;
   opacity: 1;
   transform: none;
@@ -131,14 +133,14 @@
   user-select: auto;
 }
 
-.page__accomplishment .notion-dropdown__option-list {
+.super-content:has(.notion-tabs) .notion-dropdown__option-list {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   padding: 6px;
 }
 
-.page__accomplishment .notion-dropdown__option {
+.super-content:has(.notion-tabs) .notion-dropdown__option {
   flex: 1 1 auto;
   justify-content: center;
   padding: 9px 18px;
@@ -148,21 +150,21 @@
   white-space: nowrap;
 }
 
-.page__accomplishment .notion-dropdown__option p {
+.super-content:has(.notion-tabs) .notion-dropdown__option p {
   font-size: 15px;
 }
 
 /* the icon repeats the page's own 📜 on every tab */
-.page__accomplishment .notion-dropdown__option-icon {
+.super-content:has(.notion-tabs) .notion-dropdown__option-icon {
   display: none;
 }
 
-.page__accomplishment .notion-dropdown__option:hover {
+.super-content:has(.notion-tabs) .notion-dropdown__option:hover {
   background: none;
   color: var(--kaist-blue);
 }
 
-.page__accomplishment .notion-dropdown__option.active {
+.super-content:has(.notion-tabs) .notion-dropdown__option.active {
   background: var(--color-card-bg, #fff);
   color: var(--kaist-blue);
   box-shadow: 0 1px 3px rgba(15, 15, 15, 0.08);
@@ -171,13 +173,13 @@
 /* ---- the year rail: the group header becomes a left margin column and the
    list beside it carries the rule and the dot ---------------------------- */
 
-.page__accomplishment .notion-collection-group__section {
+.super-content:has(.notion-tabs) .notion-collection-group__section {
   display: flex;
   align-items: flex-start;
   margin-bottom: 32px;
 }
 
-.page__accomplishment .notion-collection-group__section-header {
+.super-content:has(.notion-tabs) .notion-collection-group__section-header {
   flex: 0 0 var(--pub-year);
   padding: 0;
   border-top: 0;
@@ -188,14 +190,14 @@
 }
 
 /* the year labels the group; the arrow that collapses it is noise */
-.page__accomplishment .notion-collection-group__section-toggle {
+.super-content:has(.notion-tabs) .notion-collection-group__section-toggle {
   display: none;
 }
 
 /* the rail belongs to a grouped list; Patents is ungrouped, and there the
    left margin would push the rows past the container and strand the dot
    beside an empty year column */
-.page__accomplishment .notion-collection-group__section > .notion-collection-list {
+.super-content:has(.notion-tabs) .notion-collection-group__section > .notion-collection-list {
   flex: 1 1 auto;
   min-width: 0;
   position: relative;
@@ -206,7 +208,7 @@
   overflow: visible;
 }
 
-.page__accomplishment .notion-collection-group__section > .notion-collection-list::before {
+.super-content:has(.notion-tabs) .notion-collection-group__section > .notion-collection-list::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -219,7 +221,7 @@
 
 /* ---- one entry: title, authors, venue, each on its own line ------------ */
 
-.page__accomplishment .notion-collection-list__item {
+.super-content:has(.notion-tabs) .notion-collection-list__item {
   display: block;
   gap: 0;
   margin: 0 0 15px;
@@ -228,17 +230,17 @@
   border-radius: 0;
 }
 
-.page__accomplishment .notion-collection-list__item:hover {
+.super-content:has(.notion-tabs) .notion-collection-list__item:hover {
   background: none;
 }
 
-.page__accomplishment .notion-collection-list__item:last-child {
+.super-content:has(.notion-tabs) .notion-collection-list__item:last-child {
   margin-bottom: 0;
 }
 
 /* the row anchor sits under the properties by default, so only the title
    answers a click; dropping their stacking context hands it the whole row */
-.page__accomplishment .notion-collection-list__item-property {
+.super-content:has(.notion-tabs) .notion-collection-list__item-property {
   z-index: auto;
   padding: 0;
   white-space: normal;
@@ -247,7 +249,7 @@
 /* the title text is a bare node on .notion-property__title itself, which
    also carries .notion-semantic-string; the descendant selectors Super
    writes for it match nothing here, and neither would ours */
-.page__accomplishment .notion-collection-list__item .notion-property__title {
+.super-content:has(.notion-tabs) .notion-collection-list__item .notion-property__title {
   display: block;
   flex: 1 1 auto;
   min-width: 0;
@@ -262,14 +264,14 @@
   color: var(--ink);
 }
 
-.page__accomplishment .notion-collection-list__item .notion-property__title
+.super-content:has(.notion-tabs) .notion-collection-list__item .notion-property__title
   .notion-property__title__icon-wrapper {
   display: none;
 }
 
 /* a title carrying inline formatting arrives wrapped in spans, which Super
    clamps to one ellipsised line and underlines */
-.page__accomplishment .notion-collection-list__item
+.super-content:has(.notion-tabs) .notion-collection-list__item
   .notion-property.notion-property__title > span {
   overflow: visible;
   white-space: normal;
@@ -278,7 +280,7 @@
   font-weight: inherit;
 }
 
-.page__accomplishment .notion-collection-list__item-content {
+.super-content:has(.notion-tabs) .notion-collection-list__item-content {
   display: block;
   font-size: 14px;
   line-height: 1.55;
@@ -288,19 +290,19 @@
 /* Venue and Location are both text properties and sit next to each other, so
    they share the line the way the citation reads: name, then place. Super
    omits an empty property, so a row without a place grows no stray dot */
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__text {
   display: inline;
   max-width: none;
   font-size: 14px;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__text + .notion-property__text::before {
   content: '\00a0\00b7\00a0';
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__select {
   display: block;
 }
@@ -316,16 +318,16 @@
    of the four combinations lands right. The z-index puts them back over the
    row anchor, which the rule above deliberately lowered. ----------------- */
 
-.page__accomplishment .notion-collection-list__item {
+.super-content:has(.notion-tabs) .notion-collection-list__item {
   padding-right: 76px;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__url:not(:has(a[href^='http' i])) {
   display: none;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   :is(.notion-property__url, .notion-property__file) {
   position: absolute;
   top: 2px;
@@ -335,14 +337,14 @@
   padding: 0;
 }
 
-.page__accomplishment
+.super-content:has(.notion-tabs)
   .notion-collection-list__item-content:has(.notion-property__url a[href^='http' i])
   .notion-property__file {
   transform: translateY(calc(100% + 6px));
 }
 
 /* both badges wear the same chip; the DOI one replaces the raw URL text */
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   :is(.notion-property__url a, .notion-property__file a,
       .notion-property__file > div) {
   display: grid;
@@ -358,14 +360,14 @@
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   :is(.notion-property__url a, .notion-property__file a,
       .notion-property__file > div):hover {
   border-color: var(--kaist-blue);
   color: var(--kaist-blue);
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__url a::before {
   content: 'DOI';
   font-size: 10px;
@@ -376,12 +378,12 @@
 /* hovering the DOI chip shows the address it opens, read off the href so no
    script is needed; it hangs from the chip's right edge so a long DOI grows
    leftwards into the row instead of off the page */
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__url a {
   position: relative;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__url a::after {
   content: attr(href);
   position: absolute;
@@ -401,13 +403,13 @@
   transition: opacity 0.15s;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__url a:hover::after {
   opacity: 1;
 }
 
 /* the file property renders a thumbnail; the chip carries the word instead */
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__file img {
   display: none;
 }
@@ -415,14 +417,14 @@
 /* on the list view the file arrives inside a gray .notion-pill with 6px of
    side padding (2026-08-30), which showed as a gray band around the chip;
    the pill is stripped so only the anchor's chip is left */
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   .notion-property__file .notion-pill {
   padding: 0;
   border-radius: 0;
   background: none;
 }
 
-.page__accomplishment .notion-collection-list__item-content
+.super-content:has(.notion-tabs) .notion-collection-list__item-content
   :is(.notion-property__file a, .notion-property__file > div)::before {
   content: 'PDF';
   font-size: 10px;
@@ -432,11 +434,11 @@
 
 /* ---- the authors read as a citation line, not as chips ----------------- */
 
-.page__accomplishment .notion-collection-list__item-property.notion-property__select {
+.super-content:has(.notion-tabs) .notion-collection-list__item-property.notion-property__select {
   display: block;
 }
 
-.page__accomplishment .notion-collection-list__item-property.notion-property__select
+.super-content:has(.notion-tabs) .notion-collection-list__item-property.notion-property__select
   .notion-pill {
   margin: 0;
   padding: 0;
@@ -448,7 +450,7 @@
   white-space: normal;
 }
 
-.page__accomplishment .notion-collection-list__item-property.notion-property__select
+.super-content:has(.notion-tabs) .notion-collection-list__item-property.notion-property__select
   .notion-pill:not(:last-child)::after {
   content: ',\00a0';
 }
@@ -457,42 +459,42 @@
    bare "and" over exactly two. A hex escape eats up to six digits, so the
    space after each \00a0 is the terminator, not a character: without it CSS
    reads \00a0a and prints one undefined glyph followed by "nd" */
-.page__accomplishment .notion-collection-list__item-property.notion-property__select
+.super-content:has(.notion-tabs) .notion-collection-list__item-property.notion-property__select
   .notion-pill:nth-last-child(2)::after {
   content: ',\00a0 and\00a0 ';
 }
 
-.page__accomplishment .notion-collection-list__item-property.notion-property__select
+.super-content:has(.notion-tabs) .notion-collection-list__item-property.notion-property__select
   .notion-pill:first-child:nth-last-child(2)::after {
   content: '\00a0 and\00a0 ';
 }
 
 @media (max-width: 768px) {
-  .page__accomplishment {
+  .super-content:has(.notion-tabs) {
     --pub-year: 50px;
     --pub-rail: 20px;
   }
 
-  .page__accomplishment .notion-collection-group__section-header {
+  .super-content:has(.notion-tabs) .notion-collection-group__section-header {
     font-size: 18px;
   }
 
-  .page__accomplishment .notion-collection-list {
+  .super-content:has(.notion-tabs) .notion-collection-list {
     margin-left: 10px;
   }
 
-  .page__accomplishment .notion-collection-list__item .notion-property__title
+  .super-content:has(.notion-tabs) .notion-collection-list__item .notion-property__title
     .notion-semantic-string {
     font-size: 16px;
   }
 
   /* the chips leave the right-hand column and drop into the flow under the
      venue line, side by side, so the text can use the whole row */
-  .page__accomplishment .notion-collection-list__item {
+  .super-content:has(.notion-tabs) .notion-collection-list__item {
     padding-right: 0;
   }
 
-  .page__accomplishment .notion-collection-list__item-content
+  .super-content:has(.notion-tabs) .notion-collection-list__item-content
     :is(.notion-property__url, .notion-property__file) {
     position: static;
     display: inline-flex;
@@ -504,7 +506,7 @@
   /* the venue and location are inline, so a chip would run on at the end of
      their line; a newline after the last text property, when a live chip
      follows, starts the chips on a line of their own */
-  .page__accomplishment .notion-collection-list__item-content
+  .super-content:has(.notion-tabs) .notion-collection-list__item-content
     .notion-property__text:not(:has(~ .notion-property__text)):has(
       ~ .notion-property__url a[href^='http' i],
       ~ .notion-property__file
@@ -515,7 +517,7 @@
 
   /* the tooltip hangs from the chip's left edge here, since the chip now
      sits at the row's left and would push it off the page otherwise */
-  .page__accomplishment .notion-collection-list__item-content
+  .super-content:has(.notion-tabs) .notion-collection-list__item-content
     .notion-property__url a::after {
     right: auto;
     left: 0;
