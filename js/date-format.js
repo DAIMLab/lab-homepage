@@ -7,8 +7,9 @@
     /* People: Joined 2022/03/01 -> 2022/03 */
     { sel: '.page__people .notion-property__date .date',
       fix: (t) => t.replace(/(\d{4}\/\d{2})\/\d{2}/, '$1') },
-    /* Projects: Period 2018/03/01 → 2025/01/01 -> 2018.03 – 2025.01 */
-    { sel: '.page__projects .property-475c4c48 .date',
+    /* Projects: Period 2018/03/01 → 2025/01/01 -> 2018.03 – 2025.01. No page
+       scope: the property id is the database's, and two pages now show it */
+    { sel: '.property-475c4c48 .date',
       fix: (t) => t.replace(/(\d{4})\/(\d{2})\/\d{2}/g, '$1.$2').replace(/\s*→\s*/, ' – ') },
     /* Professor media: Date 2023/06/20 or June 20, 2023 -> 2023.06 */
     { sel: '.page__people-professor .notion-property__date .date',

@@ -114,7 +114,7 @@ stylesheet tells the two panels apart: `:has(.notion-dropdown)` is Papers.
 | Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | Publications (Papers tab) |
 | Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | Publications (Patents tab) |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
-| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Projects |
+| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Publications (Projects tab), Projects |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
 | About Slides | `9ee88d7c867247998c5e1a69d8944bf8` | `32c5fb4c-c55e-4d1e-8ecf-f123b787ac25` | About (two deck carousels) |

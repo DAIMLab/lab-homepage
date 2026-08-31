@@ -147,7 +147,18 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Projects Page
 
-- `css/projects.css`. Hooks: Partner `property-75626b3b`, Period `property-475c4c48`, Summary
+- `css/projects.css`, linked by **two** Head tabs since 2026-08-31: `code/projects.html` and
+  `code/publications.html`, `/publications` having gained a Projects tab over a second linked view of
+  the same database. The file splits along that line. The card block is keyed on the database, not on
+  either page, `.notion-collection:has(:is(<the four property ids>))`: a page scope would need
+  repeating per page, and a collection id is reissued by a workspace duplicate where a property id is
+  not. Any one of the four matches, so hiding a property in a view cannot cost the design. The bare
+  selector is safe because both files are per-page and Super deactivates a page's styles on leaving
+  it. The status-tab block stays at `.page__projects`: `/publications` dresses the same dropdown as
+  the segmented control it already uses for the Papers views, and that is the one kept there.
+  `js/date-format.js` dropped its `.page__projects` scope for the same reason, the Period id being the
+  database's. `/projects` is off the navbar since the move but still answers 200.
+  Hooks: Partner `property-75626b3b`, Period `property-475c4c48`, Summary
   `property-45774b6f`, Status `property-46414376`. The property list is a wrapping flex row: every
   property `width: 100%` except the date and the status chip (`auto`), which share a line; the chip needs
   `line-height: 1` against Super's 18px pill line box. Status renders as `notion-property__select`, id
@@ -168,8 +179,9 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 
 ## Publications Page
 
-- One page, one Head tab (`code/publications.html` linking `css/publications.css` at
-  a pinned SHA), scope `page__publications`.
+- One page, one Head tab (`code/publications.html`, linking `css/publications.css` and, since
+  2026-08-31, `css/projects.css`, each at a pinned SHA), scope `page__publications`. The navbar calls
+  it Accomplishment; the slug is still `/publications`.
 - Notion's tabs block is native in Super and renders as `.notion-tabs` holding
   `.notion-tabs__nav` of `.notion-tabs__button` and `.notion-tabs__panels`; the
   inactive panel is `[aria-hidden=true]` and already `display: none`, and the

@@ -1,6 +1,14 @@
-/* Projects. Served by the pinned jsDelivr <link> in code/projects.html. A
-   wrapping flex row reorders the emitted rows and seats the status chip after
-   the date; no fixed row heights. docs/super.md, "Projects Page".
+/* Projects. Served by the pinned jsDelivr <link> in code/projects.html and in
+   code/publications.html: /projects carries the database on its own page, and
+   since 2026-08-31 /publications carries a second linked view of it behind a
+   Projects tab. The file splits along that line. The card is keyed on the
+   database, so both views wear it; the status tabs stay keyed on /projects,
+   because /publications dresses the same dropdown as the segmented control it
+   already uses for the Papers views (css/publications.css) and that is the one
+   to keep there.
+
+   A wrapping flex row reorders the emitted rows and seats the status chip
+   after the date; no fixed row heights. docs/super.md, "Projects Page".
 
    Notion:  Linked gallery view of `Projects Database`
               showing Title, Partner, Period, Summary, Status
@@ -10,20 +18,13 @@
    property-45774b6f  Summary
    property-46414376  Status */
 
+/* ---- the status tabs, /projects only ---------------------------------- */
+
 .page__projects {
-  --collection-card-gap: 34px 26px;
-  --collection-card-content-padding: 13px 0 0;
-  --collection-card-border-radii: 0;
-  --collection-card-shadow: none;
-  --color-card-bg: transparent;
-
-  --sub: #66717d;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-  /* Status tabs. Super emits a dropdown, never tabs, for a multi-view collection;
-     Ascent's template restyles that same markup into a row and this does the
-     same, from reference/ascent-template.css:386. The button is hidden, the menu
-     is pinned open, and the option list becomes a flex row. Under 576px the
+  /* Super emits a dropdown, never tabs, for a multi-view collection; Ascent's
+     template restyles that same markup into a row and this does the same, from
+     reference/ascent-template.css:386. The button is hidden, the menu is
+     pinned open, and the option list becomes a flex row. Under 576px the
      dropdown is left alone, because four tabs do not fit a phone. */
 
   .notion-collection__header-wrapper {
@@ -97,6 +98,28 @@
       }
     }
   }
+}
+
+/* ---- the card, wherever the database is shown -------------------------- */
+
+/* Keyed on the database's own properties rather than on a page or a collection
+   id: a page scope would have to be repeated for every page that shows the
+   database, and a collection id is reissued by a workspace duplicate where a
+   property id is not (docs/super.md, "People Page"). Any one of the four is
+   enough to identify it, so hiding a property in some view cannot cost the
+   design. Both files that link this one are per-page, and Super deactivates a
+   page's styles on leaving it, so the unscoped selector cannot leak. */
+
+.notion-collection:has(:is(.property-75626b3b, .property-475c4c48,
+                           .property-46414376, .property-45774b6f)) {
+  --collection-card-gap: 34px 26px;
+  --collection-card-content-padding: 13px 0 0;
+  --collection-card-border-radii: 0;
+  --collection-card-shadow: none;
+  --color-card-bg: transparent;
+
+  --sub: #66717d;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Three columns at most: four tracks would need 120% of the row, so auto-fill
      can never place a fourth. Under about 900px the 268px floor wins instead and
