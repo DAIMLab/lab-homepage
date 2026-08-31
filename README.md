@@ -28,13 +28,14 @@ Notion page  →  Super.so Code editor (CSS / Head / Body)  →  daim.super.site
 | `code/global.html` | site-wide Head tab, pasted as-is |
 | `code/home.html` | Home per-page Head tab, pasted as-is |
 | `code/lab-news.html` | Lab News per-page Head tab, pasted as-is |
-| `code/projects.html` | Projects per-page Head tab, pasted as-is |
 | `code/people.html` | People per-page Head tab, pasted as-is |
+| `code/accomplishment.html` | Accomplishment per-page Head tab (slug `/publications`), pasted as-is |
 | `css/global.css` | linked from `code/global.html`, pinned jsDelivr URL |
 | `css/footer.css` | linked from `code/global.html`, pinned jsDelivr URL |
 | `css/home.css` | linked from `code/home.html`, pinned jsDelivr URL |
 | `css/lab-news.css` | linked from `code/lab-news.html`, pinned jsDelivr URL |
-| `css/projects.css` | linked from `code/projects.html`, pinned jsDelivr URL |
+| `css/publications.css` | linked from `code/accomplishment.html`, pinned jsDelivr URL |
+| `css/projects.css` | linked from `code/accomplishment.html`, pinned jsDelivr URL |
 | `css/people.css` | linked from `code/people.html`, pinned jsDelivr URL |
 | `js/email-copy.js` | linked from `code/global.html`, pinned jsDelivr URL |
 | `js/footer-inject.js` | linked from `code/global.html`, pinned jsDelivr URL |

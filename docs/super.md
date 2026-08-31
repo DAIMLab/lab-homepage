@@ -27,7 +27,7 @@ Measured facts about how Super renders this site (plan: **Personal**). Docs at <
 - `notion-*` for rendered blocks, `super-*` for Super chrome; the full list is the docs'
   `/super-css-classes`. Super's footer is off, so no `super-footer` markup exists here.
 - `<main>` carries `super-content page__<slug> parent-page__<parent>` and `id="page-<slug>"`; Home is
-  `page__index`. Scope rules per page (`.page__projects .notion-collection-card`). Collection wrappers
+  `page__index`. Scope rules per page (`.page__people .notion-collection-card`). Collection wrappers
   carry `collection-<data-source-id>`; the five member views share one class, the alumni database has
   another.
 - `.super-navbar` is a sibling before `main`, so page scopes cannot reach it by descent; use
@@ -145,19 +145,17 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
   the first cut, keyed on the grid lacking `data-total`; the script stamps `data-total` after hydration
   (earlier throws #418), the counter reads it via `attr()`, and every observer write is compare-first.
 
-## Projects Page
+## Projects Card
 
-- `css/projects.css`, linked by **two** Head tabs since 2026-08-31: `code/projects.html` and
-  `code/publications.html`, `/publications` having gained a Projects tab over a second linked view of
-  the same database. The file splits along that line. The card block is keyed on the database, not on
-  either page, `.notion-collection:has(:is(<the four property ids>))`: a page scope would need
-  repeating per page, and a collection id is reissued by a workspace duplicate where a property id is
-  not. Any one of the four matches, so hiding a property in a view cannot cost the design. The bare
-  selector is safe because both files are per-page and Super deactivates a page's styles on leaving
-  it. The status-tab block stays at `.page__projects`: `/publications` dresses the same dropdown as
-  the segmented control it already uses for the Papers views, and that is the one kept there.
-  `js/date-format.js` dropped its `.page__projects` scope for the same reason, the Period id being the
-  database's. `/projects` is off the navbar since the move but still answers 200.
+- `css/projects.css`, linked by `code/accomplishment.html`. The Projects page it was written for is
+  gone since 2026-08-31, folded into `/publications` as a third tab over a linked view of the same
+  database, so the file no longer scopes by page at all: the card block is keyed on the database,
+  `.notion-collection:has(:is(<the four property ids>))`. A collection id is reissued by a workspace
+  duplicate where a property id is not, and any one of the four matches, so hiding a property in a
+  view cannot cost the design. The bare selector is safe because the file is linked per-page and
+  Super deactivates a page's styles on leaving it. `js/date-format.js` dropped its `.page__projects`
+  scope in the same pass, the Period id being the database's. The status-tab block went with the page:
+  `/publications` dresses that dropdown as the segmented control it already uses for the Papers views.
   Hooks: Partner `property-75626b3b`, Period `property-475c4c48`, Summary
   `property-45774b6f`, Status `property-46414376`. The property list is a wrapping flex row: every
   property `width: 100%` except the date and the status chip (`auto`), which share a line; the chip needs
@@ -168,18 +166,15 @@ title `DAIM`, description `DAIM LABS 홈페이지`, legacy logo/OG `https://cdn.
 - Card anatomy: the anchor is absolute over the whole card, the cover's span is `display: contents`, the
   card is already `position: relative`, so an absolute status pill needs only `z-index: 3`. The summary
   keeps a two-line clamp (Chrome reports it as `flow-root`; measure the height).
-- The status tabs are Super's `.notion-dropdown` restyled per `reference/ascent-template.css:386`; left
-  alone below 576px. The four views live on the linked block (its id is the `notion-create-view`
-  `database_id`). Cell wrapping is the view's `WRAP CELLS`, not CSS. Pinning the menu open also needs `z-index: auto`:
-  super.css parks the closed menu at `-1`, so an in-flow relative menu paints behind its own
-  wrapper and the wrapper eats every click (2026-08-30, daimlab: tabs looked fine, none responded).
-- Dates: Notion has no year-month format and formula properties never render on Super collection cards (do
-  not rebuild the deleted `Term` formula), so `js/date-format.js` rewrites the Period under a
-  `MutationObserver`.
+- Retired with the page, kept for the lesson: those status tabs were Super's `.notion-dropdown`
+  restyled per `reference/ascent-template.css:386`, left alone below 576px. Pinning such a menu open
+  needs `z-index: auto` as well as `position: relative`: super.css parks the closed menu at `-1`, so an
+  in-flow relative menu paints behind its own wrapper and the wrapper eats every click (2026-08-30,
+  daimlab: tabs looked fine, none responded). Cell wrapping is a view's `WRAP CELLS`, not CSS.
 
 ## Publications Page
 
-- One page, one Head tab (`code/publications.html`, linking `css/publications.css` and, since
+- One page, one Head tab (`code/accomplishment.html`, linking `css/publications.css` and, since
   2026-08-31, `css/projects.css`, each at a pinned SHA), scope `page__publications`. The navbar calls
   it Accomplishment; the slug is still `/publications`.
 - Notion's tabs block is native in Super and renders as `.notion-tabs` holding

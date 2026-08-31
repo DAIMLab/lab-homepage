@@ -19,8 +19,7 @@ Root page: <https://app.notion.com/p/DAIM-Homepage-3c611c7b703c809fb685f773804f1
 | Home | `/` | `3c611c7b703c809fb685f773804f1684` |
 | About | `/about` | `21f11c7b703c83f399ea01c297c4d409` |
 | Team DAIM | `/people` | `dfc11c7b703c83fd8dcb01007f12d3c0` |
-| Publications | `/publications` | `11211c7b703c8253a3208121bec822f3` |
-| Projects | `/projects` | `63e11c7b703c8246a3e681a2d19a3ac0` |
+| Accomplishment | `/publications` | `11211c7b703c8253a3208121bec822f3` |
 | Lab News | `/lab-news` | `49611c7b703c83698d1001e8650efcdc` |
 | Footer | `/footer` | `3c711c7b703c80ef8ef7c71f06352789` |
 | Databases | `/databases` | `3c911c7b703c816c9d28dec4774a53b8` |
@@ -101,12 +100,14 @@ Databases live away from the page that shows them; the page carries a **linked v
 instead. That split is Ascent's own pattern and it is what keeps a view switcher off
 a page: Super renders `.notion-dropdown` only when a collection block holds more than
 one view, so a linked block with a single view emits no switcher markup at all.
-Verified: `/projects` had 4 and a dropdown while it still carried the Ascent
-template's Blog posts view; that block is gone and its single `All` view emits no
-switcher. The Papers block now runs the other way on purpose: it carries three views so the
-switcher appears and `css/publications.css` can dress it as a segmented control.
-The Patents block keeps one view and stays switcher-free, which is also how the
-stylesheet tells the two panels apart: `:has(.notion-dropdown)` is Papers.
+Verified on the retired Projects page: it had 4 views and a dropdown while it
+still carried the Ascent template's Blog posts view, and dropped to no switcher
+markup once that block went and a single `All` view was left. The Papers and
+Projects blocks now run the other way on purpose, carrying several views each so
+the switcher appears and `css/publications.css` can dress it as a segmented
+control; Patents keeps one view and stays switcher-free. Two of the three panels
+now hold a dropdown, so `:has(.notion-dropdown)` no longer tells one from
+another; nothing in the stylesheet leans on it.
 
 | Database | Notion ID | Data source | Shown on |
 | --- | --- | --- | --- |
@@ -114,7 +115,7 @@ stylesheet tells the two panels apart: `:has(.notion-dropdown)` is Papers.
 | Papers | `90abcc7cae564e3bb1bca8c2f24f89e6` | `7f3f7a41-1143-4ea4-99f9-0c451af98b69` | Publications (Papers tab) |
 | Patents | `8df6b73555b7455495ab3e50bed1816c` | `e92c829b-0b7e-463c-b9a5-c9697e0a6c84` | Publications (Patents tab) |
 | Lab News Posts | `01b3904e64264c8d8126367a121b079e` | `9d77a8a6-1aec-46ba-9cdd-0e65238a31b9` | Lab News, Home |
-| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Publications (Projects tab), Projects |
+| Projects DB | `36470995bdcb42588b866eb5b59d45a4` | `16204f18-52d4-4c73-82f4-31a8c63bf2df` | Accomplishment (Projects tab) |
 | People | `40333c711338463887e0d21c77e4efa0` | `2d2152b8-53b9-4235-9c0f-0b1a2225fb85` | People |
 | Team Photos | `b301c409726240c490b33b07eacb0b91` | `8c7e255c-9f06-4566-a8cc-304eb6759dff` | People (hero carousel) |
 | About Slides | `9ee88d7c867247998c5e1a69d8944bf8` | `32c5fb4c-c55e-4d1e-8ecf-f123b787ac25` | About (two deck carousels) |
@@ -492,11 +493,12 @@ repo only ever scopes by the five site pages, never by a database or row page:
 
 | Used in the repo | Never used |
 | --- | --- |
-| `page__index`, `page__people`, `page__people-professor`, `page__lab-news`, `page__projects` | `page__people-1`, `page__alumni`, `page__professor-media`, `page__lab-news-lab-news-posts`, `page__projects-projects-db`, every row class, every `parent-page__*` |
+| `page__index`, `page__people`, `page__people-professor`, `page__lab-news`, `page__publications` | `page__people-1`, `page__alumni`, `page__professor-media`, `page__lab-news-lab-news-posts`, `page__projects-projects-db`, every row class, every `parent-page__*` |
 
 Card anchors are relative and Super-generated (`href="/people-1/wonseok-jang"`), so
 they follow the new path on the next build with no edit here. `js/date-format.js`
-keys `.page__projects .property-475c4c48`, and a property id survives a move.
+keys `.property-475c4c48` with no page at all, a property id outliving both a
+move and the page it was written for.
 
 ### Keep the source database off the page that shows it
 
