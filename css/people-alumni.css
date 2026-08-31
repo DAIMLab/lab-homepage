@@ -51,16 +51,22 @@
     }
 
     .notion-collection-card {
+      /* the switch js/card-click-off.js reads. The card routes nowhere, the
+         row pages it pointed at being bare and linking back to nothing, and
+         the click has two sources: Super lays an anchor over the card and
+         hangs a React onClick on the card itself. The anchor going inert
+         below answers the first and is what lets the text under it be
+         selected; no CSS reaches the second, hence the script */
+      --card-click: off;
+
       border-bottom: 1px solid var(--rule);
       /* the mail tooltip leaves the card box */
       overflow: visible;
     }
 
-    /* Super lays an anchor over the whole card, pointing at a bare row page
-       nothing links back from. It goes inert rather than away: the element
-       still carries the title's text node, and hiding it would take that with
-       it. :hover still reaches the card, events passing through an inert
-       overlay to the box behind it */
+    /* inert rather than gone: the anchor still carries the title's text node,
+       and hiding it would take that with it. :hover still reaches the card,
+       events passing through the overlay to the box behind it */
     .notion-collection-card__anchor {
       pointer-events: none;
     }

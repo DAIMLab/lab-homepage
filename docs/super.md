@@ -258,8 +258,9 @@ row-page link.
 
 - Head tab `code/people.html`: links only (Font Awesome, `css/people.css`, `css/people-identity.css`,
   `css/people-professor.css`, `css/people-alumni.css`, each pinned to a SHA); the CSS and Body tabs stay
-  empty. Behaviour is site-wide and page-guarded: `js/clamp-tooltip.js` for the alumni thesis bubble,
-  plus the two named below. The identity file
+  empty. Behaviour is site-wide: `js/clamp-tooltip.js` for the alumni thesis bubble and
+  `js/card-click-off.js` for its dead click, both keyed on CSS rather than on this page, plus the two
+  named below. The identity file
   holds what the card shares with the profile page: the mailto:/tel: contact rows, the domain-marked SNS
   circles, and the blue entry bars, scoped `:is()` over both pages' exact containers. Behavior is site-wide: `js/email-copy.js`
   (deliberately unscoped, any email property on any page gets click-to-copy) and a `.page__people` rule in
@@ -320,10 +321,15 @@ row-page link.
   `.notion-collection-card:has(.property-794a5759)` where Notion did ship a value (3 of 47 rows are
   empty today). Degree is told apart by Notion's select colour, `.pill-blue` Ph.D navy and `.pill-green`
   master's slate, not by the value string: a relabel (Master to M.S.) leaves the colours standing.
-- The card does not click. Super's anchor takes `pointer-events: none` (as the member cards' does),
-  which leaves `:hover` reaching the card, events passing through the inert overlay to the box behind
-  it; the row pages it pointed at are bare and nothing links back from them. The anchor stays in the
-  DOM because it carries the title's text node. It is still a tab stop, and Enter still follows it.
+- **The card does not click, and stopping it takes two halves.** Super lays an anchor over the card
+  *and* hangs a React `onClick` on the card element itself (measured 2026-08-31; the anchor carries no
+  handler). `pointer-events: none` on the anchor answers only the first, which is why the card still
+  routed after that alone. `js/card-click-off.js` answers the second, eating the click at the window in
+  the capture phase, before it can bubble back to React's root where the synthetic handler is
+  dispatched; that covers the anchor's keyboard Enter too. The inert anchor stays, being what lets the
+  text under the overlay be selected and what keeps the pointer cursor off. Which cards go inert is the
+  stylesheet's call, read off `--card-click: off`, and the email button and any real property link opt
+  out by selector. The anchor is never removed: it carries the title's text node.
 - The thesis reads back two ways, both needed because the card no longer opens anything. Selection:
   the property list has `pointer-events: none`, which takes text selection with it, so the thesis wins
   them back (`pointer-events: auto`, `user-select: text`). Tooltip: `js/clamp-tooltip.js` mirrors the
